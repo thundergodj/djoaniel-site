@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to display "No Value" — Case Study · Djoaniel Hernandez</title>
+<meta name="description" content="Setting the null-value display standard for a Swiss private-wealth platform. One everywhere-problem resolved into one deterministic rule — and the seven-person circle it took to ship it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Anybody:wght@900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/eishiki-v3.css">
+</head>
+<body>
+
+<!-- ============================== CHROME ============================== -->
+<header class="top">
+  <div class="in">
+    <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <nav>
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#archive">Archive</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================== HERO ============================== -->
+<div class="inner" style="padding-top:var(--space-4xl)">
+  <a class="arrow plain" href="../index.html#work"><span class="g">←</span> All work</a>
+  <p style="font:var(--text-label);letter-spacing:.14em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 01 · Design systems · Enterprise banking</p>
+  <h1 class="d-hero">How to display<br>"No&nbsp;Value"</h1>
+  <p class="prose lead">In private wealth software, a blank field isn't nothing — it's a <button type="button" class="term" data-tip-label="Why it's a question" data-tip="A blank can mean &ldquo;nothing was entered,&rdquo; &ldquo;this doesn't apply,&rdquo; or &ldquo;the value is genuinely zero.&rdquo; The screen looks identical in all three cases — so the reader has to guess.">question</button>. I wrote the rule that ended the guesswork.</p>
+
+  <div class="slot" data-ratio="16/9" style="margin-top:var(--space-xl)">
+    <span class="idx">01</span>
+    <span class="lbl">Investment proposal screen · redacted<br>(reconstructed, NDA-safe)</span>
+  </div>
+
+  <div class="stats" style="margin-top:var(--space-2xl)">
+    <div class="stat"><span class="v">7</span><div class="r"></div><span class="l">Roles aligned</span></div>
+    <div class="stat"><span class="v">4</span><div class="r"></div><span class="l">States of "empty"</span></div>
+    <div class="stat"><span class="v">1</span><div class="r"></div><span class="l">Rule shipped</span><span class="n">(specifics under NDA)</span></div>
+  </div>
+</div>
+
+<!-- ============================== BODY ============================== -->
+<div class="cs-grid" style="margin-top:var(--space-5xl)">
+
+  <!-- sticky index -->
+  <nav class="snav" aria-label="Case study sections">
+    <a href="#s01"><span class="n">01</span><span>The mess</span></a>
+    <a href="#s02"><span class="n">02</span><span>The problem</span></a>
+    <a href="#s03"><span class="n">03</span><span>The reframe</span></a>
+    <a href="#s04"><span class="n">04</span><span>The insight</span></a>
+    <a href="#s05"><span class="n">05</span><span>The system</span></a>
+    <a href="#s06"><span class="n">06</span><span>Circle of influence</span></a>
+    <a href="#s07"><span class="n">07</span><span>The fix, in practice</span></a>
+    <a href="#s08"><span class="n">08</span><span>The outcome</span></a>
+    <a href="#s09"><span class="n">09</span><span>Reflection</span></a>
+  </nav>
+
+  <main>
+
+    <!-- ===================== 01 ===================== -->
+    <section class="sec" id="s01" style="padding-top:0">
+      <div class="srule"><span class="eb">01 · The mess</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">One empty value.<br><span class="mark">Five</span> different answers.</h2>
+      <p class="prose">Across the CRM, an empty field was rendered however each screen's author felt that day. Same underlying state — no data — read five different ways to the advisor looking at it.</p>
+
+      <div class="demo" style="margin-top:var(--space-lg)">
+        <div class="bar"><span class="t">CRM · Investment Proposal · as-found</span></div>
+        <div class="grid">
+          <div class="df is-null"><span class="lbl">Description</span><span class="val">None</span></div>
+          <div class="df is-null"><span class="lbl">Location</span><span class="val">N/A</span></div>
+          <div class="df is-null"><span class="lbl">Channel</span><span class="val">(blank)</span></div>
+          <div class="df is-null"><span class="lbl">Expected Volume</span><span class="val">0</span></div>
+          <div class="df is-null"><span class="lbl">Related Objects</span><span class="val">null</span></div>
+          <div class="df is-null"><span class="lbl">Product</span><span class="val">—hidden—</span></div>
+        </div>
+      </div>
+      <p class="mono-note">Inconsistent null-handling, sampled from real screens (reconstructed, NDA-safe).</p>
+    </section>
+
+    <!-- ===================== 02 ===================== -->
+    <section class="sec" id="s02">
+      <div class="srule"><span class="eb">02 · The problem</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">A blank is a question <span class="mark">the advisor can't afford</span> to guess.</h2>
+      <p class="d-md">Is this data <em>missing</em>, or is the value <em>actually zero</em>?</p>
+      <p class="prose">In wealth management that ambiguity isn't cosmetic. A field that reads "0.00" when it should read "no data" misrepresents a client's position — and a field that reads "None" where a number is expected makes an advisor second-guess the whole record.</p>
+      <p class="prose">Inconsistent empties quietly erode trust in every screen they touch, and trust is the entire product.</p>
+
+      <div style="margin-top:var(--space-xl)">
+        <blockquote class="pq">
+          <q>Blank meant three different things depending on who read it.</q>
+          <div class="by"><span class="r"></span><span>Relationship Manager · discovery session</span></div>
+        </blockquote>
+      </div>
+    </section>
+
+    <!-- ===================== 03 ===================== -->
+    <section class="sec" id="s03">
+      <div class="srule"><span class="eb">03 · The reframe</span><span class="ln"></span><span class="sq"></span></div>
+      <p class="d-md">How might we make every empty field communicate its true meaning — consistently, on every screen?</p>
+      <p class="prose">The goal wasn't to pick a prettier placeholder. It was to make "empty" <b>legible and predictable</b> — so a
+        <button type="button" class="term" data-tip-label="Developer" data-tip="Whoever renders the field. Under the old system they had to decide what an empty value looked like — a design decision made a hundred times, inconsistently, at build time.">developer</button>
+        never has to make a judgment call, and an
+        <button type="button" class="term" data-tip-label="Advisor" data-tip="The relationship manager reading a client's position on screen. They can't open the database to check whether a blank means zero — they act on what the interface tells them.">advisor</button>
+        never has to wonder.</p>
+    </section>
+
+    <!-- ===================== 04 ===================== -->
+    <section class="sec" id="s04">
+      <div class="srule"><span class="eb">04 · The insight</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">"Empty" isn't one state. It's <span class="mark">four</span>.</h2>
+      <p class="prose">The breakthrough was refusing to treat emptiness as a single case. Each of these means something different to the person reading it — so each earns a different treatment. Select one to see what it renders as.</p>
+
+      <div data-states style="margin-top:var(--space-lg)">
+        <div class="states" role="tablist">
+          <button class="state" role="tab" aria-selected="true" data-tone="dash" data-token="—"
+            data-rule="Nothing was entered and nothing was necessarily expected. The blanket rule applies: <b>show an emdash</b>, never a word that could be mistaken for content.">
+            <span class="n">01</span><span class="t">No data</span>
+            <span class="d">Nothing was entered, and nothing was necessarily expected.</span>
+          </button>
+          <button class="state" role="tab" aria-selected="false" data-tone="ok" data-token="0.00"
+            data-rule="A financial field that exists and is expected to hold an amount. The zero is <b>intent, not absence</b> — so it must render as a real number.">
+            <span class="n">02</span><span class="t">Zero, legitimately</span>
+            <span class="d">A financial field that is genuinely, meaningfully zero.</span>
+          </button>
+          <button class="state" role="tab" aria-selected="false" data-tone="dash" data-token="—"
+            data-rule="A number was expected but can't be resolved. You <b>can't</b> show 0.00 here — that would assert a position the system doesn't actually know.">
+            <span class="n">03</span><span class="t">Invalid financial</span>
+            <span class="d">A number was expected but can't be resolved.</span>
+          </button>
+          <button class="state" role="tab" aria-selected="false" data-tone="ok" data-token="skip"
+            data-rule="An optional part inside a concatenated output. <b>Skip the empty segment entirely</b> — never punctuate a gap that isn't there.">
+            <span class="n">04</span><span class="t">Composed / optional</span>
+            <span class="d">An optional part inside a concatenated output.</span>
+          </button>
+        </div>
+        <div class="state-out"><div class="txt"></div><div class="tok"></div></div>
+      </div>
+    </section>
+
+    <!-- ===================== 05 ===================== -->
+    <section class="sec" id="s05">
+      <div class="srule"><span class="eb">05 · The system</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">One blanket rule. Three exceptions.</h2>
+      <p class="prose">A
+        <button type="button" class="term" data-tip-label="Deterministic" data-tip="Given the same input, the rule always produces the same output — with no room for interpretation. That's what makes it buildable as logic rather than enforceable as a guideline.">deterministic</button>
+        rule set — no interpretation required. It starts with a single default, then handles the cases where the default would lie.</p>
+
+      <div class="rules" style="margin-top:var(--space-lg)">
+        <div class="rule blanket">
+          <div class="cond">Blanket rule</div>
+          <p class="out">Any datatype with no value displays an emdash. <b>Simplify string and number before anything else.</b></p>
+          <div class="tok">—</div>
+        </div>
+        <div class="rule">
+          <div class="cond">Exception 1 · Financial, expected</div>
+          <p class="out">A financial field that exists and is expected to hold an amount — the zero is <b>intent</b>, not absence.</p>
+          <div class="tok">0.00</div>
+        </div>
+        <div class="rule">
+          <div class="cond">Exception 2 · Financial, invalid</div>
+          <p class="out">A financial field where no value can be resolved — you can't show 0.00, because <b>no value was ever expected</b>.</p>
+          <div class="tok">—</div>
+        </div>
+        <div class="rule">
+          <div class="cond">Exception 3 · Concatenated</div>
+          <p class="out">When an output field composes multiple inputs, <b>skip optional empties</b> — never punctuate a gap.</p>
+          <div class="tok">skip</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 06 ===================== -->
+    <section class="sec" id="s06">
+      <div class="srule"><span class="eb">06 · The circle of influence</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The logic was the easy part. <span class="mark">Alignment</span> was the work.</h2>
+      <p class="prose">A display rule only becomes a standard when the whole delivery org agrees to build against it. Turning "just show a dash" and "just show 0.00" into one deterministic rule meant winning — and being sharpened by — seven roles. Hover or tab through each one.</p>
+
+      <div class="coi" data-coi id="coi1" style="margin-top:var(--space-lg)">
+        <div class="list">
+          <button class="chip" data-d="Translated the display rules into acceptance criteria and pressure-tested every edge case against real data scenarios."><b>Business Analyst</b><small>Acceptance criteria</small></button>
+          <button class="chip" data-d="The end-user's voice — validated that '0.00' versus '—' matched how advisors actually read a client's position."><b>Relationship Manager</b><small>End-user reality</small></button>
+          <button class="chip" data-d="Design governance and sign-off — ensured the rule fit the wider design-system language and standards."><b>Design Director</b><small>Governance</small></button>
+          <button class="chip" data-d="Prioritised the work, arbitrated scope, and carried the rule into the backlog as deterministic logic."><b>Product Owner</b><small>Backlog &amp; scope</small></button>
+          <button class="chip" data-d="Aligned the rule to product strategy and roadmap, and secured buy-in above the team."><b>Product Director</b><small>Strategy buy-in</small></button>
+          <button class="chip" data-d="Turned the rule set into an implementation spec engineers could build against — no judgment calls left on the table."><b>Tech Lead</b><small>Implementation spec</small></button>
+          <button class="chip" data-d="Confirmed how null versus zero flows from the underlying services, so the display always matches the source of truth."><b>Infrastructure Lead</b><small>Source of truth</small></button>
+        </div>
+        <div class="stage2">
+          <svg class="edges" aria-hidden="true"></svg>
+          <div class="hub">DJ<small>RULE OWNER</small></div>
+          <div class="desc"></div>
+        </div>
+      </div>
+      <p class="mono-note">Seven roles, one rule. This is what "systems thinking" looks like as a team sport.</p>
+    </section>
+
+    <!-- ===================== 07 ===================== -->
+    <section class="sec" id="s07">
+      <div class="srule"><span class="eb">07 · The fix, in practice</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The same screen, before and after the rule.</h2>
+      <p class="prose">Watch what the rule does to the mess from section 01 — ambiguity resolved into intent. Each field shows <b>which rule fired</b> once the standard is applied. Toggle it.</p>
+
+      <div class="demo" data-demo style="margin-top:var(--space-lg)">
+        <div class="bar">
+          <span class="t">CRM · Investment Proposal</span>
+          <div class="toggle" role="group" aria-label="Before or after the rule">
+            <button type="button" data-before class="active" aria-pressed="true">Before</button>
+            <button type="button" data-after aria-pressed="false">After the rule</button>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="df" data-b="None" data-a="—" data-at="dash" data-rule="Blanket rule">
+            <span class="lbl">Description</span><span class="val">None</span><span class="fired"></span></div>
+          <div class="df" data-b="null" data-a="CHF 0.00" data-at="ok" data-rule="Exception 1 · financial, expected">
+            <span class="lbl">Expected Volume</span><span class="val">null</span><span class="fired"></span></div>
+          <div class="df" data-b="N/A" data-a="—" data-at="dash" data-rule="Blanket rule">
+            <span class="lbl">Location</span><span class="val">N/A</span><span class="fired"></span></div>
+          <div class="df" data-b="(blank)" data-a="—" data-at="dash" data-rule="Exception 2 · financial, invalid">
+            <span class="lbl">Expected Profit</span><span class="val">(blank)</span><span class="fired"></span></div>
+          <div class="df" data-b="0" data-a="—" data-at="dash" data-rule="Blanket rule · the 0 was a lie">
+            <span class="lbl">Related Objects</span><span class="val">0</span><span class="fired"></span></div>
+          <div class="df" data-b="Wall St, , , NY" data-a="Wall St, NY" data-at="ok" data-rule="Exception 3 · concatenated">
+            <span class="lbl">Domicile Address</span><span class="val">Wall St, , , NY</span><span class="fired"></span></div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span class="k null"><i></i> Ambiguous — reader must guess</span>
+        <span class="k dash"><i></i> Correctly absent — emdash</span>
+        <span class="k ok"><i></i> Resolved to a real value</span>
+      </div>
+      <p class="mono-note">The address row is the one people miss: a concatenated field punctuating gaps that were never there.</p>
+    </section>
+
+    <!-- ===================== 08 ===================== -->
+    <section class="sec" id="s08">
+      <div class="srule"><span class="eb">08 · The outcome</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">One everywhere-problem became <span class="mark">one rule</span>.</h2>
+      <p class="prose">The rule set became the <b>single source of truth for null-value display</b> — written as deterministic logic the delivery org could build against instead of a dozen judgment calls.</p>
+      <p class="prose">Specifics are under NDA (this ran on live client data), but the win is simpler than a number: the guesswork left the screen, and every empty field now says exactly what it means.</p>
+
+      <div class="slot" data-ratio="4/3" style="margin-top:var(--space-xl);max-width:520px">
+        <span class="idx">02</span>
+        <span class="lbl">Rule set as shipped spec · redacted</span>
+      </div>
+    </section>
+
+    <!-- ===================== 09 ===================== -->
+    <section class="sec" id="s09">
+      <div class="srule"><span class="eb">09 · Reflection</span><span class="ln"></span><span class="sq"></span></div>
+      <blockquote class="pq">
+        <q>The work I'm proudest of is invisible. Nobody notices null-handling done right — they just trust the screen. That's the job.</q>
+        <div class="by"><span class="r"></span><span>Djoaniel Hernandez · System note № 04</span></div>
+      </blockquote>
+
+      <div class="btn" style="margin-top:var(--space-xl)">
+        <span class="slab" aria-hidden="true"></span>
+        <button type="button" onclick="location.href='mailto:djoaniel@gmail.com'">Talk to me about systems work <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <nav class="prevnext">
+      <a class="pn plain" href="sarisari-snaps.html"><div class="k">← Previous case</div><div class="t">SariSari Snaps</div></a>
+      <a class="pn next plain" href="tessa.html"><div class="k">Next case →</div><div class="t">Tessa</div></a>
+    </nav>
+
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="in">
+    <div class="z">Created by Djoaniel Hernandez · NN/g #1046866 · <a href="mailto:djoaniel@gmail.com">djoaniel@gmail.com</a></div>
+    <div class="mk">意識</div>
+  </div>
+</footer>
+
+<script src="../assets/eishiki-v3.js"></script>
+</body>
+</html>

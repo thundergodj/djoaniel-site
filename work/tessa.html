@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TESSA — Case Study · Djoaniel Hernandez</title>
+<meta name="description" content="TESSA — a Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. Conversation design case study by Djoaniel Hernandez.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Anybody:wght@900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/eishiki-v3.css">
+</head>
+<body>
+
+<!-- ============================== CHROME ============================== -->
+<header class="top">
+  <div class="in">
+    <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <nav>
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#archive">Archive</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================== HERO ============================== -->
+<div class="inner" style="padding-top:var(--space-4xl)">
+  <a class="arrow plain" href="../index.html#work"><span class="g">←</span> All work</a>
+  <p style="font:var(--text-label);letter-spacing:.14em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 02 · Conversation design · Social impact</p>
+  <h1 class="d-hero">A career coach that lives<br>where the jobseekers <span class="mark">already are</span></h1>
+  <p class="prose lead">TESSA — the Training &amp; Employment Support Services Assistant — is a Facebook Messenger chatbot built by Accenture for Plan International Philippines. It coaches young Filipino jobseekers, particularly young women from marginalized communities, toward employment through
+    <button type="button" class="term" data-tip-label="Conversation, not portal" data-tip="A job portal shows every option at once and asks the user to filter. A conversation reveals one turn at a time &mdash; which means the designer, not the user, carries the burden of anticipation.">conversation instead of a job portal</button>.
+    I designed the engine underneath it.</p>
+
+  <div class="facts" style="margin-top:var(--space-2xl)">
+    <div class="f"><div class="k">My role</div><div class="v">Conversation / CUI Designer<small>End-to-end dialogue architecture</small></div></div>
+    <div class="f"><div class="k">Client</div><div class="v">Plan International PH<small>via Accenture</small></div></div>
+    <div class="f"><div class="k">Platform</div><div class="v">Facebook Messenger<small>No app install required</small></div></div>
+    <div class="f"><div class="k">Year</div><div class="v">2018<small>Recognized at WEF 2018</small></div></div>
+  </div>
+</div>
+
+<!-- ============================== BODY ============================== -->
+<div class="cs-grid" style="margin-top:var(--space-5xl)">
+
+  <nav class="snav" aria-label="Case study sections">
+    <a href="#s01"><span class="n">01</span><span>The situation</span></a>
+    <a href="#s02"><span class="n">02</span><span>The system move</span></a>
+    <a href="#s03"><span class="n">03</span><span>The engine</span></a>
+    <a href="#s04"><span class="n">04</span><span>The outcome</span></a>
+    <a href="#s05"><span class="n">05</span><span>Reflection</span></a>
+  </nav>
+
+  <main>
+
+    <!-- ===================== 01 ===================== -->
+    <section class="sec" id="s01" style="padding-top:0">
+      <div class="srule"><span class="eb">01 · The situation</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The users who need guidance most are the ones job portals <span class="mark">serve worst.</span></h2>
+      <p class="prose">Traditional job platforms assume a lot: a polished CV, confident English, reliable data access, and the self-assurance to navigate filters and application forms alone. For young Filipinos from marginalized communities — Plan International's audience — those assumptions fail quietly and constantly.</p>
+      <p class="prose">The gap wasn't job listings. It was <b>guidance</b>: someone to ask "what am I even qualified for?" without embarrassment.</p>
+
+      <div class="cards3" style="margin-top:var(--space-lg)">
+        <div class="cardx"><div class="n">Barrier 01</div><div class="t">No coach, no map</div><div class="d">Career counseling barely exists for this audience. First-generation jobseekers navigate hiring blind.</div></div>
+        <div class="cardx"><div class="n">Barrier 02</div><div class="t">Portals assume readiness</div><div class="d">Forms, filters, and CV uploads presume a user who already knows how hiring works.</div></div>
+        <div class="cardx"><div class="n">Barrier 03</div><div class="t">New apps are a cost</div><div class="d">Data is expensive and trust is scarce. Asking this audience to install something new is asking them to leave.</div></div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 ===================== -->
+    <section class="sec" id="s02">
+      <div class="srule"><span class="eb">02 · The system move</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">Don't build a destination. <span class="mark">Build a conversation.</span></h2>
+      <p class="prose">The core decision was to meet users inside Facebook Messenger — already installed, already trusted, already free-rated on most Philippine mobile plans. No new app, no new account, no new interface to learn. The interface is literally the one they use to talk to friends.</p>
+
+      <blockquote class="pq" style="margin:var(--space-xl) 0">
+        <q>If the user already knows how to chat, the entire UI problem becomes a conversation-design problem.</q>
+        <div class="by"><span class="r"></span><span>The reframe that set the scope</span></div>
+      </blockquote>
+
+      <p class="prose">That reframing is where my work lived. I designed the <b>main engine</b> — the conversational logic that drove the whole bot: the intent structure, the decision flows, and the dialogue architecture that turned a user's messy, human answers into a coherent coaching path. Not a scripted FAQ — a structured decision engine that maps a person's situation (skills, availability, goals) to actionable next steps, entirely through natural back-and-forth.</p>
+
+      <div class="chat" style="margin-top:var(--space-lg)">
+        <div class="hdr">Interaction model · illustrative</div>
+        <div class="bub bot">Hi! I'm TESSA 👋 I can help you get ready for work. Ano'ng gusto mong gawin — find a job, or build your skills first?</div>
+        <div class="bub user">di ko alam eh... wala pa akong experience</div>
+        <div class="bub bot">That's okay — everyone starts there. Let's find out what you're already good at. Tell me: have you ever helped in a family business, sari-sari store, or taken care of siblings?</div>
+      </div>
+      <p class="mono-note">Reconstructed to show the engine's behaviour: no dead ends, no shame, every answer routes somewhere useful. Production dialogue belongs to the client.</p>
+    </section>
+
+    <!-- ===================== 03 ===================== -->
+    <section class="sec" id="s03">
+      <div class="srule"><span class="eb">03 · The engine</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">Rules for a bot that talks to people with <span class="mark">everything at stake.</span></h2>
+      <p class="prose">A conversational UI for a vulnerable audience has almost no margin for confusion. A confusing form annoys a user; a confusing coach convinces them the problem is <i>them</i>. The architecture followed from that.</p>
+
+      <div class="plist" style="margin-top:var(--space-lg)">
+        <div class="prow"><div class="n">01</div>
+          <div><div class="t">Every input routes somewhere</div><div class="d">The decision tree had to absorb real human answers — uncertain, misspelled, off-script — and still move the user forward. <b>"I don't know" is a valid answer with its own branch,</b> not an error state.</div></div></div>
+        <div class="prow"><div class="n">02</div>
+          <div><div class="t">Coach, don't interrogate</div><div class="d">The same data a job portal collects through a form gets gathered through dialogue — a few questions at a time, each one earning the next. The structure is an interview; <b>the experience is a chat with someone on your side.</b></div></div></div>
+        <div class="prow"><div class="n">03</div>
+          <div><div class="t">Structure carries the empathy</div><div class="d">Warmth isn't a coat of friendly copy on top — it's architectural. Branch design decides whether a user with no work experience feels guided or judged. <b>The kindest thing a system can do is always have a next step.</b></div></div></div>
+        <div class="prow"><div class="n">04</div>
+          <div><div class="t">End at action, not information</div><div class="d">Every path terminates in something the user can do — a skill to build, a preparation step, a concrete lead — because the goal was employment readiness, <b>not a well-informed dead end.</b></div></div></div>
+      </div>
+
+      <p class="mono-note">A visual UI shows all its options at once; a conversation reveals one turn at a time. Every plausible situation has to be mapped, branched, and resolved before the first user ever types "hi."</p>
+    </section>
+
+    <!-- ===================== 04 ===================== -->
+    <section class="sec" id="s04">
+      <div class="srule"><span class="eb">04 · The outcome</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">Recognized on the <span class="mark">world stage.</span></h2>
+      <p class="prose">TESSA's impact on youth employment was significant enough to be featured at the <b>World Economic Forum in 2018</b> — a social-impact chatbot from the Philippines, alongside global initiatives. Plan International Philippines and Accenture publicly featured testimonials from young Filipinas who found employment with TESSA's guidance: the outcome the entire engine was designed to route toward.</p>
+
+      <div class="slot" data-ratio="16/9" style="margin-top:var(--space-xl)">
+        <span class="idx">01</span>
+        <span class="lbl">Dialogue architecture map<br>(reconstructed · client dialogue withheld)</span>
+      </div>
+      <p class="mono-note">Outcomes limited to publicly documented facts. Detailed usage metrics belong to the client and are not reproduced here.</p>
+    </section>
+
+    <!-- ===================== 05 ===================== -->
+    <section class="sec" id="s05">
+      <div class="srule"><span class="eb">05 · Reflection</span><span class="ln"></span><span class="sq"></span></div>
+      <p class="prose">TESSA is the same discipline I use in banking and pharma work, pointed at a different stake: take a user with low context and zero tolerance for friction, and design a system that simply cannot strand them. <b>Enterprise software users are trapped by their jobs; TESSA's users would just leave</b> — which makes conversational architecture for them the more honest test of whether a flow actually works.</p>
+
+      <blockquote class="pq" style="margin-top:var(--space-xl)">
+        <q>The model generating the words matters less than the architecture deciding where the conversation is allowed to go.</q>
+        <div class="by"><span class="r"></span><span>Djoaniel Hernandez · System note № 02</span></div>
+      </blockquote>
+
+      <div class="btn" style="margin-top:var(--space-xl)">
+        <span class="slab" aria-hidden="true"></span>
+        <button type="button" onclick="location.href='mailto:djoaniel@gmail.com'">Talk to me about systems work <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <nav class="prevnext">
+      <a class="pn plain" href="no-value.html"><div class="k">← Previous case</div><div class="t">No Value</div></a>
+      <a class="pn next plain" href="sarisari-snaps.html"><div class="k">Next case →</div><div class="t">SariSari Snaps</div></a>
+    </nav>
+
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="in">
+    <div class="z">Created by Djoaniel Hernandez · NN/g #1046866 · <a href="mailto:djoaniel@gmail.com">djoaniel@gmail.com</a></div>
+    <div class="mk">意識</div>
+  </div>
+</footer>
+
+<script src="../assets/eishiki-v3.js"></script>
+</body>
+</html>

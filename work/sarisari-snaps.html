@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SariSari Snaps — Case Study · Djoaniel Hernandez</title>
+<meta name="description" content="Turning Messenger DMs into a self-serve ritual — a four-step configurator and the Lucy design system for a Philippine home studio selling custom magnetic photo frames.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Anybody:wght@900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/eishiki-v3.css">
+</head>
+<body>
+
+<!-- ============================== CHROME ============================== -->
+<header class="top">
+  <div class="in">
+    <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <nav>
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#archive">Archive</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================== HERO ============================== -->
+<div class="inner" style="padding-top:var(--space-4xl)">
+  <a class="arrow plain" href="../index.html#work"><span class="g">←</span> All work</a>
+  <p style="font:var(--text-label);letter-spacing:.14em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 03 · E-commerce · Design system</p>
+  <h1 class="d-hero">Turning DMs into<br>a <span class="mark">self-serve ritual</span></h1>
+  <p class="prose lead">SariSari Snaps sells custom magnetic photo frames out of a home studio in the Philippines. Orders lived in Messenger threads — names misspelled, prices re-explained fifty times a week. I designed a four-step configurator and the design system behind it, so a customer could build, personalize, and confirm a keepsake in under two minutes, on their own.</p>
+
+  <div class="facts" style="margin-top:var(--space-2xl)">
+    <div class="f"><div class="k">My role</div><div class="v">UX + Visual + Front-end<small>End-to-end, solo</small></div></div>
+    <div class="f"><div class="k">Scope</div><div class="v">Configurator flow<small>+ the "Lucy" design system</small></div></div>
+    <div class="f"><div class="k">Platform</div><div class="v">Mobile-first web<small>GCash checkout</small></div></div>
+    <div class="f"><div class="k">Timeline</div><div class="v">Concept → shipped<small>~5 weeks</small></div></div>
+  </div>
+</div>
+
+<!-- ============================== BODY ============================== -->
+<div class="cs-grid" style="margin-top:var(--space-5xl)">
+
+  <nav class="snav" aria-label="Case study sections">
+    <a href="#s01"><span class="n">01</span><span>The situation</span></a>
+    <a href="#s02"><span class="n">02</span><span>The insight</span></a>
+    <a href="#s03"><span class="n">03</span><span>The principles</span></a>
+    <a href="#s04"><span class="n">04</span><span>The flow</span></a>
+    <a href="#s05"><span class="n">05</span><span>Inside the system</span></a>
+    <a href="#s06"><span class="n">06</span><span>The outcome</span></a>
+    <a href="#s07"><span class="n">07</span><span>Reflection</span></a>
+  </nav>
+
+  <main>
+
+    <!-- ===================== 01 ===================== -->
+    <section class="sec" id="s01" style="padding-top:0">
+      <div class="srule"><span class="eb">01 · The situation</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">A micro-business drowning in <span class="mark">its own success.</span></h2>
+      <p class="prose">"The Celebrant" ran SariSari Snaps the way a lot of Filipino home businesses run: entirely through Facebook Messenger. A customer would send a photo, ask the price, get talked through the options, send four more photos, change their mind on the color, and — somewhere in that thread — the engraving text would get lost. Every order was a manual conversation, and the busier the shop got, the more orders slipped.</p>
+      <p class="prose">The product itself is lovely: a matte magnetic frame that holds four photos, personalized with a name or short message, engraved free. The problem was never demand. It was that <b>the ordering experience didn't match the care of the product</b> — and it didn't scale past the owner's own thumbs.</p>
+
+      <div class="cards3" style="margin-top:var(--space-lg)">
+        <div class="cardx"><div class="n">Friction 01</div><div class="t">No price clarity</div><div class="d">"How much?" was the most-sent message. Pricing lived in the owner's head, re-typed all day.</div></div>
+        <div class="cardx"><div class="n">Friction 02</div><div class="t">Lost details</div><div class="d">Engraving text, color, and photo order arrived across a dozen messages. Mistakes shipped.</div></div>
+        <div class="cardx"><div class="n">Friction 03</div><div class="t">Owner as bottleneck</div><div class="d">Nothing moved unless she was online to answer. Orders capped at how fast one person could reply.</div></div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 ===================== -->
+    <section class="sec" id="s02">
+      <div class="srule"><span class="eb">02 · The insight</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The interface should be loud. <span class="mark">The product should be quiet.</span></h2>
+      <p class="prose">The instinct with a fun, giftable product is to make everything colorful. But the frame sits against someone's <i>actual photos</i> — a wedding, a baby, a barkada trip. If the product colors are saturated, they fight the photo. If the interface is timid, the brand feels generic and the "add to cart" moment never lands.</p>
+
+      <blockquote class="pq" style="margin:var(--space-xl) 0">
+        <q>So I split the color into two collections that never mix: a baddie interface, and a quiet product.</q>
+        <div class="by"><span class="r"></span><span>The constraint that answered everything else</span></div>
+      </blockquote>
+
+      <p class="prose">This one decision resolved almost every downstream question. The UI could be as expressive as the brand wanted — magenta selection, honey CTAs, a lime promo chip — because none of it ever touches the rendered frame. The five frame colors stayed deliberately matte, tuned to flatter a photo rather than shout over it. <b>Each interface accent is a frame color at the same hue with the chroma cranked up</b> — so the two systems feel related without ever clashing.</p>
+
+      <div class="cols2" style="margin-top:var(--space-lg)">
+        <div class="colcard">
+          <div class="h">Lucy — the interface palette</div>
+          <div class="s">Amplified. UI chrome only: selection, CTAs, promos, feedback. Never rendered on the product.</div>
+          <div class="swatches">
+            <i style="background:#C01C76"></i><i style="background:#F0B731"></i><i style="background:#126B42"></i>
+            <i style="background:#C7F04D"></i><i style="background:#16BED0"></i><i style="background:#4B1E78"></i>
+          </div>
+        </div>
+        <div class="colcard">
+          <div class="h">The 5 frame colors — matte</div>
+          <div class="s">What the customer buys. Muted on purpose, so the photo always wins. Color never changes the price.</div>
+          <div class="swatches">
+            <i style="background:#F5F3EF"></i><i style="background:#2B2B2B"></i><i style="background:#BEC9A5"></i>
+            <i style="background:#E8AFCF"></i><i style="background:#A3D8E1"></i>
+          </div>
+        </div>
+      </div>
+      <p class="mono-note">Locked law: frame colors stay matte, permanently. Writing the rule down kept later additions from drifting the two collections back together.</p>
+    </section>
+
+    <!-- ===================== 03 ===================== -->
+    <section class="sec" id="s03">
+      <div class="srule"><span class="eb">03 · The principles</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">Four rules that made every other decision easy.</h2>
+
+      <div class="plist" style="margin-top:var(--space-lg)">
+        <div class="prow"><div class="n">01</div>
+          <div><div class="t">Two collections, never blended</div><div class="d">Interface color and product color are separate systems with separate jobs. <b>The UI can be as loud as the brand; the frame stays calm.</b></div></div></div>
+        <div class="prow"><div class="n">02</div>
+          <div><div class="t">Three fonts, three locked jobs</div><div class="d">The display face is emotional only (headlines, giftable copy). The sans carries every functional pixel — <b>including prices and buttons</b>. Mono is reserved for tiny system tags. No exceptions, so nothing ever feels off-brand by accident.</div></div></div>
+        <div class="prow"><div class="n">03</div>
+          <div><div class="t">One selection color</div><div class="d">Selection Magenta means "this is chosen / this is focused" everywhere — swatches, form focus, SKU tiles, steps. <b>One consistent signal</b> so the customer always knows what they've picked.</div></div></div>
+        <div class="prow"><div class="n">04</div>
+          <div><div class="t">Warmth is a feature, not decoration</div><div class="d">The voice is Taglish, direct, a little funny — <b>even in the error states</b>. A payment failure should feel like a friend catching a typo, not a system scolding you.</div></div></div>
+      </div>
+    </section>
+
+    <!-- ===================== 04 ===================== -->
+    <section class="sec" id="s04">
+      <div class="srule"><span class="eb">04 · The flow</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">Four steps, <span class="mark">no dead ends.</span></h2>
+      <p class="prose">The whole Messenger conversation compresses into a locked four-step path. Each step does exactly one job, shows progress, and lets you go back without losing anything. Personalization — the thing that used to get lost in the thread — gets its own dedicated step, with live character limits so nothing ships too long to fit.</p>
+
+      <div class="steps" style="margin-top:var(--space-lg)">
+        <div class="step"><div class="n">1</div><div class="t">Choose frame</div><div class="d">Pick the SKU. Price is visible up front — the question that used to fill the inbox is answered before it's asked.</div></div>
+        <div class="step"><div class="n">2</div><div class="t">Pick color</div><div class="d">Five matte options on a live preview. Color has zero price impact, stated plainly, so there's no hesitation.</div></div>
+        <div class="step"><div class="n">3</div><div class="t">Add your text</div><div class="d">Free engraving with per-column limits and instant validation. The detail that used to get lost is now structured.</div></div>
+        <div class="step"><div class="n">4</div><div class="t">Review order</div><div class="d">One clear summary, then GCash. The owner receives a complete, correct order instead of a puzzle to assemble.</div></div>
+      </div>
+
+      <div class="slot" data-ratio="16/9" style="margin-top:var(--space-xl)">
+        <span class="idx">01</span>
+        <span class="lbl">Configurator · step 3, personalization<br>(mobile-first)</span>
+      </div>
+    </section>
+
+    <!-- ===================== 05 ===================== -->
+    <section class="sec" id="s05">
+      <div class="srule"><span class="eb">05 · Inside the system</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">Small decisions that <span class="mark">carry the brand.</span></h2>
+
+      <p class="prose"><b>The button that stamps.</b> The primary CTA is Honey fill on Ink text — a 9.5:1 contrast ratio, so it's both the loudest thing on screen and fully accessible. Its signature is a hard 6px offset shadow with no blur: Ink at rest, Selection Magenta on hover, and on press the offset collapses to zero so the button physically stamps down like a rubber stamp. A tiny piece of tactility that makes committing to an order feel good.</p>
+
+      <p class="prose"><b>Naming the field "Your text."</b> "Inscription" and "Engraving" tested as intimidating — they made people feel they needed something profound. "Your text" gave permission to be casual, and casual is exactly the tone that gets orders finished. The label is a UX decision, not a copy afterthought.</p>
+
+      <p class="prose"><b>Voice, all the way into the errors.</b> Most design systems let the brand voice evaporate at the system messages. Here it's the opposite — the errors are where the warmth matters most, because that's where people feel stupid.</p>
+
+      <div class="vpairs" style="margin-top:var(--space-lg)">
+        <div class="vpair"><div class="tag">Payment failed</div>
+          <div class="before">Error: Transaction declined (code 402).</div>
+          <div class="after">Payment didn't go through. Your card was declined — no charge was made. Give it another try, or use GCash instead.</div></div>
+        <div class="vpair"><div class="tag">Text too long</div>
+          <div class="before">Invalid input: exceeds maximum length.</div>
+          <div class="after">Max 10 characters per column — try something shorter.</div></div>
+        <div class="vpair"><div class="tag">Info</div>
+          <div class="before">Notice: orders after 15:00 process next business day.</div>
+          <div class="after">Heads up po: orders placed after 3PM ship the next working day.</div></div>
+        <div class="vpair"><div class="tag">Saved</div>
+          <div class="before">Draft saved successfully.</div>
+          <div class="after">Saved. Your photos and text are locked in — you can still edit before checkout.</div></div>
+      </div>
+      <p class="mono-note">Struck-through line = the default system message. Below it, the one that shipped.</p>
+    </section>
+
+    <!-- ===================== 06 ===================== -->
+    <section class="sec" id="s06">
+      <div class="srule"><span class="eb">06 · The outcome</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The inbox stopped being <span class="mark">the storefront.</span></h2>
+      <p class="prose">The configurator turned a one-person, always-on operation into something that runs while the owner sleeps. Orders now arrive complete and correct — the frame, color, engraving, and quantity already assembled — so the studio spends its time making, not decoding threads.</p>
+
+      <div class="stats" style="margin-top:var(--space-xl)">
+        <div class="stat"><span class="v">4→1</span><div class="r"></div><span class="l">Multi-message thread → one self-serve flow</span></div>
+        <div class="stat"><span class="v">0</span><div class="r"></div><span class="l">Pricing questions in the inbox</span><span class="n">The answer is on the page now</span></div>
+        <div class="stat"><span class="v">24/7</span><div class="r"></div><span class="l">Orders accepted without the owner online</span></div>
+      </div>
+      <p class="mono-note">Directional outcomes framed from the design goals of a personal project, not audited business metrics.</p>
+    </section>
+
+    <!-- ===================== 07 ===================== -->
+    <section class="sec" id="s07">
+      <div class="srule"><span class="eb">07 · Reflection</span><span class="ln"></span><span class="sq"></span></div>
+      <p class="prose">The lesson I keep from this one is that <b>a single, well-named constraint does more than a hundred pretty screens.</b> "Loud interface, quiet product" wasn't a visual flourish — it was a rule that answered color, contrast, typography, and even copy questions before they came up. When the constraint is right, the design system almost writes itself, and everyone building on it stays in tune.</p>
+      <p class="prose">If I took it further, I'd add a photo-upload preview inside step three so customers see their actual images in the frame before checkout, and I'd instrument the flow to see exactly where — if anywhere — people still hesitate.</p>
+
+      <blockquote class="pq" style="margin-top:var(--space-xl)">
+        <q>Made to keep.</q>
+        <div class="by"><span class="r"></span><span>SariSari Snaps · brand line</span></div>
+      </blockquote>
+
+      <div class="actions" style="margin-top:var(--space-xl)">
+        <div class="btn">
+          <span class="slab" aria-hidden="true"></span>
+          <button type="button" onclick="location.href='mailto:djoaniel@gmail.com'">Talk to me about systems work <span aria-hidden="true">→</span></button>
+        </div>
+        <a class="arrow plain" href="https://www.figma.com/design/C96Egl8nHV4FKmSlwijlQt" target="_blank" rel="noopener">See the raw working file <span class="g">↗</span></a>
+      </div>
+    </section>
+
+    <nav class="prevnext">
+      <a class="pn plain" href="tessa.html"><div class="k">← Previous case</div><div class="t">Tessa</div></a>
+      <a class="pn next plain" href="no-value.html"><div class="k">Next case →</div><div class="t">No Value</div></a>
+    </nav>
+
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="in">
+    <div class="z">Created by Djoaniel Hernandez · NN/g #1046866 · <a href="mailto:djoaniel@gmail.com">djoaniel@gmail.com</a></div>
+    <div class="mk">意識</div>
+  </div>
+</footer>
+
+<script src="../assets/eishiki-v3.js"></script>
+</body>
+</html>

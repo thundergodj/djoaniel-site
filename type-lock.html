@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Type lock — Instrument Serif floor test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&family=Anybody:wght@900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:rgb(9,9,9);--body:rgb(62,62,58);--muted:rgb(102,102,96);--faint:rgb(150,149,143);
+  --line:rgb(214,213,208);--paper:rgb(247,246,242);--white:rgb(255,255,255);
+  --accent:rgb(11,63,255);--null:rgb(169,46,38);--ok:oklch(0.56 0.05 155);
+  --serif:"Instrument Serif",Georgia,serif;
+  --sans:"Radio Canada",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",monospace;
+  --hair:0.667px solid var(--line);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;padding:clamp(20px,4vw,64px)}
+.w{max-width:1080px;margin:0 auto}
+.eb{font-family:Anybody,sans-serif;font-weight:900;font-size:19px;line-height:1;
+  text-transform:uppercase;letter-spacing:-.01em}
+.srule{display:flex;align-items:center;gap:12px;margin:0 0 22px}
+.srule .ln{height:1px;background:var(--ink);flex:1}
+.srule .sq{width:9px;height:9px;background:var(--accent)}
+h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5vw,64px);
+  line-height:1.02;letter-spacing:-.03em;margin:0 0 10px}
+.lede{font-size:16px;line-height:1.62;color:var(--body);max-width:62ch;margin:0 0 44px}
+section{margin:0 0 56px}
+.k{font-family:var(--mono);font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--faint)}
+
+/* ---- ladder ---- */
+.lad{border-top:var(--hair)}
+.rung{display:grid;grid-template-columns:74px 1fr 128px;gap:18px;align-items:baseline;
+  padding:13px 0;border-bottom:var(--hair)}
+.rung .sz{font-family:var(--mono);font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.rung .sp{font-family:var(--serif);font-weight:400;line-height:1.1;letter-spacing:-.02em;
+  color:var(--ink);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.rung .vd{font-family:var(--mono);font-size:9px;letter-spacing:.11em;text-transform:uppercase;text-align:right}
+.fail .sz,.fail .sp{color:var(--null)}
+.fail .vd{color:var(--null)}
+.edge .vd{color:var(--accent)}
+.pass .vd{color:var(--ok)}
+.zone{background:rgba(169,46,38,.045)}
+
+/* ---- side by side ---- */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:0;border:var(--hair);background:var(--white)}
+.cmp > div{padding:20px 22px}
+.cmp > div:first-child{border-right:var(--hair)}
+.cmp .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--faint);margin-bottom:14px}
+.cmp p{margin:0 0 12px}
+.s16{font-family:var(--serif);font-size:16px;line-height:1.2}
+.s19{font-family:var(--serif);font-size:19px;line-height:1.16}
+.s24{font-family:var(--serif);font-size:24px;line-height:1.1}
+.r16{font-family:var(--sans);font-weight:700;font-size:16px;line-height:1.24;letter-spacing:-.012em}
+.r19{font-family:var(--sans);font-weight:700;font-size:19px;line-height:1.2;letter-spacing:-.012em}
+.r24{font-family:var(--sans);font-weight:700;font-size:24px;line-height:1.16;letter-spacing:-.015em}
+
+/* ---- rule box ---- */
+.rule{border:1px solid var(--ink);background:var(--white);padding:24px 26px}
+.rule h3{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.06;
+  letter-spacing:-.025em;margin:0 0 14px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-family:var(--mono);font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--faint);text-align:left;font-weight:400;padding:0 0 9px;border-bottom:var(--hair)}
+td{padding:10px 0;border-bottom:var(--hair);color:var(--body);vertical-align:top}
+td:first-child{color:var(--ink);font-weight:600;width:34%}
+td code{font-family:var(--mono);font-size:11.5px;color:var(--accent)}
+.note{font-size:13.5px;line-height:1.62;color:var(--body);max-width:62ch}
+@media (max-width:720px){.cmp{grid-template-columns:1fr}.cmp>div:first-child{border-right:0;border-bottom:var(--hair)}
+  .rung{grid-template-columns:58px 1fr;}.rung .vd{grid-column:1/-1;text-align:left}}
+</style>
+</head>
+<body>
+<div class="w">
+
+  <div class="srule"><span class="eb">Type lock</span><span class="ln"></span><span class="sq"></span></div>
+  <h1>How small can Instrument Serif go before it stops being Instrument Serif?</h1>
+  <p class="lede">Instrument Serif is a single-weight display face with high stroke contrast. Its thin strokes measure roughly 1/15 of the cap height — so the hairline's rendered width is a direct function of size, and below a threshold it falls under one device pixel and the renderer greys it into mush. Scroll the ladder on the machine you actually design on and judge it with your eyes; the verdict column is the arithmetic.</p>
+
+  <section>
+    <div class="srule"><span class="eb">01 · The ladder</span><span class="ln"></span><span class="sq"></span></div>
+    <div class="lad">
+      <div class="rung fail zone"><span class="sz">12 px</span><span class="sp">Handbuilt systems that survive contact</span><span class="vd">Hairline 0.55px — fails</span></div>
+      <div class="rung fail zone"><span class="sz">14 px</span><span class="sp">Handbuilt systems that survive contact</span><span class="vd">Hairline 0.65px — fails</span></div>
+      <div class="rung fail zone"><span class="sz">16 px</span><span class="sp">Handbuilt systems that survive contact</span><span class="vd">Hairline 0.74px — fails</span></div>
+      <div class="rung fail zone"><span class="sz">18 px</span><span class="sp">Handbuilt systems that survive contact</span><span class="vd">Hairline 0.83px — fails</span></div>
+      <div class="rung fail zone"><span class="sz">20 px</span><span class="sp">Handbuilt systems that survive contact</span><span class="vd">Hairline 0.92px — marginal</span></div>
+      <div class="rung edge"><span class="sz">22 px</span><span class="sp">Handbuilt systems that survive contact</span><span class="vd">Hairline 1.01px — edge</span></div>
+      <div class="rung edge"><span class="sz">24 px</span><span class="sp">Handbuilt systems that survive contact</span><span class="vd">Hairline 1.10px — floor</span></div>
+      <div class="rung pass"><span class="sz">28 px</span><span class="sp">Handbuilt systems that survive contact</span><span class="vd">1.29px — safe</span></div>
+      <div class="rung pass"><span class="sz">34 px</span><span class="sp">Handbuilt systems that survive contact</span><span class="vd">1.56px — safe</span></div>
+      <div class="rung pass"><span class="sz">46 px</span><span class="sp">Handbuilt systems</span><span class="vd">2.11px — intended</span></div>
+      <div class="rung pass"><span class="sz">72 px</span><span class="sp">Handbuilt</span><span class="vd">3.31px — intended</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="srule"><span class="eb">02 · The swap</span><span class="ln"></span><span class="sq"></span></div>
+    <p class="note" style="margin:0 0 20px">Same strings, same sizes. Left is the serif inside its failure zone; right is Radio Canada 700 doing the job instead. The point isn't that the serif looks bad — it's that below the floor it stops carrying any of the character you're paying it for, while costing you legibility.</p>
+    <div class="cmp">
+      <div>
+        <div class="lbl">Instrument Serif — below floor</div>
+        <p class="s16">The "No Value" System</p>
+        <p class="s19">The "No Value" System</p>
+        <p class="s24">The "No Value" System</p>
+      </div>
+      <div>
+        <div class="lbl">Radio Canada 700 — same sizes</div>
+        <p class="r16">The "No Value" System</p>
+        <p class="r19">The "No Value" System</p>
+        <p class="r24">The "No Value" System</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="srule"><span class="eb">03 · The locked rule</span><span class="ln"></span><span class="sq"></span></div>
+    <div class="rule">
+      <h3>Instrument Serif never renders below 24px. Ever.</h3>
+      <p class="note" style="margin:0 0 22px">24px is where the hairline clears 1.0 device pixels on a standard 1× display — which is what most of your audience is on, since a 1920×1080 Windows laptop at 125% scaling is the single most common viewport. On a 2× retina panel you could cheat down to about 18px, but the site cannot detect that reliably enough to bet type on it. So: one floor, no exceptions.</p>
+      <table>
+        <tr><th>Role</th><th>Face</th><th>Size</th></tr>
+        <tr><td>Wordmark</td><td>Radio Canada 700, uppercase, <code>-0.035em</code></td><td><code>clamp(42px, 7.1vh, 98px)</code></td></tr>
+        <tr><td>Thesis / statements</td><td>Instrument Serif</td><td><code>clamp(24px, 2.5vh, 34px)</code></td></tr>
+        <tr><td>Card &amp; section titles</td><td>Instrument Serif — <em>if ≥24px</em></td><td><code>clamp(24px, 2.35vh, 27px)</code></td></tr>
+        <tr><td>Card titles, short viewports</td><td>Radio Canada 700 <em>(automatic swap under 900px height)</em></td><td><code>clamp(15px, 2.05vh, 19px)</code></td></tr>
+        <tr><td>Body prose</td><td>Radio Canada 400</td><td>15–17px / 1.6, max 62ch</td></tr>
+        <tr><td>Labels, data, captions</td><td>IBM Plex Mono</td><td>8–11px, <code>0.11–0.15em</code></td></tr>
+        <tr><td>Section eyebrows</td><td>Anybody 900</td><td>19px, uppercase</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="srule"><span class="eb">04 · Consequence</span><span class="ln"></span><span class="sq"></span></div>
+    <p class="note">The homepage now enforces this automatically. Above 900px viewport height, card titles are Instrument Serif at 24–27px. Below it, they swap to Radio Canada 700 rather than shrinking the serif into the failure zone. That swap is the readability rule from the north star doing visible work: the frame yields to the content, and nothing on the page is set below the size at which it was designed to be read.</p>
+  </section>
+
+</div>
+</body>
+</html>

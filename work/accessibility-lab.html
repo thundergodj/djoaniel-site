@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Break the interface — Accessibility audit lab · Djoaniel Hernandez</title>
+<meta name="description" content="Five surfaces, ten criteria, one platform pass. The WCAG 2.2 AA audit template I built for a Swiss banking design team — wired to live controls so you can break it yourself.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Anybody:wght@900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/eishiki-v3.css">
+<style>
+/* ==================================================================
+   ACCESSIBILITY LAB — case-study-local components.
+   Every value below resolves to an eishiki-v3 token. No new colours,
+   no corner radius, no shadow. Semantics reuse the existing legend:
+     sage  (--data-ok)     = passed
+     red   (--data-null)   = failed
+     blue  (--accent)      = inherited
+     ochre (--accent-warm) = the platform pass
+   ================================================================== */
+
+/* ---- surface index (the five audited families) ---- */
+.surfaces{display:grid;grid-template-columns:repeat(5,1fr);border:var(--border-hair);
+  background:var(--surface-card-25)}
+@media(max-width:820px){.surfaces{grid-template-columns:repeat(2,1fr)}}
+.surf{text-align:left;background:transparent;border:0;border-right:var(--border-hair);
+  padding:var(--space-md) var(--space-sm);cursor:pointer;font:inherit;
+  transition:background var(--dur-fast) linear}
+.surf:last-child{border-right:0}
+.surf:hover,.surf.on{background:var(--white)}
+.surf .n{font:var(--text-caption);letter-spacing:.12em;color:var(--text-faint)}
+.surf .t{font-family:var(--font-sans);font-weight:700;font-size:15px;line-height:1.25;
+  color:var(--text-primary);margin:9px 0 6px}
+.surf.on .t{color:var(--accent)}
+.surf .s{font:var(--text-label);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-muted)}
+.surf[disabled]{cursor:default;opacity:1}
+.surf[disabled] .t{color:var(--text-primary)}
+.surf.platform{background:rgba(0,0,0,0)}
+.surf.platform .s{color:var(--accent-warm)}
+
+/* ---- lab shell ---- */
+.lab{display:grid;grid-template-columns:340px 1fr;gap:var(--space-lg);
+  align-items:start;margin-top:var(--space-lg)}
+@media(max-width:1080px){.lab{grid-template-columns:1fr}}
+.box{border:var(--border-hair);background:var(--surface-card-30)}
+.box > .hd{display:flex;align-items:center;gap:var(--space-2xs);padding:13px 16px;
+  border-bottom:var(--border-hair);font:var(--text-micro);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-primary)}
+.box > .hd .r{margin-left:auto;font:var(--text-caption);letter-spacing:.1em;
+  color:var(--text-faint)}
+.box .bd{padding:var(--space-md) 16px}
+
+/* ---- controls ---- */
+.ctl{padding:15px 0;border-bottom:var(--border-dashed)}
+.ctl:first-child{padding-top:2px}
+.ctl:last-child{border-bottom:0;padding-bottom:2px}
+.ctl .sc{font:var(--text-label);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);font-weight:600}
+.ctl .nm{display:block;font-family:var(--font-sans);font-weight:700;font-size:14px;
+  line-height:1.3;color:var(--text-primary);margin:7px 0 4px}
+.ctl .hp{font-family:var(--font-sans);font-size:12.5px;line-height:1.5;
+  color:var(--text-muted);margin:0}
+
+/* slider + steppers — 2.5.7: never drag-only */
+.sl{display:flex;align-items:center;gap:8px;margin-top:11px}
+.sl input[type=range]{flex:1;height:24px;accent-color:var(--accent);cursor:pointer}
+.stp{width:30px;height:30px;flex:none;border:var(--border-solid);background:var(--white);
+  font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--text-primary);
+  cursor:pointer;line-height:1;padding:0}
+.stp:hover{border-color:var(--accent);color:var(--accent)}
+.ro{display:flex;align-items:center;gap:8px;margin-top:9px;font-family:var(--font-mono)}
+.ro .sw{width:13px;height:13px;flex:none;border:0.667px solid var(--border-default);display:block}
+.ro .v{font-size:19px;font-weight:600;letter-spacing:-.02em;color:var(--text-primary)}
+.ro .q{font-size:10px;letter-spacing:.08em;color:var(--text-faint);text-transform:uppercase}
+.ro .b{margin-left:auto;font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:600;padding:4px 8px}
+/* Verdict inks are darkened past the raw sage/red tokens so the badges
+   themselves clear 4.5:1 at 9px. An accessibility artifact that fails its
+   own contrast check is not an artifact. */
+.b-ok{background:rgba(86,128,102,.14);color:var(--ok-ink)}
+.b-no{background:rgba(169,46,38,.10);color:var(--no-ink)}
+:root{--ok-ink:rgb(38,84,56);--no-ink:rgb(150,38,31)}
+
+/* switch — square, no radius, system-consistent */
+.sr{display:flex;gap:var(--space-xs);align-items:flex-start}
+.sr .tx{flex:1}
+button.tg{flex:none;margin-top:3px;width:46px;height:24px;border:var(--border-solid);
+  background:var(--white);position:relative;cursor:pointer;padding:0;
+  transition:background var(--dur-fast) linear,border-color var(--dur-fast) linear}
+button.tg::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;
+  background:var(--text-faint);transition:transform var(--dur-fast) var(--ease-snap),
+  background var(--dur-fast) linear}
+button.tg[aria-pressed="true"]{border-color:var(--accent)}
+button.tg[aria-pressed="true"]::after{transform:translateX(22px);background:var(--accent)}
+
+/* ---- audit artifact ---- */
+.audit .hd{background:var(--surface-inverse);color:var(--text-inverse);border-bottom:0}
+.audit .hd .r{color:var(--ink-400)}
+.ovl{margin-left:auto;font:var(--text-caption);letter-spacing:.12em;text-transform:uppercase;
+  font-weight:600;padding:5px 9px}
+.ar{display:grid;grid-template-columns:74px 1fr;gap:var(--space-xs);padding:12px 16px;
+  border-bottom:var(--border-hair);align-items:start}
+.ar:last-child{border-bottom:0}
+.ar .st{font:var(--text-label);letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  padding:5px 0;text-align:center}
+.st-ok{background:rgba(86,128,102,.14);color:var(--ok-ink)}
+.st-no{background:rgba(169,46,38,.10);color:var(--no-ink)}
+.st-in{background:rgba(11,63,255,.08);color:var(--accent)}
+/* the overall pill sits on the inverse header — light inks, not the light-surface set */
+.audit .hd .ovl.b-ok{background:rgba(150,200,168,.16);color:rgb(154,214,178)}
+.audit .hd .ovl.b-no{background:rgba(232,132,124,.16);color:rgb(240,150,142)}
+.ar .cn{font-family:var(--font-sans);font-weight:700;font-size:13.5px;line-height:1.3;
+  color:var(--text-primary)}
+.ar .cn i{font-style:normal;font-family:var(--font-mono);font-weight:400;font-size:11px;
+  color:var(--text-faint);margin-left:6px;letter-spacing:.04em}
+.ar.no .cn{color:var(--data-null)}
+.ar .cd{font-family:var(--font-sans);font-size:12.5px;line-height:1.5;
+  color:var(--text-muted);margin:4px 0 0}
+.ar.inh{background:rgba(11,63,255,.022)}
+.inhhd{padding:9px 16px;border-bottom:var(--border-hair);border-top:var(--border-hair);
+  font:var(--text-label);letter-spacing:.12em;text-transform:uppercase;color:var(--accent);
+  background:rgba(11,63,255,.045)}
+.auf{display:flex;justify-content:space-between;gap:var(--space-md);padding:11px 16px;
+  border-top:var(--border-hair);font:var(--text-caption);letter-spacing:.05em;
+  color:var(--text-faint)}
+
+/* ---- stage + specimen ---- */
+.stg{border:var(--border-hair);background:var(--surface-card-16);padding:var(--space-md)}
+.stghd{display:flex;align-items:center;gap:var(--space-sm);margin-bottom:var(--space-sm);
+  font:var(--text-caption);letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.stghd .ln{flex:1;height:1px;background:var(--border-default)}
+.stghd .mk{color:var(--data-null)}
+.stghd .mk.ok{color:var(--data-ok)}
+
+#spec{background:var(--white);border:var(--border-hair);
+  --ui:rgb(11,63,255); --tx:rgb(9,9,9);
+  font-family:var(--font-sans)}
+#spec .bar{display:flex;align-items:center;gap:10px;padding:12px 15px;
+  border-bottom:var(--border-hair)}
+#spec .bm{font-family:var(--font-wordmark);font-weight:600;font-size:14px;
+  letter-spacing:-.04em;text-transform:uppercase;color:var(--ui)}
+#spec .sp{flex:1}
+#spec .bd2{padding:var(--space-md) 15px}
+#spec h4{font-family:var(--font-display);font-weight:400;font-size:26px;line-height:1.1;
+  letter-spacing:-.03em;text-transform:uppercase;color:var(--tx);margin:0 0 4px}
+#spec .cr{font:var(--text-caption);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--tx);opacity:.65;margin:0 0 var(--space-sm)}
+.ib{width:30px;height:30px;flex:none;border:var(--border-solid);background:var(--white);
+  display:grid;place-items:center;cursor:pointer;color:var(--ui);padding:0}
+.ib:hover{border-color:var(--ui)}
+.ib svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.ab{font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.08em;
+  text-transform:uppercase;padding:9px 14px;border:0.667px solid var(--ui);
+  background:var(--white);color:var(--ui);cursor:pointer}
+.ab.pri{background:var(--ui);color:var(--white)}
+.ab.gh{border-color:var(--border-default);color:var(--tx)}
+
+table.tb{width:100%;border-collapse:collapse;font-size:13px;color:var(--tx)}
+table.tb th{text-align:left;font:var(--text-label);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--tx);opacity:.75;padding:8px 9px;border-bottom:0.667px solid var(--tx)}
+table.tb td{padding:10px 9px;border-bottom:var(--border-hair);vertical-align:middle}
+table.tb tr:last-child td{border-bottom:0}
+table.tb .isin{font-family:var(--font-mono);font-size:11px;opacity:.6;display:block;margin-top:2px}
+
+/* status chip */
+.ch{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:10px;
+  font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px}
+.ch i{width:8px;height:8px;flex:none;display:block;font-style:normal}
+.ch.ok{background:rgba(86,128,102,.13);color:var(--data-ok)}   .ch.ok i{background:var(--data-ok)}
+.ch.wa{background:rgba(196,138,42,.14);color:rgb(140,96,22)}   .ch.wa i{background:var(--accent-warm)}
+.ch.cl{background:rgba(9,9,9,.05);color:var(--text-muted)}     .ch.cl i{background:var(--text-faint)}
+
+/* form specimen */
+.fld{margin-bottom:var(--space-md)}
+.fld label{display:block;font:var(--text-label);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--tx);opacity:.8;margin-bottom:6px}
+.fld input,.fld select{width:100%;padding:10px 11px;border:0.667px solid var(--border-default);
+  background:var(--white);font-family:var(--font-sans);font-size:14px;color:var(--tx)}
+.fld input:focus-visible,.fld select:focus-visible{outline:2px solid var(--ui);outline-offset:1px}
+.fld .hint{font-family:var(--font-sans);font-size:12px;color:var(--tx);opacity:.6;margin:6px 0 0}
+.fld .err{display:flex;gap:7px;font-family:var(--font-sans);font-size:12.5px;
+  color:var(--data-null);margin:7px 0 0;font-weight:600}
+.fld.bad input{border-color:var(--data-null);border-width:1.4px}
+
+/* toast / status message */
+.toast{border:0.667px solid var(--data-ok);background:rgba(86,128,102,.09);
+  padding:11px 13px;display:flex;gap:9px;align-items:flex-start;
+  font-family:var(--font-sans);font-size:13px;color:var(--tx);margin-top:var(--space-sm)}
+.toast i{width:9px;height:9px;background:var(--data-ok);flex:none;margin-top:4px;font-style:normal}
+
+/* transaction review */
+.rev{border:var(--border-hair);background:var(--surface-card-25);padding:var(--space-sm) 13px;
+  margin-top:var(--space-sm)}
+.rev .rt{font:var(--text-label);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-muted);margin:0 0 9px}
+.rev dl{display:grid;grid-template-columns:auto 1fr;gap:6px var(--space-md);margin:0;
+  font-family:var(--font-sans);font-size:13px;color:var(--tx)}
+.rev dt{font:var(--text-caption);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-muted);align-self:center}
+.rev dd{margin:0;font-weight:600}
+
+/* the two failure mechanics */
+#spec.rigid .ch{height:22px;width:92px;overflow:hidden}
+#spec.rigid .ab{height:32px;overflow:hidden;white-space:nowrap}
+#spec.spacing,#spec.spacing *{line-height:1.5!important;letter-spacing:.12em!important;
+  word-spacing:.16em!important}
+#spec.coloronly .ch{background:transparent!important;padding-left:0}
+#spec.coloronly .ch span{position:absolute;width:1px;height:1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap}
+
+/* screen-reader simulator */
+.srs{border:var(--border-hair);background:var(--surface-inverse);color:var(--text-inverse);
+  padding:12px 14px;margin-top:var(--space-sm);min-height:66px}
+.srs .k{display:block;font:var(--text-label);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent-warm);margin-bottom:7px}
+.srs output{display:block;font-family:var(--font-mono);font-size:12.5px;line-height:1.6;
+  color:var(--white)}
+.srs .hint{color:var(--ink-400);font-style:italic}
+.srs .bad{color:rgb(232,132,124)}
+
+/* inherited explainer */
+.inhbox{border:var(--border-hair);border-left:2px solid var(--accent);
+  background:var(--surface-card-30);padding:var(--space-md) var(--space-lg)}
+
+/* focus — the system's own token, stated out loud */
+.lab :where(button,input,a,[tabindex]):focus-visible,
+#spec :where(button,input,select,a):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.skip{position:absolute;left:-9999px;background:var(--ink-900);color:var(--white);
+  padding:12px 18px;z-index:99;font:var(--text-caption);letter-spacing:.1em;text-transform:uppercase}
+.skip:focus{left:0;top:0}
+</style>
+</head>
+<body>
+<a class="skip" href="#lab">Skip to the audit lab</a>
+
+<header class="top">
+  <div class="in">
+    <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <nav>
+      <a href="../index.html#work" aria-current="page">Work</a>
+      <a href="../index.html#about">About</a>
+      <a href="../index.html#archive">Archive</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================== HERO ============================== -->
+<div class="inner" style="padding-top:var(--space-4xl)">
+  <a class="arrow plain" href="../index.html#work"><span class="g">←</span> All work</a>
+  <p style="font:var(--text-label);letter-spacing:.14em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 02 · Accessibility governance · Enterprise banking</p>
+  <h1 class="d-hero">Break the<br>interface</h1>
+  <p class="prose lead">An EU directive gave a Swiss banking platform a date and a standard, but no method. I built the audit — five surfaces, ten criteria, one status taxonomy — and wired it to the design team's review gate. Below, that audit is live. Change a value; watch the verdict turn.</p>
+
+  <div class="stats" style="margin-top:var(--space-2xl)">
+    <div class="stat"><span class="v">5</span><div class="r"></div><span class="l">Surfaces audited</span></div>
+    <div class="stat"><span class="v">10</span><div class="r"></div><span class="l">AA criteria per pass</span></div>
+    <div class="stat"><span class="v">1</span><div class="r"></div><span class="l">Platform pass</span><span class="n">(everything after it inherits)</span></div>
+  </div>
+</div>
+
+<!-- ============================== SCOPE ============================== -->
+<div class="inner sec">
+  <div class="srule"><span class="eb">01 · The scope</span><span class="ln"></span><span class="sq"></span></div>
+  <h2 class="d-lg">Not screens. <span class="mark">Surfaces.</span></h2>
+  <p class="prose">Auditing feature by feature would never have finished. So the unit of audit became the surface — the recurring construct that every feature is assembled from. Four of them carry their own criteria. The fifth carries everyone else's.</p>
+
+  <div class="surfaces" style="margin-top:var(--space-lg)" role="tablist" aria-label="Audited surfaces">
+    <button class="surf on" role="tab" aria-selected="true" aria-controls="stagewrap" data-spec="tables">
+      <span class="n">01</span><span class="t">Tables</span><span class="s">Live</span></button>
+    <button class="surf" role="tab" aria-selected="false" aria-controls="stagewrap" data-spec="forms">
+      <span class="n">02</span><span class="t">Forms</span><span class="s">Live</span></button>
+    <button class="surf" role="tab" aria-selected="false" aria-controls="stagewrap" data-spec="status">
+      <span class="n">03</span><span class="t">Status indicators</span><span class="s">Live</span></button>
+    <button class="surf" role="tab" aria-selected="false" aria-controls="stagewrap" data-spec="txn">
+      <span class="n">04</span><span class="t">Transactions</span><span class="s">Live</span></button>
+    <button class="surf platform" disabled>
+      <span class="n">05</span><span class="t">Web apps &amp;<br>web services</span><span class="s">Platform · audited once</span></button>
+  </div>
+  <p class="mono-note">Specimens are reconstructed, NDA-safe. Data is fictional.</p>
+</div>
+
+<!-- ============================== LAB ============================== -->
+<div class="inner sec" id="lab" style="padding-top:0">
+  <div class="srule"><span class="eb">02 · The audit, live</span><span class="ln"></span><span class="sq"></span></div>
+  <h2 class="d-lg">Ten criteria. <span class="mark">Yours to fail.</span></h2>
+  <p class="prose">Every control below is a decision a designer or developer actually makes. The panel on the left is the deliverable the team received — same taxonomy, same wording, same signature block. It re-renders as you work.</p>
+
+  <div class="lab">
+
+    <!-- ---------- LEFT: controls + audit ---------- -->
+    <div>
+      <section class="box" aria-labelledby="ch">
+        <p class="hd" id="ch">Controls <span class="r" id="specname">Tables</span></p>
+        <div class="bd" id="controls"></div>
+      </section>
+
+      <section class="box audit" aria-labelledby="ah" style="margin-top:var(--space-md)">
+        <p class="hd" id="ah">Accessibility <span class="ovl" id="ovl">Passed</span></p>
+        <div id="rows" aria-live="polite"></div>
+        <div class="auf"><span>Reviewed 20 Mar 2025</span><span>D. Hernandez · UX</span></div>
+      </section>
+    </div>
+
+    <!-- ---------- RIGHT: stage ---------- -->
+    <div id="stagewrap">
+      <div class="stg">
+        <p class="stghd"><span id="stgt">Savings plan overview</span><span class="ln"></span><span class="mk ok" id="mk">conformant</span></p>
+
+        <div id="spec" class="rigid">
+          <div class="bar">
+            <span class="bm">Yourbank</span><span class="sp"></span>
+            <button class="ib" type="button" data-nm="Refresh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg></button>
+            <button class="ib" type="button" data-nm="Export savings plans"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg></button>
+            <button class="ib" type="button" data-nm="Account menu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M4.6 20a7.4 7.4 0 0 1 14.8 0"/></svg></button>
+          </div>
+
+          <div class="bd2">
+
+            <!-- ===== TABLES ===== -->
+            <div data-view="tables">
+              <p class="cr">Home › Trading</p>
+              <h4>Savings plan</h4>
+              <div style="display:flex;gap:8px;margin:var(--space-sm) 0">
+                <button class="ab gh" type="button">Filter</button>
+                <button class="ab pri" type="button">New savings plan</button>
+              </div>
+              <table class="tb">
+                <thead><tr>
+                  <th data-th="Instrument" scope="col">Instrument</th>
+                  <th data-th="Frequency" scope="col">Frequency</th>
+                  <th data-th="Amount" scope="col">Amount</th>
+                  <th data-th="Status" scope="col">Status</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td>SGS Ltd Nam.<span class="isin">DE0008491051</span></td><td>Monthly</td><td>EUR 50</td>
+                      <td><span class="ch ok"><i></i><span>Active</span></span></td></tr>
+                  <tr><td>Credit Agricole SA<span class="isin">DE0008491051</span></td><td>Monthly</td><td>EUR 75</td>
+                      <td><span class="ch ok"><i></i><span>Active</span></span></td></tr>
+                  <tr><td>Nestlé SA Nam.<span class="isin">DE0008491051</span></td><td>Monthly</td><td>EUR 100</td>
+                      <td><span class="ch wa"><i></i><span>Paused</span></span></td></tr>
+                  <tr><td>Novartis AG Namen<span class="isin">DE0008491051</span></td><td>Monthly</td><td>EUR 125</td>
+                      <td><span class="ch cl"><i></i><span>Closed</span></span></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- ===== FORMS ===== -->
+            <div data-view="forms" hidden>
+              <p class="cr">Home › Trading › New</p>
+              <h4>New savings plan</h4>
+              <div class="fld" id="f-amt">
+                <label for="i-amt" data-lbl="Savings amount">Savings amount</label>
+                <input id="i-amt" type="text" value="50,000" aria-describedby="f-amt-h f-amt-e">
+                <p class="hint" id="f-amt-h" data-hint>EUR. Maximum EUR 10,000 per execution.</p>
+                <p class="err" id="f-amt-e" data-err><span aria-hidden="true">✕</span> Amount exceeds the EUR 10,000 limit. Enter a lower amount or split the plan.</p>
+              </div>
+              <div class="fld">
+                <label for="i-frq" data-lbl="Frequency">Frequency</label>
+                <select id="i-frq"><option>Monthly</option><option>Quarterly</option></select>
+              </div>
+              <div class="fld">
+                <label for="i-dat" data-lbl="First execution date">First execution date</label>
+                <input id="i-dat" type="text" value="26.09.2026" aria-describedby="f-dat-h">
+                <p class="hint" id="f-dat-h" data-hint>Format DD.MM.YYYY.</p>
+              </div>
+              <button class="ab pri" type="button">Create plan</button>
+            </div>
+
+            <!-- ===== STATUS ===== -->
+            <div data-view="status" hidden>
+              <p class="cr">Component · Status indicators</p>
+              <h4>Plan states</h4>
+              <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:var(--space-sm)">
+                <span class="ch ok"><i></i><span>Active</span></span>
+                <span class="ch wa"><i></i><span>Paused</span></span>
+                <span class="ch cl"><i></i><span>Closed</span></span>
+              </div>
+              <button class="ab pri" type="button" id="dotoast">Pause plan</button>
+              <div id="toastwrap" role="status" aria-live="polite"></div>
+            </div>
+
+            <!-- ===== TRANSACTIONS ===== -->
+            <div data-view="txn" hidden>
+              <p class="cr">Home › Payments</p>
+              <h4>Confirm payment</h4>
+              <div class="fld bad" id="t-iban">
+                <label for="i-iban" data-lbl="Beneficiary IBAN">Beneficiary IBAN</label>
+                <input id="i-iban" type="text" value="CH93 0076 2011 6238 5295 8" aria-describedby="t-iban-e">
+                <p class="err" id="t-iban-e" data-err><span aria-hidden="true">✕</span> IBAN checksum failed. Swiss IBANs are 21 characters — this one is 22. Check the digits after CH93.</p>
+              </div>
+              <div class="rev" data-review>
+                <p class="rt">Review before you commit</p>
+                <dl>
+                  <dt>Amount</dt><dd>EUR 12,400.00</dd>
+                  <dt>Beneficiary</dt><dd>Meyer Handels AG</dd>
+                  <dt>Value date</dt><dd>27 Jul 2026</dd>
+                </dl>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:var(--space-sm)">
+                <button class="ab gh" type="button" data-back>Back &amp; amend</button>
+                <button class="ab pri" type="button">Confirm payment</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="srs">
+          <span class="k">Screen reader output</span>
+          <output id="sr"><span class="hint">Tab or hover into the specimen to hear what gets announced.</span></output>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== INHERITED ============================== -->
+<div class="inner sec" style="padding-top:0">
+  <div class="srule"><span class="eb">03 · Inherited</span><span class="ln"></span><span class="sq"></span></div>
+  <h2 class="d-lg">Audited once. <span class="mark">Carried forever.</span></h2>
+  <p class="prose">The first version of this template made every feature test all ten criteria. It was correct and it was unusable — nobody was going to re-measure the focus ring on the forty-first form.</p>
+  <p class="prose">So the taxonomy grew a third status. <b>Inherited</b> means the criterion is satisfied by a governed platform component, was audited once against <b>Web apps &amp; web services</b>, and is carried by every feature that consumes it. A feature audit only tests what the feature itself introduces.</p>
+
+  <div class="inhbox" style="margin-top:var(--space-lg)">
+    <p class="prose" style="margin:0"><b>Switch surfaces above and watch the blue rows.</b> They are identical on Tables, Forms, Status indicators and Transactions — same criteria, same wording, same source. That repetition isn't laziness in the artifact. It's the mechanism: one platform pass in March 2025, then nothing to re-litigate. The one-off became the standing rule.</p>
+  </div>
+
+  <div class="legend" style="margin-top:var(--space-lg)">
+    <span class="k ok"><i></i>Passed · tested on this surface</span>
+    <span class="k null"><i></i>Failed · defect raised against this feature</span>
+    <span class="k"><i style="background:var(--accent)"></i>Inherited · resolved at the platform</span>
+  </div>
+</div>
+
+<!-- ============================== SELF-AUDIT ============================== -->
+<div class="inner sec" style="padding-top:0">
+  <div class="srule"><span class="eb">04 · This page</span><span class="ln"></span><span class="sq"></span></div>
+  <h2 class="d-lg">It passes its <span class="mark">own audit.</span></h2>
+  <p class="prose">Every control here is reachable and operable from the keyboard alone. Each slider is duplicated by a −/+ button, so no part of this page depends on a dragging movement — the same criterion the artifact marks inherited. The verdict panel is a live region, so it is announced rather than merely shown. Contrast ratios are computed with the WCAG relative-luminance formula, not estimated.</p>
+  <p class="mono-note">Claiming accessibility work without shipping an accessible artifact would be the tell.</p>
+</div>
+
+<footer class="foot">
+  <div class="in">
+    <span class="z">Djoaniel Hernandez · UX</span>
+    <span class="mk">意識</span>
+    <span class="z">EST. 2002</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= WCAG contrast ================= */
+var W=[255,255,255];
+function ch(c){c/=255;return c<=0.04045?c/12.92:Math.pow((c+0.055)/1.055,2.4);}
+function lum(r){return 0.2126*ch(r[0])+0.7152*ch(r[1])+0.0722*ch(r[2]);}
+function ratio(a,b){var x=lum(a),y=lum(b),h=Math.max(x,y),l=Math.min(x,y);return (h+0.05)/(l+0.05);}
+function mix(f,t,x){return [0,1,2].map(function(i){return Math.round(f[i]+(t[i]-f[i])*x);});}
+function hex(r){return '#'+r.map(function(v){return ('0'+v.toString(16)).slice(-2);}).join('').toUpperCase();}
+var UI=[11,63,255], TX=[9,9,9];
+
+/* ================= state ================= */
+var S={uiC:100,txC:100,colour:false,alt:false,space:false,rigid:true,
+       head:true,label:true,hint:true,errtxt:true,live:true,review:true};
+var uiR=0, txR=0;
+
+/* ================= inherited block (constant, every surface) ================= */
+var INHERITED=[
+ {sc:'2.4.7',n:'Focus visible',d:'Focus ring is a platform token. Audited once against Web apps &amp; web services; every focusable control carries the result.'},
+ {sc:'2.5.7',n:'Dragging movements',d:'No governed component requires a drag. Re-tested only where a feature introduces a bespoke control.'},
+ {sc:'2.5.8',n:'Target size (minimum)',d:'24 × 24 CSS px is enforced by the component library&rsquo;s spacing scale. Not re-measured per feature.'},
+ {sc:'3.2.3',n:'Consistent navigation',d:'Shell navigation belongs to the platform, not the feature. One pass, March 2025.'}
+];
+
+/* ================= surfaces ================= */
+function C(key,sc,nm,hp,def){return {key:key,sc:sc,nm:nm,hp:hp,def:def};}
+
+var SURF={
+ tables:{
+  title:'Savings plan overview',
+  controls:[
+   C('colour','1.4.1','Status by colour alone','Strip the word from each chip, leaving a coloured square. Red / green separation disappears for roughly 1 in 12 men.',false),
+   C('alt','1.1.1','Remove icon-button names','Delete the accessible names on the icon-only toolbar. Watch the screen-reader output.',false),
+   C('head','1.3.1','Keep column header association','Turn off and the header cells stop being headers. Cell values lose the column they belong to.',true),
+   C('space','1.4.12','Apply the user&rsquo;s spacing stylesheet','Line height 1.5×, letter spacing 0.12em, word spacing 0.16em — the override a dyslexic reader is entitled to apply.',false),
+   C('rigid','1.4.12','Fixed-height chips &amp; buttons','The design-system decision that only becomes a defect once the override above is on. This pairing is what the audit exists to catch.',true)
+  ],
+  criteria:[
+   uic(), txc(),
+   {sc:'1.4.1',n:'Use of colour',t:function(){return !S.colour;},
+    p:'Status carries a written label beside the colour. Not colour-dependent.',
+    f:'Status is conveyed by hue alone. Active, Paused and Closed collapse into one another.'},
+   {sc:'1.1.1',n:'Non-text content',t:function(){return !S.alt;},
+    p:'All icon-only controls expose an equivalent text alternative.',
+    f:'Three toolbar controls announce as an unnamed button. Export is unreachable by intent.'},
+   {sc:'1.3.1',n:'Info and relationships',t:function(){return S.head;},
+    p:'Column headers are marked up as headers and scoped to their column.',
+    f:'Header cells carry no semantic role. A screen reader reads &ldquo;EUR 125&rdquo; with no idea it is an amount.'},
+   {sc:'1.4.12',n:'Text spacing',t:function(){return !(S.space&&S.rigid);},
+    p:function(){return S.space?'User spacing applied; chips and buttons reflow with no loss of content.':'No override applied. Layout is fluid and will absorb one.';},
+    f:'Fixed-height chips clip their own labels the moment the user applies their spacing stylesheet. Content is lost.'}
+  ]
+ },
+
+ forms:{
+  title:'New savings plan',
+  controls:[
+   C('label','3.3.2','Keep visible field labels','Turn off and the labels move into the placeholder — which vanishes the moment anyone types.',true),
+   C('hint','3.3.2','Keep format instructions','The EUR limit and the date format. Constraints the user cannot guess.',true),
+   C('errtxt','3.3.1','Describe the error in text','Turn off and the field keeps only a red border. The error still exists; it just stops being knowable.',true),
+   C('space','1.4.12','Apply the user&rsquo;s spacing stylesheet','Same override, different surface.',false),
+   C('rigid','1.4.12','Fixed-height chips &amp; buttons','Rigid sizing in the shared component set.',true)
+  ],
+  criteria:[
+   uic(), txc(),
+   {sc:'3.3.2',n:'Labels or instructions',t:function(){return S.label&&S.hint;},
+    p:'Every input carries a persistent label and its format constraint.',
+    f:function(){return !S.label?'Labels exist only as placeholder text. They disappear on first keystroke, and the user loses the question they are answering.':'Format and limit constraints are unstated. The user learns the rule by breaking it.';}},
+   {sc:'1.3.1',n:'Info and relationships',t:function(){return S.label;},
+    p:'Each label is programmatically associated with its control.',
+    f:'No label element remains, so nothing is programmatically associated. One visual decision, two criteria failed.'},
+   {sc:'3.3.1',n:'Error identification',t:function(){return S.errtxt;},
+    p:'The error is identified and described in text, alongside the visual treatment.',
+    f:'The error is signalled by a red border only. A non-sighted or colour-blind user is stopped without being told why.'},
+   {sc:'1.4.12',n:'Text spacing',t:function(){return !(S.space&&S.rigid);},
+    p:function(){return S.space?'User spacing applied; the form reflows intact.':'No override applied. Layout will absorb one.';},
+    f:'Fixed-height controls clip their content under the user&rsquo;s spacing stylesheet.'}
+  ]
+ },
+
+ status:{
+  title:'Status indicators',
+  controls:[
+   C('colour','1.4.1','Status by colour alone','The component-level version of the same defect. Fix it here and every table inherits the fix.',false),
+   C('live','4.1.3','Announce status messages','Turn off and the confirmation still appears on screen — but only on screen.',true),
+   C('space','1.4.12','Apply the user&rsquo;s spacing stylesheet','Line height 1.5×, letter spacing 0.12em, word spacing 0.16em.',false),
+   C('rigid','1.4.12','Fixed-height chips &amp; buttons','Rigid sizing in the shared component set.',true)
+  ],
+  criteria:[
+   uic(), txc(),
+   {sc:'1.4.1',n:'Use of colour',t:function(){return !S.colour;},
+    p:'Each state carries its name. Colour reinforces; it does not carry.',
+    f:'Three states, three hues, no words. The component encodes meaning the user may not be able to receive.'},
+   {sc:'4.1.3',n:'Status messages',t:function(){return S.live;},
+    p:'Confirmations are exposed through a live region and announced without moving focus.',
+    f:'The confirmation renders visually only. A screen-reader user presses Pause plan and receives silence.'},
+   {sc:'1.4.12',n:'Text spacing',t:function(){return !(S.space&&S.rigid);},
+    p:function(){return S.space?'User spacing applied; chips grow to fit their labels.':'No override applied.';},
+    f:'The chip is sized to the English word. Under user spacing — or German — the label is cut.'}
+  ]
+ },
+
+ txn:{
+  title:'Payment confirmation',
+  controls:[
+   C('review','3.3.4','Keep the review step','Turn off and Confirm becomes final and immediate. For a financial transaction, that is a conformance failure, not a preference.',true),
+   C('errtxt','3.3.3','Suggest a correction','Turn off and the error states that something is wrong without saying what would be right.',true),
+   C('space','1.4.12','Apply the user&rsquo;s spacing stylesheet','Same override, highest-stakes surface.',false),
+   C('rigid','1.4.12','Fixed-height chips &amp; buttons','Rigid sizing in the shared component set.',true)
+  ],
+  criteria:[
+   uic(), txc(),
+   {sc:'3.3.4',n:'Error prevention (financial)',t:function(){return S.review;},
+    p:'The transaction is reversible, checked, and confirmed — the user reviews and can amend before committing.',
+    f:'A payment commits on a single click, with no review and no way back. This is the criterion a bank cannot argue its way out of.'},
+   {sc:'3.3.3',n:'Error suggestion',t:function(){return S.errtxt;},
+    p:'The failure is named and a correction is suggested — length, position, what to check.',
+    f:'The user is told the IBAN is invalid and nothing else. They will retype the same digits.'},
+   {sc:'3.3.1',n:'Error identification',t:function(){return true;},
+    p:'The field in error is identified in text, not by colour alone.',
+    f:''},
+   {sc:'1.4.12',n:'Text spacing',t:function(){return !(S.space&&S.rigid);},
+    p:function(){return S.space?'User spacing applied; the confirmation panel reflows intact.':'No override applied.';},
+    f:'Fixed-height controls clip under the user&rsquo;s spacing stylesheet.'}
+  ]
+ }
+};
+
+function uic(){return {sc:'1.4.11',n:'Non-text contrast',t:function(){return uiR>=3;},
+  p:function(){return 'Components hold '+uiR.toFixed(2)+':1 against the surface. Minimum 3:1 met.';},
+  f:function(){return 'Components sit at '+uiR.toFixed(2)+':1. Buttons, borders and focus indicators fall below the 3:1 floor.';}};}
+function txc(){return {sc:'1.4.3',n:'Contrast (minimum)',t:function(){return txR>=4.5;},
+  p:function(){return 'Body text holds '+txR.toFixed(2)+':1. Minimum 4.5:1 met.';},
+  f:function(){return 'Body text sits at '+txR.toFixed(2)+':1. Values are unreadable in low light or with reduced acuity.';}};}
+
+/* ================= refs ================= */
+var spec=document.getElementById('spec'), rows=document.getElementById('rows'),
+    ovl=document.getElementById('ovl'), ctrls=document.getElementById('controls'),
+    srOut=document.getElementById('sr'), mk=document.getElementById('mk'),
+    stgt=document.getElementById('stgt'), specname=document.getElementById('specname');
+var current='tables';
+
+/* ================= controls render ================= */
+function renderControls(){
+  var s=SURF[current], h='';
+  h+='<div class="ctl"><span class="sc">1.4.11 · Non-text contrast</span>'+
+     '<label class="nm" for="uiC">Interface component contrast</label>'+
+     '<p class="hp">Buttons, borders and focus indicators must hold at least 3:1 against what sits beside them.</p>'+
+     slider('uiC',3)+'</div>';
+  h+='<div class="ctl"><span class="sc">1.4.3 · Contrast (minimum)</span>'+
+     '<label class="nm" for="txC">Body text contrast</label>'+
+     '<p class="hp">Values, labels and breadcrumbs must hold at least 4.5:1 against the surface behind them.</p>'+
+     slider('txC',4.5)+'</div>';
+  s.controls.forEach(function(c){
+    h+='<div class="ctl"><span class="sc">'+c.sc+'</span>'+
+       '<div class="sr"><span class="tx"><span class="nm" id="l-'+c.key+'">'+c.nm+'</span>'+
+       '<p class="hp">'+c.hp+'</p></span>'+
+       '<button class="tg" type="button" data-k="'+c.key+'" aria-labelledby="l-'+c.key+'" aria-pressed="'+(S[c.key]?'true':'false')+'"></button></div></div>';
+  });
+  ctrls.innerHTML=h;
+  wireSlider('uiC',UI,3); wireSlider('txC',TX,4.5);
+  ctrls.querySelectorAll('.tg').forEach(function(b){
+    b.addEventListener('click',function(){
+      var k=b.dataset.k, next=b.getAttribute('aria-pressed')!=='true';
+      b.setAttribute('aria-pressed',String(next)); S[k]=next; applyState(); render();
+    });
+  });
+  ctrls.querySelectorAll('.stp').forEach(function(b){
+    b.addEventListener('click',function(){
+      var i=document.getElementById(b.dataset.s);
+      i.value=Math.min(+i.max,Math.max(+i.min,+i.value+(+i.step)*(+b.dataset.d)));
+      i.dispatchEvent(new Event('input',{bubbles:true}));
+    });
+  });
+}
+function slider(id,need){
+  return '<div class="sl">'+
+    '<button class="stp" type="button" data-s="'+id+'" data-d="-1" aria-label="Decrease">−</button>'+
+    '<input type="range" id="'+id+'" min="8" max="100" step="2" value="'+S[id]+'" aria-describedby="'+id+'-o">'+
+    '<button class="stp" type="button" data-s="'+id+'" data-d="1" aria-label="Increase">+</button></div>'+
+    '<p class="ro" id="'+id+'-o"><span class="sw" id="'+id+'-w"></span>'+
+    '<span class="v" id="'+id+'-v">—</span><span class="q">: 1 / needs '+need+':1</span>'+
+    '<span class="b b-ok" id="'+id+'-b">Pass</span></p>';
+}
+function wireSlider(id,base,need){
+  var i=document.getElementById(id),v=document.getElementById(id+'-v'),
+      w=document.getElementById(id+'-w'),b=document.getElementById(id+'-b');
+  function go(){
+    S[id]=+i.value;
+    var rgb=mix(W,base,i.value/100), r=ratio(rgb,W), rr=Math.round(r*100)/100;
+    v.textContent=rr.toFixed(2); w.style.background=hex(rgb);
+    var ok=r>=need; b.textContent=ok?'Pass':'Fail'; b.className='b '+(ok?'b-ok':'b-no');
+    i.setAttribute('aria-valuetext',rr.toFixed(2)+' to 1, '+(ok?'passes':'fails')+' the '+need+' to 1 minimum');
+    spec.style.setProperty(id==='uiC'?'--ui':'--tx',hex(rgb));
+    if(id==='uiC') uiR=r; else txR=r;
+    render();
+  }
+  i.addEventListener('input',go); go();
+}
+
+/* ================= apply state to the specimen ================= */
+function applyState(){
+  spec.classList.toggle('coloronly',S.colour);
+  spec.classList.toggle('spacing',S.space);
+  spec.classList.toggle('rigid',S.rigid);
+
+  spec.querySelectorAll('.ib').forEach(function(b){
+    if(S.alt) b.removeAttribute('aria-label'); else b.setAttribute('aria-label',b.dataset.nm);
+  });
+  spec.querySelectorAll('th[data-th]').forEach(function(t){
+    if(S.head){t.setAttribute('scope','col');t.setAttribute('role','columnheader');}
+    else {t.removeAttribute('scope');t.setAttribute('role','cell');}
+  });
+  spec.querySelectorAll('[data-lbl]').forEach(function(l){
+    var inp=document.getElementById(l.getAttribute('for'));
+    if(S.label){l.hidden=false; if(inp){inp.removeAttribute('placeholder');inp.removeAttribute('aria-label');}}
+    else {l.hidden=true; if(inp){inp.setAttribute('placeholder',l.dataset.lbl);inp.removeAttribute('aria-label');}}
+  });
+  spec.querySelectorAll('[data-hint]').forEach(function(h){h.hidden=!S.hint;});
+  spec.querySelectorAll('[data-err]').forEach(function(e){e.hidden=!S.errtxt;});
+  spec.querySelectorAll('[data-review]').forEach(function(r){r.hidden=!S.review;});
+  spec.querySelectorAll('[data-back]').forEach(function(r){r.hidden=!S.review;});
+  var tw=document.getElementById('toastwrap');
+  if(tw){ if(S.live){tw.setAttribute('role','status');tw.setAttribute('aria-live','polite');}
+          else {tw.removeAttribute('role');tw.removeAttribute('aria-live');} }
+}
+
+/* ================= audit render ================= */
+function val(x){return typeof x==='function'?x():x;}
+function render(){
+  var s=SURF[current], fails=0, h='';
+  s.criteria.forEach(function(c){
+    var ok=c.t();
+    if(!ok) fails++;
+    h+='<div class="ar'+(ok?'':' no')+'"><span class="st '+(ok?'st-ok':'st-no')+'">'+(ok?'Passed':'Failed')+'</span>'+
+       '<span><span class="cn">'+c.n+'<i>'+c.sc+'</i></span><p class="cd">'+val(ok?c.p:c.f)+'</p></span></div>';
+  });
+  h+='<p class="inhhd">Inherited from web apps &amp; web services · one pass, March 2025</p>';
+  INHERITED.forEach(function(c){
+    h+='<div class="ar inh"><span class="st st-in">Inherit</span>'+
+       '<span><span class="cn">'+c.n+'<i>'+c.sc+'</i></span><p class="cd">'+c.d+'</p></span></div>';
+  });
+  rows.innerHTML=h;
+
+  if(fails===0){ ovl.textContent='Passed'; ovl.className='ovl b-ok';
+                 mk.textContent='conformant'; mk.className='mk ok'; }
+  else { ovl.textContent=fails+(fails===1?' failure':' failures'); ovl.className='ovl b-no';
+         mk.textContent=fails+(fails===1?' criterion broken':' criteria broken'); mk.className='mk'; }
+}
+
+/* ================= surface switching ================= */
+document.querySelectorAll('.surf[data-spec]').forEach(function(b){
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.surf[data-spec]').forEach(function(x){
+      x.classList.remove('on'); x.setAttribute('aria-selected','false');
+    });
+    b.classList.add('on'); b.setAttribute('aria-selected','true');
+    current=b.dataset.spec;
+    spec.querySelectorAll('[data-view]').forEach(function(v){ v.hidden = v.dataset.view!==current; });
+    stgt.textContent=SURF[current].title;
+    specname.textContent=b.querySelector('.t').textContent;
+    /* reset every toggle, then apply this surface's defaults — a broken state
+       must never leak across surfaces and quietly fail a criterion nobody touched */
+    ['colour','alt','space'].forEach(function(k){ S[k]=false; });
+    ['rigid','head','label','hint','errtxt','live','review'].forEach(function(k){ S[k]=true; });
+    SURF[current].controls.forEach(function(c){ S[c.key]=c.def; });
+    renderControls(); applyState(); render();
+    srOut.innerHTML='<span class="hint">Tab or hover into the specimen to hear what gets announced.</span>';
+  });
+});
+
+/* ================= screen-reader simulator ================= */
+function nameOf(el){
+  if(el.getAttribute('aria-label')) return el.getAttribute('aria-label');
+  var lb=el.id&&spec.querySelector('label[for="'+el.id+'"]');
+  if(lb&&!lb.hidden) return lb.textContent.trim();
+  if(el.placeholder) return null;
+  var t=(el.textContent||'').replace(/\s+/g,' ').trim();
+  return t||null;
+}
+function describedBy(el){
+  var ids=(el.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean), out=[];
+  ids.forEach(function(id){ var n=document.getElementById(id); if(n&&!n.hidden) out.push(n.textContent.replace(/\s+/g,' ').trim()); });
+  return out.join(' ');
+}
+function announce(el){
+  if(!el||!spec.contains(el)) return;
+  var tag=el.tagName, role=tag==='BUTTON'?'button':(tag==='INPUT'?'edit text':(tag==='SELECT'?'combo box':(tag==='TH'?(el.getAttribute('scope')?'column header':'cell'):'')));
+  var nm=nameOf(el), desc=describedBy(el);
+  if(!nm){
+    srOut.innerHTML='<span class="bad">'+(role||'element')+'.</span> <span class="hint">No accessible name — the user is told a control exists, not what it does.</span>';
+    return;
+  }
+  var out=nm+', '+role;
+  if(el.value&&tag==='INPUT') out=nm+', edit text, '+el.value;
+  if(desc) out+='. '+desc;
+  srOut.textContent=out+'.';
+}
+spec.addEventListener('focusin',function(e){ announce(e.target.closest('button,input,select,a,th')); });
+spec.addEventListener('mouseover',function(e){ var t=e.target.closest('button,input,select,a,th'); if(t) announce(t); });
+
+/* toast — 4.1.3 */
+document.addEventListener('click',function(e){
+  if(!e.target.closest('#dotoast')) return;
+  var tw=document.getElementById('toastwrap');
+  tw.innerHTML='<div class="toast"><i></i><span>Savings plan paused. It will resume on 3 Sep 2026.</span></div>';
+  if(S.live) srOut.textContent='Savings plan paused. It will resume on 3 Sep 2026.';
+  else srOut.innerHTML='<span class="hint">— silence. The confirmation rendered on screen only; nothing was announced.</span>';
+});
+
+/* ================= boot ================= */
+renderControls(); applyState(); render();
+})();
+</script>
+</body>
+</html>

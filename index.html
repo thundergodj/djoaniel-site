@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Djoaniel Hernandez</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Anybody:wght@900&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   EISHIKI v3 tokens — palette and type locked.
+   CHANGE: Instrument Sans removed entirely. Instrument Serif
+   carries all display type including the wordmark.
+   ============================================================ */
+:root{
+  --ink-900:rgb(9,9,9);
+  --ink-700:rgb(62,62,58);
+  --ink-600:rgb(102,102,96);
+  --ink-400:rgb(150,149,143);
+  --line:rgb(214,213,208);
+  --paper:rgb(247,246,242);
+  --white:rgb(255,255,255);
+  --accent:rgb(11,63,255);
+  --data-null:rgb(169,46,38);
+  --data-ok:oklch(0.56 0.05 155);
+
+  --text-primary:var(--ink-900);
+  --text-body:var(--ink-700);
+  --text-muted:var(--ink-600);
+  --text-faint:var(--ink-400);
+
+  --font-display:"Instrument Serif",ui-serif,Georgia,serif;
+  --font-sans:"Radio Canada",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --font-black:Anybody,Arial,sans-serif;
+
+  --hair:0.667px solid var(--line);
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --gap:12px;
+  --edge:clamp(16px,2.2vw,30px);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;overflow:hidden;background:var(--paper);color:var(--text-primary);
+  font-family:var(--font-sans);-webkit-font-smoothing:antialiased;
+}
+.page{
+  height:100dvh;display:grid;grid-template-rows:auto minmax(0,1fr);
+  padding:var(--edge);gap:clamp(12px,2.2vh,26px);
+}
+
+/* ================= HEADER — name, thesis, nothing else ================= */
+header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px;flex:none}
+/* Wordmark is Radio Canada — the only place the body face goes display-scale. */
+.wm{
+  font-family:var(--font-sans);font-weight:700;
+  font-size:clamp(42px,7.1vh,98px);line-height:.88;letter-spacing:-.035em;
+  margin:0 0 clamp(6px,1.1vh,14px);text-transform:uppercase;
+}
+/* LEGEND — blue means one thing: read this.
+   The block is cap-height and the same ink as .mark below, so the name
+   reads as the first highlighted thing on the page, not as punctuation.
+   Sized in em so it tracks the wordmark's clamp at every viewport. */
+.wm::after{
+  content:"";display:inline-block;
+  width:var(--wm-block-w,.28em);height:.72em;background:var(--accent);
+  margin-left:.09em;vertical-align:baseline;
+}
+.thesis{
+  font-family:var(--font-display);font-size:clamp(17px,2.5vh,29px);
+  line-height:1.2;letter-spacing:-.015em;margin:0;max-width:34ch;color:var(--text-primary);
+}
+.mark{
+  background-image:linear-gradient(transparent 60%,rgba(11,63,255,.19) 60%,rgba(11,63,255,.19) 93%,transparent 93%);
+  background-repeat:no-repeat;background-size:0 100%;
+  animation:stroke .6s var(--ease) .3s forwards;
+}
+@keyframes stroke{to{background-size:100% 100%}}
+nav{display:flex;gap:18px;align-items:center;padding-bottom:4px}
+nav a{
+  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--text-muted);text-decoration:none;transition:color .16s var(--ease);
+}
+nav a:hover,nav a:focus-visible{color:var(--accent)}
+
+/* ================= WORK GRID — six, all present ================= */
+.grid{
+  display:grid;gap:var(--gap);min-height:0;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+}
+.card{
+  border:var(--hair);background:var(--white);text-decoration:none;color:inherit;
+  display:grid;grid-template-rows:minmax(0,1fr) auto;min-height:0;overflow:hidden;
+  transition:border-color .18s var(--ease),transform .18s var(--ease);
+}
+.card:hover,.card:focus-visible{border-color:var(--ink-900);transform:translateY(-2px);outline:none}
+
+/* --- the teaser: a live fragment of the interface, rebuilt --- */
+.tz{position:relative;overflow:hidden;background:var(--paper);border-bottom:var(--hair);min-height:0}
+.tz > .in{position:absolute;inset:0;padding:clamp(9px,1.5vh,16px);display:flex;flex-direction:column;gap:5px;justify-content:center}
+.cap{
+  position:absolute;left:0;bottom:0;z-index:2;
+  font-family:var(--font-mono);font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-faint);background:var(--paper);padding:4px 7px;border-top:var(--hair);border-right:var(--hair);
+}
+
+/* --- card foot --- */
+.ft{padding:clamp(9px,1.5vh,15px) clamp(11px,1.4vw,16px);display:grid;gap:5px}
+.cat{
+  font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--text-faint);display:flex;align-items:center;gap:7px;
+}
+.cat i{width:6px;height:6px;background:var(--accent);font-style:normal;flex:none}
+.cat.retail i{background:var(--ink-400)}
+/* Instrument Serif never renders below its 24px floor — see type-lock.html.
+   Where the viewport can't afford 24px, titles fall back to Radio Canada. */
+.ct{
+  font-family:var(--font-display);font-weight:400;
+  font-size:clamp(24px,2.35vh,27px);line-height:1.06;
+  letter-spacing:-.02em;margin:0;transition:color .16s var(--ease);
+}
+@media (max-height:900px){
+  .ct{
+    font-family:var(--font-sans);font-weight:700;
+    font-size:clamp(15px,2.05vh,19px);line-height:1.18;letter-spacing:-.012em;
+  }
+}
+.card:hover .ct,.card:focus-visible .ct{color:var(--accent)}
+.cd{font-size:clamp(11px,1.4vh,13px);line-height:1.5;color:var(--text-body);margin:0;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ============================================================
+   TEASER FRAGMENTS — each rebuilt from scratch in the v3 system.
+   Localised recreations. No client assets, no screenshots.
+   ============================================================ */
+
+/* 01 · null-value table */
+.tbl{font-family:var(--font-mono);font-size:clamp(8px,1.12vh,10.5px);width:100%;border-collapse:collapse}
+.tbl th{font-weight:400;color:var(--text-faint);text-align:left;letter-spacing:.1em;
+  text-transform:uppercase;font-size:.82em;padding:0 0 5px;border-bottom:var(--hair)}
+.tbl td{padding:3.5px 0;border-bottom:var(--hair);color:var(--text-body)}
+.tbl td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.tbl .null td:last-child{color:var(--data-null);font-weight:600}
+.card:hover .tbl .null td:last-child::after{content:" · no value returned";font-size:.82em;opacity:.7}
+
+/* 02 · dialogue + branch */
+.bub{max-width:82%;padding:5px 8px;font-size:clamp(8.5px,1.15vh,11px);line-height:1.42;border:var(--hair)}
+.bub.b{background:var(--white);align-self:flex-start}
+.bub.u{background:var(--ink-900);color:var(--white);align-self:flex-end;border-color:var(--ink-900)}
+.branch{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);
+  font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:2px}
+.branch .ln{height:.667px;background:var(--accent);flex:1;opacity:.45}
+
+/* 03 · configurator steps */
+.steps{display:flex;align-items:center;gap:4px;font-family:var(--font-mono);font-size:7.5px;
+  letter-spacing:.09em;text-transform:uppercase}
+.steps span{border:var(--hair);padding:4px 6px;color:var(--text-faint);background:var(--white)}
+.steps span.on{background:var(--accent);border-color:var(--accent);color:var(--white)}
+.steps .ar{color:var(--text-faint);border:0;padding:0}
+.frame{flex:1;border:var(--hair);background:var(--white);display:grid;place-items:center;min-height:0;
+  font-family:var(--font-mono);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-faint)}
+.frame .ph{width:52%;aspect-ratio:4/3;border:var(--hair);
+  background:repeating-linear-gradient(45deg,transparent 0 4px,rgba(9,9,9,.045) 4px 5px)}
+
+/* 04 · roster rows */
+.rost{font-family:var(--font-mono);font-size:clamp(8px,1.1vh,10px);display:grid;gap:0}
+.rost div{display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:var(--hair);color:var(--text-body)}
+.rost b{width:13px;color:var(--text-faint);font-weight:400}
+.rost .s{margin-left:auto;letter-spacing:.09em;text-transform:uppercase;font-size:.85em}
+.rost .s.ok{color:var(--data-ok)}
+.rost .s.wait{color:var(--text-faint)}
+.rost .add{color:var(--accent);border-bottom:0;padding-top:6px}
+
+/* 05 / 06 · honest awaiting-content frames */
+.await{flex:1;border:var(--hair);display:grid;place-items:center;
+  background:repeating-linear-gradient(45deg,transparent 0 6px,rgba(9,9,9,.035) 6px 7px)}
+.await span{font-family:var(--font-mono);font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--text-faint);background:var(--paper);padding:5px 9px;border:var(--hair)}
+
+/* ================= RESPONSIVE ================= */
+@media (min-height:1000px){
+  .cd{-webkit-line-clamp:3}
+  :root{--gap:15px}
+}
+@media (max-width:1100px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  body{overflow:auto}
+  .page{height:auto;grid-template-rows:none}
+  header{grid-template-columns:1fr}
+  .grid{grid-template-columns:1fr;grid-template-rows:none}
+  .card{min-height:300px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  .mark{background-size:100% 100%}
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header>
+    <div>
+      <h1 class="wm">Djoaniel</h1>
+      <p class="thesis">Sixteen years of <span class="mark">heads-up displays</span> for industries that never called them that.</p>
+    </div>
+    <nav aria-label="Primary">
+      <a href="about.html">About</a>
+      <a href="colophon.html">Colophon</a>
+      <a href="mailto:djoaniel@gmail.com">djoaniel@gmail.com</a>
+    </nav>
+  </header>
+
+  <main class="grid">
+
+    <!-- 01 -->
+    <a class="card" href="work/no-value.html">
+      <div class="tz">
+        <div class="in">
+          <table class="tbl">
+            <tr><th>Holding</th><th>Market value</th></tr>
+            <tr><td>Nestlé SA</td><td>12,480.00</td></tr>
+            <tr><td>Roche Holding</td><td>8,215.50</td></tr>
+            <tr class="null"><td>Zurich Insurance</td><td>—</td></tr>
+            <tr><td>Novartis AG</td><td>4,092.00</td></tr>
+          </table>
+        </div>
+        <span class="cap">Localised recreation · NDA</span>
+      </div>
+      <div class="ft">
+        <span class="cat"><i></i>Enterprise banking · Avaloq</span>
+        <h2 class="ct">The "No Value" System</h2>
+        <p class="cd">One everywhere-problem resolved into one deterministic rule — and the seven roles it took to ship it.</p>
+      </div>
+    </a>
+
+    <!-- 02 -->
+    <a class="card" href="work/tessa.html">
+      <div class="tz">
+        <div class="in">
+          <div class="bub b">What kind of work are you looking for?</div>
+          <div class="bub u">I'm not sure yet</div>
+          <div class="bub b">Then let's start with what you're good at.</div>
+          <div class="branch"><span>Branch · unresolved intent</span><span class="ln"></span></div>
+        </div>
+        <span class="cap">Decision engine · rebuilt</span>
+      </div>
+      <div class="ft">
+        <span class="cat"><i></i>Conversational · Plan International</span>
+        <h2 class="ct">TESSA</h2>
+        <p class="cd">A career coach for young Filipino jobseekers. I designed the decision engine underneath the dialogue.</p>
+      </div>
+    </a>
+
+    <!-- 03 -->
+    <a class="card" href="work/sarisari-snaps.html">
+      <div class="tz">
+        <div class="in">
+          <div class="steps">
+            <span>01 Size</span><span class="ar">→</span>
+            <span class="on">02 Frame</span><span class="ar">→</span>
+            <span>03 Photos</span><span class="ar">→</span>
+            <span>04 Review</span>
+          </div>
+          <div class="frame"><div class="ph"></div></div>
+        </div>
+        <span class="cap">Configurator · live product</span>
+      </div>
+      <div class="ft">
+        <span class="cat"><i></i>Commerce · Founder</span>
+        <h2 class="ct">SariSari Snaps</h2>
+        <p class="cd">Orders lived in Messenger threads. I built the configurator and the system behind it, so the inbox stopped being the storefront.</p>
+      </div>
+    </a>
+
+    <!-- 04 -->
+    <a class="card" href="#">
+      <div class="tz">
+        <div class="in">
+          <div class="rost">
+            <div><b>01</b> Rider — captain <span class="s ok">Confirmed</span></div>
+            <div><b>02</b> Rider <span class="s ok">Confirmed</span></div>
+            <div><b>03</b> Rider <span class="s wait">Awaiting</span></div>
+            <div><b>04</b> — <span class="s wait">Open slot</span></div>
+            <div class="add">+ Add rider</div>
+          </div>
+        </div>
+        <span class="cap">Registration portal</span>
+      </div>
+      <div class="ft">
+        <span class="cat retail"><i></i>Retail · Campaign</span>
+        <h2 class="ct">Rudy Project</h2>
+        <p class="cd">A Team Challenge registration portal and the token system behind it, built to survive a campaign calendar.</p>
+      </div>
+    </a>
+
+    <!-- 05 -->
+    <a class="card" href="#">
+      <div class="tz">
+        <div class="in"><div class="await"><span>Awaiting content</span></div></div>
+        <span class="cap">Retail · digital marketing</span>
+      </div>
+      <div class="ft">
+        <span class="cat retail"><i></i>Retail · Brand</span>
+        <h2 class="ct">Altared State</h2>
+        <p class="cd">Needs your account of the work before I write anything here.</p>
+      </div>
+    </a>
+
+    <!-- 06 -->
+    <a class="card" href="#">
+      <div class="tz">
+        <div class="in"><div class="await"><span>Awaiting content</span></div></div>
+        <span class="cap">Retail · digital marketing</span>
+      </div>
+      <div class="ft">
+        <span class="cat retail"><i></i>Retail · Industrial</span>
+        <h2 class="ct">Brady / Emedco</h2>
+        <p class="cd">Needs your account of the work before I write anything here.</p>
+      </div>
+    </a>
+
+  </main>
+</div>
+
+</body>
+</html>
