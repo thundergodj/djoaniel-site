@@ -73,7 +73,7 @@
   align-items:baseline;padding:13px 16px;border-bottom:0.667px solid var(--border-default)}
 .ruleset .r:last-child{border-bottom:0}
 .ruleset .r.blanket{background:var(--surface-card-30)}
-.ruleset .c{font:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.ruleset .c{font:var(--mono);letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted);font-weight:500}
 .ruleset .o{font-family:var(--font-sans);font-size:14px;line-height:1.5;color:var(--text-body)}
 .ruleset .k{font-family:var(--font-mono);font-size:15px;font-weight:500;text-align:right;
   color:var(--text-primary)}
@@ -102,7 +102,7 @@
 .mono-note,.slot .lbl,.slot .idx{color:var(--text-muted)}
 /* the CTA is a link, so it is a link */
 .btn a.go{position:relative;display:inline-flex;align-items:center;gap:10px;
-  padding:12px 20px;font:var(--text-caption);font-weight:500;letter-spacing:.05em;
+  padding:12px 20px;font:var(--text-caption);font-weight:500;letter-spacing:0.04em;
   text-transform:uppercase;background:var(--surface-inverse);color:var(--text-inverse);
   border:0.667px solid var(--surface-inverse);white-space:nowrap;text-decoration:none;
   transition:transform var(--dur-fast) var(--ease-snap)}
@@ -120,7 +120,7 @@
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
     <nav aria-label="Primary">
       <a href="../index.html">Work</a>
-      <a href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20No%20Value">djoaniel@gmail.com</a>
+      <a href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20No%20Value"><i class="ph ph-envelope-simple inl" aria-hidden="true"></i> djoaniel@gmail.com<span class="sr-only"> (opens your email app)</span></a>
     </nav>
   </div>
 </header>
@@ -263,9 +263,12 @@
   <p class="claim">Everything above is the argument.</p>
   <p class="prose">Below: why the ambiguity cost real money, the four states you can pull apart yourself, the reasoning behind each exception, and the seven roles it took to make a rule into a standard. Nothing under this line is load-bearing — you already have the case.</p>
 
-  <div class="btn" style="margin-top:var(--space-xl)">
-    <span class="slab" aria-hidden="true"></span>
-    <a class="go" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20No%20Value">Talk to me about systems work <span aria-hidden="true">→</span></a>
+  <div class="actions" style="margin-top:var(--space-xl)">
+    <div class="btn">
+          <span class="slab" aria-hidden="true"></span>
+          <a href="#e01">Read the evidence <span aria-hidden="true">&rarr;</span></a>
+        </div>
+    <a class="arrow plain" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20No%20Value">Talk to me about systems work<span class="sr-only"> (opens your email app)</span> <i class="ph ph-envelope-simple" aria-hidden="true"></i></a>
   </div>
 </div>
 
@@ -428,9 +431,12 @@
         <div class="by"><span class="r"></span><span>Djoaniel Hernandez · System note № 04</span></div>
       </blockquote>
 
-      <div class="btn" style="margin-top:var(--space-xl)">
-        <span class="slab" aria-hidden="true"></span>
-        <a class="go" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20No%20Value">Talk to me about systems work <span aria-hidden="true">→</span></a>
+      <div class="actions" style="margin-top:var(--space-xl)">
+        <div class="btn">
+          <span class="slab" aria-hidden="true"></span>
+          <a href="../index.html#work">See all work <span aria-hidden="true">&rarr;</span></a>
+        </div>
+        <a class="arrow plain" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20No%20Value">Talk to me about systems work<span class="sr-only"> (opens your email app)</span> <i class="ph ph-envelope-simple" aria-hidden="true"></i></a>
       </div>
     </section>
 
@@ -446,7 +452,7 @@
 
 <footer class="foot">
   <div class="in">
-    <div class="z">Created by Djoaniel Hernandez · NN/g #1046866 · <a href="mailto:djoaniel@gmail.com">djoaniel@gmail.com</a></div>
+    <div class="z">Created by Djoaniel Hernandez · NN/g #1046866 · <a href="mailto:djoaniel@gmail.com"><i class="ph ph-envelope-simple inl" aria-hidden="true"></i> djoaniel@gmail.com<span class="sr-only"> (opens your email app)</span></a></div>
     <div class="mk">意識</div>
   </div>
 </footer>

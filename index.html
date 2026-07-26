@@ -84,7 +84,7 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap
 @keyframes stroke{to{background-size:100% 100%}}
 nav{display:flex;gap:18px;align-items:center;padding-bottom:4px}
 nav a{
-  font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
   color:var(--text-muted);text-decoration:none;transition:color .16s var(--ease);
 }
 nav a:hover,nav a:focus-visible{color:var(--accent)}
@@ -105,33 +105,37 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
 /* --- the teaser: a live fragment of the interface, rebuilt --- */
 .tz{position:relative;overflow:hidden;background:var(--paper);border-bottom:var(--hair);min-height:0}
 .tz > .in{position:absolute;inset:0;padding:clamp(9px,1.5vh,16px);display:flex;flex-direction:column;gap:5px;justify-content:center}
-.cap{
-  position:absolute;left:0;bottom:0;z-index:2;
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
-  color:var(--text-muted);background:var(--paper);padding:5px 9px;border-top:var(--hair);border-right:var(--hair);
-}
+/* .cap REMOVED. It was an 11px mono uppercase chip sitting directly above
+   .cat — same face, same size, same tracking, same case. Two different
+   kinds of information rendered identically read as one breadcrumb, and
+   it was the actual readability failure on this grid, not the serif.
+   The NDA / recreation disclaimer belongs on the case study page, where
+   someone who cares is already reading. */
 
 /* --- card foot --- */
-.ft{padding:clamp(9px,1.5vh,15px) clamp(11px,1.4vw,16px);display:grid;gap:5px}
+.ft{padding:clamp(9px,1.5vh,15px) clamp(11px,1.4vw,16px);display:grid;gap:7px}
 .cat{
-  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
   color:var(--text-muted);display:flex;align-items:center;gap:8px;
 }
 .cat i{width:6px;height:6px;background:var(--accent);font-style:normal;flex:none}
 .cat.retail i{background:var(--ink-600)}
-/* Card titles are ALWAYS Instrument Serif. The old sans fallback at short
-   viewports is removed — swapping the face mid-system was more damaging
-   than the thing it protected against. The 24px floor is now held by the
-   clamp minimum instead, so the serif never renders below it and never
-   has to be substituted. */
+/* Serif promoted from 24-30 to 28-36. At the old scale Instrument Serif
+   sat at the very floor of its range beside a dense mono table, and read
+   as underpowered rather than as the display voice. Same face, more
+   authority. The 28px minimum still clears the type lock's 24px floor. */
 .ct{
   font-family:var(--font-display);font-weight:400;
-  font-size:clamp(24px,2.6vh,30px);line-height:1.08;
-  letter-spacing:-.016em;margin:0;transition:color .16s var(--ease);
+  font-size:clamp(28px,3.1vh,36px);line-height:1.02;
+  letter-spacing:-.022em;margin:0;transition:color .16s var(--ease);
   font-synthesis-weight:none;-webkit-font-smoothing:subpixel-antialiased;
 }
 .card:hover .ct,.card:focus-visible .ct{color:var(--accent)}
+/* Claims are written to a 100-110 character band = exactly two lines at
+   this measure. min-height reserves both lines so the six card feet align
+   even where the copy is a placeholder and runs short. */
 .cd{font-size:clamp(14px,1.7vh,16px);line-height:1.5;color:var(--text-body);margin:0;
+  min-height:3em;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
 /* ============================================================
@@ -140,7 +144,7 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
    ============================================================ */
 
 /* 01 · null-value table */
-.tbl{font-family:var(--font-mono);font-size:clamp(11px,1.35vh,13px);width:100%;border-collapse:collapse}
+.tbl{font-family:var(--font-mono);font-size:clamp(12px,1.35vh,13px);width:100%;border-collapse:collapse}
 .tbl th{font-weight:400;color:var(--text-muted);text-align:left;letter-spacing:.1em;
   text-transform:uppercase;font-size:.88em;padding:0 0 6px;border-bottom:var(--hair)}
 .tbl td{padding:3.5px 0;border-bottom:var(--hair);color:var(--text-body)}
@@ -153,22 +157,22 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
 .bub.b{background:var(--white);align-self:flex-start}
 .bub.u{background:var(--ink-900);color:var(--white);align-self:flex-end;border-color:var(--ink-900)}
 .branch{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);
-  font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:4px}
+  font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent);margin-top:4px;font-weight:500}
 .branch .ln{height:.667px;background:var(--accent);flex:1;opacity:.45}
 
 /* 03 · configurator steps */
-.steps{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:10.5px;
-  letter-spacing:.08em;text-transform:uppercase}
+.steps{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12.5px;
+  letter-spacing:0.04em;text-transform:uppercase;font-weight:500}
 .steps span{border:var(--hair);padding:5px 7px;color:var(--text-muted);background:var(--white)}
 .steps span.on{background:var(--accent);border-color:var(--accent);color:var(--white)}
 .steps .ar{color:var(--text-muted);border:0;padding:0}
 .frame{flex:1;border:var(--hair);background:var(--white);display:grid;place-items:center;min-height:0;
-  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+  font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted)}
 .frame .ph{width:52%;aspect-ratio:4/3;border:var(--hair);
   background:repeating-linear-gradient(45deg,transparent 0 4px,rgba(9,9,9,.045) 4px 5px)}
 
 /* 04 · roster rows */
-.rost{font-family:var(--font-mono);font-size:clamp(11px,1.35vh,13px);display:grid;gap:0}
+.rost{font-family:var(--font-mono);font-size:clamp(12px,1.35vh,13px);display:grid;gap:0}
 .rost div{display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:var(--hair);color:var(--text-body)}
 .rost b{width:17px;color:var(--text-muted);font-weight:400}
 .rost .s{margin-left:auto;letter-spacing:.08em;text-transform:uppercase;font-size:.88em}
@@ -179,12 +183,12 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
 /* 05 / 06 · honest awaiting-content frames */
 .await{flex:1;border:var(--hair);display:grid;place-items:center;
   background:repeating-linear-gradient(45deg,transparent 0 6px,rgba(9,9,9,.035) 6px 7px)}
-.await span{font-family:var(--font-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+.await span{font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
   color:var(--text-muted);background:var(--paper);padding:5px 9px;border:var(--hair)}
 
 /* ================= RESPONSIVE ================= */
 @media (min-height:1000px){
-  .cd{-webkit-line-clamp:3}
+  .cd{-webkit-line-clamp:3;min-height:4.5em}
   :root{--gap:15px}
 }
 @media (max-width:1100px){
@@ -213,12 +217,18 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
    Every icon is aria-hidden and paired with a .sr-only phrase, so the
    signal reaches screen readers as words rather than as decoration.
    ================================================================== */
-.ph{flex:none;line-height:1;font-size:1.05em;
+.ph{flex:none;line-height:1;font-size:1.4em;
   transition:transform var(--dur-fast) var(--ease-snap)}
-a:hover .ph-arrow-square-out{transform:translate(1.5px,-1.5px)}
-a:hover .ph-envelope-simple,.btn a:hover .ph-envelope-simple{transform:translateY(-1px)}
-/* leading icons sit inside running text and need optical alignment */
-.ph.lead{margin-right:.4em;vertical-align:-.09em;font-size:1em}
+/* ACTION-LEVEL icons run 2x the label so the destination reads before
+   the words do. The label is 10-13px mono caps; a 1em icon disappears
+   against it, which is exactly the failure this pass exists to fix. */
+.arrow .ph{font-size:26px}
+.btn .ph{font-size:20px}
+a:hover .ph-arrow-square-out{transform:translate(2px,-2px)}
+a:hover .ph-envelope-simple{transform:translateY(-2px)}
+/* TEXT-LEVEL icons sit inside a running line (nav, footer credit) and are
+   capped so they cannot blow out the line box. Signal, not shout. */
+.ph.inl{margin-right:.42em;vertical-align:-.14em;font-size:1.35em}
 
 /* Screen-reader-only destination text. Must never be display:none —
    that would strip it from the accessibility tree, which is the whole
@@ -239,7 +249,7 @@ a:hover .ph-envelope-simple,.btn a:hover .ph-envelope-simple{transform:translate
     <nav aria-label="Primary">
       <a href="about.html">About</a>
       <a href="colophon.html">Colophon</a>
-      <a href="mailto:djoaniel@gmail.com">djoaniel@gmail.com</a>
+      <a href="mailto:djoaniel@gmail.com"><i class="ph ph-envelope-simple inl" aria-hidden="true"></i> djoaniel@gmail.com<span class="sr-only"> (opens your email app)</span></a>
     </nav>
   </header>
 
@@ -257,7 +267,6 @@ a:hover .ph-envelope-simple,.btn a:hover .ph-envelope-simple{transform:translate
             <tr><td>Novartis AG</td><td>4,092.00</td></tr>
           </table>
         </div>
-        <span class="cap">Localised recreation · NDA</span>
       </div>
       <div class="ft">
         <span class="cat"><i></i>Enterprise banking · Avaloq</span>
@@ -275,7 +284,6 @@ a:hover .ph-envelope-simple,.btn a:hover .ph-envelope-simple{transform:translate
           <div class="bub b">Then let's start with what you're good at.</div>
           <div class="branch"><span>Branch · unresolved intent</span><span class="ln"></span></div>
         </div>
-        <span class="cap">Decision engine · rebuilt</span>
       </div>
       <div class="ft">
         <span class="cat"><i></i>Conversational · Plan International</span>
@@ -296,12 +304,11 @@ a:hover .ph-envelope-simple,.btn a:hover .ph-envelope-simple{transform:translate
           </div>
           <div class="frame"><div class="ph"></div></div>
         </div>
-        <span class="cap">Configurator · live product</span>
       </div>
       <div class="ft">
         <span class="cat"><i></i>Commerce · Founder</span>
         <h2 class="ct">SariSari Snaps</h2>
-        <p class="cd">Orders lived in Messenger threads. I built the configurator and the system behind it, so the inbox stopped being the storefront.</p>
+        <p class="cd">Orders lived in Messenger threads. I built the configurator so the inbox stopped being the storefront.</p>
       </div>
     </a>
 
@@ -317,7 +324,6 @@ a:hover .ph-envelope-simple,.btn a:hover .ph-envelope-simple{transform:translate
             <div class="add">+ Add rider</div>
           </div>
         </div>
-        <span class="cap">Registration portal</span>
       </div>
       <div class="ft">
         <span class="cat retail"><i></i>Retail · Campaign</span>
@@ -330,12 +336,11 @@ a:hover .ph-envelope-simple,.btn a:hover .ph-envelope-simple{transform:translate
     <a class="card" href="#">
       <div class="tz">
         <div class="in"><div class="await"><span>Awaiting content</span></div></div>
-        <span class="cap">Retail · digital marketing</span>
       </div>
       <div class="ft">
         <span class="cat retail"><i></i>Retail · Brand</span>
         <h2 class="ct">Altared State</h2>
-        <p class="cd">Needs your account of the work before I write anything here.</p>
+        <p class="cd">Placeholder. Send me your account of the Altared State work and I'll write the claim that goes here.</p>
       </div>
     </a>
 
@@ -343,12 +348,11 @@ a:hover .ph-envelope-simple,.btn a:hover .ph-envelope-simple{transform:translate
     <a class="card" href="#">
       <div class="tz">
         <div class="in"><div class="await"><span>Awaiting content</span></div></div>
-        <span class="cap">Retail · digital marketing</span>
       </div>
       <div class="ft">
         <span class="cat retail"><i></i>Retail · Industrial</span>
         <h2 class="ct">Brady / Emedco</h2>
-        <p class="cd">Needs your account of the work before I write anything here.</p>
+        <p class="cd">Placeholder. Send me your account of the Brady / Emedco work and I'll write the claim that goes here.</p>
       </div>
     </a>
 
