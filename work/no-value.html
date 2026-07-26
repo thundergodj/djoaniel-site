@@ -4,150 +4,349 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How to display "No Value" — Case Study · Djoaniel Hernandez</title>
-<meta name="description" content="Setting the null-value display standard for a Swiss private-wealth platform. One everywhere-problem resolved into one deterministic rule — and the seven-person circle it took to ship it.">
+<meta name="description" content="Setting the null-value display standard for a Swiss private-wealth platform. One everywhere-problem resolved into one deterministic rule — and the seven roles it took to ship it.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600;700&family=Anybody:wght@900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&family=Anybody:wght@900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/eishiki-v3.css">
+<style>
+/* ==================================================================
+   CASE STUDY SHELL — brief + evidence
+   The page is split once, hard. Everything above the break is the
+   argument; everything below is optional depth. The separators are
+   readouts, not ornament: they tell a skimmer the shape of the
+   document so that skimming produces the right conclusion.
+   No blue in this file's structure — blue means "read this".
+   ================================================================== */
+:root{
+  --chrome-h:57px;
+  --rail-h:32px;
+  --mono:11px/1.1 "IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+.skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--text-primary);
+  color:var(--paper);padding:10px 16px;font:var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.skip:focus{left:8px;top:8px}
+
+/* Wordmark follows the type lock: Radio Canada 700, never Instrument Sans.
+   The block matches the homepage — cap height, on the baseline. */
+.logo .wm{font-family:var(--font-sans);font-weight:700;letter-spacing:-.02em}
+.logo .sq{width:.28em;height:.72em;font-size:17px;background:var(--accent);display:block}
+
+/* ---------- position readout ---------- */
+.rail{position:sticky;top:var(--chrome-h);z-index:35;background:var(--paper);
+  border-bottom:0.667px solid var(--border-default)}
+.rail .in{max-width:var(--inner);margin:0 auto;padding:10px var(--gut);
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  font:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.rail .now{color:var(--text-primary)}
+.rail .of{white-space:nowrap}
+
+/* ---------- separators ---------- */
+.sep{margin:0 0 22px}
+.sep .ln{height:0.667px;background:var(--border-default)}
+.sep .rw{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:11px}
+.sep .ix,.sep .tag{font:var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.sep .ix{color:var(--text-primary)}
+.sep .tag{color:var(--text-muted)}
+
+/* The one hard boundary. Two rules, unequal — a stop, not a divider. */
+.hardbreak{margin:var(--space-4xl) 0 var(--space-xl)}
+.hardbreak .a{height:2px;background:var(--text-primary)}
+.hardbreak .b{height:0.667px;background:var(--text-primary);margin-top:3px}
+.hardbreak .rw{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  margin-top:13px;font:var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.hardbreak .l{color:var(--text-primary)}
+.hardbreak .r{color:var(--text-muted)}
+
+/* ---------- the brief ---------- */
+.brief{padding-top:var(--space-3xl)}
+.brief .kick{font:var(--mono);letter-spacing:.14em;color:var(--text-muted);
+  text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)}
+.claim{font-family:var(--font-display);font-size:clamp(24px,2.6vw,31px);line-height:1.22;
+  letter-spacing:-.015em;color:var(--text-primary);margin:0;max-width:30ch}
+
+/* the rule, in its shortest legible form */
+.ruleset{border:var(--border-hair);margin-top:var(--space-lg)}
+.ruleset .r{display:grid;grid-template-columns:190px minmax(0,1fr) 74px;gap:18px;
+  align-items:baseline;padding:13px 16px;border-bottom:0.667px solid var(--border-default)}
+.ruleset .r:last-child{border-bottom:0}
+.ruleset .r.blanket{background:var(--surface-card-30)}
+.ruleset .c{font:var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.ruleset .o{font-family:var(--font-sans);font-size:14px;line-height:1.5;color:var(--text-body)}
+.ruleset .k{font-family:var(--font-mono);font-size:15px;font-weight:500;text-align:right;
+  color:var(--text-primary)}
+@media(max-width:760px){
+  .ruleset .r{grid-template-columns:minmax(0,1fr) 60px;gap:6px 14px}
+  .ruleset .c{grid-column:1/2}
+  .ruleset .k{grid-row:1/2;grid-column:2/3}
+  .ruleset .o{grid-column:1/3}
+}
+
+/* ---------- the instrument responds to where the reader is ---------- */
+.demo[data-demo] .df,
+.demo[data-demo] .df .val,
+.demo[data-demo] .df .fired{transition-delay:calc(var(--i,0) * 85ms)}
+@media(prefers-reduced-motion:reduce){
+  .demo[data-demo] .df,
+  .demo[data-demo] .df .val,
+  .demo[data-demo] .df .fired{transition:none !important;transition-delay:0s !important}
+}
+
+/* ---------- inherited defects, fixed ---------- */
+.sec,[id]{scroll-margin-top:calc(var(--chrome-h) + var(--rail-h) + 24px)}
+.snav{top:calc(var(--chrome-h) + var(--rail-h) + 20px)}
+:focus-visible{outline:2px solid var(--text-primary);outline-offset:2px}
+/* --text-faint is 2.78:1 and fails AA — nothing new in this file uses it */
+.mono-note,.slot .lbl,.slot .idx{color:var(--text-muted)}
+/* the CTA is a link, so it is a link */
+.btn a.go{position:relative;display:inline-flex;align-items:center;gap:10px;
+  padding:12px 20px;font:var(--text-caption);font-weight:500;letter-spacing:.05em;
+  text-transform:uppercase;background:var(--surface-inverse);color:var(--text-inverse);
+  border:0.667px solid var(--surface-inverse);white-space:nowrap;text-decoration:none;
+  transition:transform var(--dur-fast) var(--ease-snap)}
+.btn a.go:hover{transform:translate(1px,1px)}
+.btn a.go:active{transform:translate(4px,4px)}
+</style>
 </head>
 <body>
+
+<a class="skip" href="#main">Skip to content</a>
 
 <!-- ============================== CHROME ============================== -->
 <header class="top">
   <div class="in">
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
-    <nav>
-      <a href="../index.html#work" aria-current="page">Work</a>
-      <a href="../index.html#about">About</a>
-      <a href="../index.html#archive">Archive</a>
+    <nav aria-label="Primary">
+      <a href="../index.html">Work</a>
+      <a href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20No%20Value">djoaniel@gmail.com</a>
     </nav>
   </div>
 </header>
 
-<!-- ============================== HERO ============================== -->
-<div class="inner" style="padding-top:var(--space-4xl)">
-  <a class="arrow plain" href="../index.html#work"><span class="g">←</span> All work</a>
-  <p style="font:var(--text-label);letter-spacing:.14em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 01 · Design systems · Enterprise banking</p>
-  <h1 class="d-hero">How to display<br>"No&nbsp;Value"</h1>
-  <p class="prose lead">In private wealth software, a blank field isn't nothing — it's a <button type="button" class="term" data-tip-label="Why it's a question" data-tip="A blank can mean &ldquo;nothing was entered,&rdquo; &ldquo;this doesn't apply,&rdquo; or &ldquo;the value is genuinely zero.&rdquo; The screen looks identical in all three cases — so the reader has to guess.">question</button>. I wrote the rule that ended the guesswork.</p>
+<!-- position readout — tells a skimmer the shape of the page -->
+<div class="rail" aria-hidden="true">
+  <div class="in">
+    <span class="now" data-readout>The brief</span>
+    <span class="of">Case study 01 · No Value</span>
+  </div>
+</div>
 
-  <div class="slot" data-ratio="16/9" style="margin-top:var(--space-xl)">
-    <span class="idx">01</span>
-    <span class="lbl">Investment proposal screen · redacted<br>(reconstructed, NDA-safe)</span>
+<main id="main">
+
+<!-- ==================================================================
+     THE BRIEF — the whole argument. If someone reads only this, they
+     have everything they need to decide whether to talk to me.
+     ================================================================== -->
+<div class="inner brief" data-pos="The brief">
+  <a class="arrow plain" href="../index.html"><span class="g">←</span> All work</a>
+  <p class="kick">// Case study 01 · Design systems · Enterprise banking</p>
+  <h1 class="d-hero">How to display<br>"No&nbsp;Value"</h1>
+  <p class="prose lead">In private wealth software, a blank field isn't nothing — it's a
+    <button type="button" class="term" data-tip-label="Why it's a question" data-tip="A blank can mean &ldquo;nothing was entered,&rdquo; &ldquo;this doesn't apply,&rdquo; or &ldquo;the value is genuinely zero.&rdquo; The screen looks identical in all three cases — so the reader has to guess.">question</button>.
+    I wrote the rule that ended the guesswork.</p>
+
+  <!-- the situation, shown rather than described -->
+  <div class="sep" style="margin-top:var(--space-2xl)">
+    <div class="ln"></div>
+    <div class="rw"><span class="ix">01 · the situation</span><span class="tag">brief</span></div>
+  </div>
+  <p class="claim">One empty value. Five different answers.</p>
+  <p class="prose">Across the CRM, an empty field was rendered however each screen's author felt that day. Same underlying state — no data — read five different ways by the advisor looking at it. In wealth management that ambiguity isn't cosmetic: a field reading <b>0.00</b> where it should read <b>no data</b> misrepresents a client's position.</p>
+
+  <div class="demo" style="margin-top:var(--space-lg)">
+    <div class="bar"><span class="t">CRM · Investment Proposal · as-found</span></div>
+    <div class="grid">
+      <div class="df is-null"><span class="lbl">Description</span><span class="val">None</span></div>
+      <div class="df is-null"><span class="lbl">Location</span><span class="val">N/A</span></div>
+      <div class="df is-null"><span class="lbl">Channel</span><span class="val">(blank)</span></div>
+      <div class="df is-null"><span class="lbl">Expected Volume</span><span class="val">0</span></div>
+      <div class="df is-null"><span class="lbl">Related Objects</span><span class="val">null</span></div>
+      <div class="df is-null"><span class="lbl">Product</span><span class="val">—hidden—</span></div>
+    </div>
+  </div>
+  <p class="mono-note">Inconsistent null-handling, sampled from real screens (localised recreation, NDA-safe).</p>
+
+  <!-- the move -->
+  <div class="sep" style="margin-top:var(--space-3xl)">
+    <div class="ln"></div>
+    <div class="rw"><span class="ix">02 · the move</span><span class="tag">brief</span></div>
+  </div>
+  <p class="claim">"Empty" isn't one state. It's four — so one blanket rule, and three exceptions.</p>
+  <p class="prose">The rule set is
+    <button type="button" class="term" data-tip-label="Deterministic" data-tip="Given the same input, the rule always produces the same output — with no room for interpretation. That's what makes it buildable as logic rather than enforceable as a guideline.">deterministic</button>:
+    a developer never makes a judgment call, an advisor never wonders.</p>
+
+  <div class="ruleset">
+    <div class="r blanket">
+      <span class="c">Blanket rule</span>
+      <span class="o">Any datatype with no value displays an emdash.</span>
+      <span class="k">—</span>
+    </div>
+    <div class="r">
+      <span class="c">Exc. 1 · financial, expected</span>
+      <span class="o">The field is expected to hold an amount, so the zero is intent, not absence.</span>
+      <span class="k">0.00</span>
+    </div>
+    <div class="r">
+      <span class="c">Exc. 2 · financial, invalid</span>
+      <span class="o">No value can be resolved — showing 0.00 would assert a position the system doesn't know.</span>
+      <span class="k">—</span>
+    </div>
+    <div class="r">
+      <span class="c">Exc. 3 · concatenated</span>
+      <span class="o">An output composing several inputs skips optional empties. Never punctuate a gap.</span>
+      <span class="k">skip</span>
+    </div>
   </div>
 
-  <div class="stats" style="margin-top:var(--space-2xl)">
+  <!-- the payoff — the instrument resolves as it comes into view -->
+  <div class="sep" style="margin-top:var(--space-3xl)">
+    <div class="ln"></div>
+    <div class="rw"><span class="ix">03 · the payoff</span><span class="tag">live · try it</span></div>
+  </div>
+  <p class="claim">The same screen, before and after the rule.</p>
+  <p class="prose">Each field shows <b>which rule fired</b> once the standard is applied. It resolves on its own as you reach it — toggle back and forth as much as you like.</p>
+
+  <div class="demo" data-demo style="margin-top:var(--space-lg)">
+    <div class="bar">
+      <span class="t">CRM · Investment Proposal</span>
+      <div class="toggle" role="group" aria-label="Before or after the rule">
+        <button type="button" data-before class="active" aria-pressed="true">Before</button>
+        <button type="button" data-after aria-pressed="false">After the rule</button>
+      </div>
+    </div>
+    <div class="grid" aria-live="polite">
+      <div class="df" style="--i:0" data-b="None" data-a="—" data-at="dash" data-rule="Blanket rule">
+        <span class="lbl">Description</span><span class="val">None</span><span class="fired"></span></div>
+      <div class="df" style="--i:1" data-b="null" data-a="CHF 0.00" data-at="ok" data-rule="Exception 1 · financial, expected">
+        <span class="lbl">Expected Volume</span><span class="val">null</span><span class="fired"></span></div>
+      <div class="df" style="--i:2" data-b="N/A" data-a="—" data-at="dash" data-rule="Blanket rule">
+        <span class="lbl">Location</span><span class="val">N/A</span><span class="fired"></span></div>
+      <div class="df" style="--i:3" data-b="(blank)" data-a="—" data-at="dash" data-rule="Exception 2 · financial, invalid">
+        <span class="lbl">Expected Profit</span><span class="val">(blank)</span><span class="fired"></span></div>
+      <div class="df" style="--i:4" data-b="0" data-a="—" data-at="dash" data-rule="Blanket rule · the 0 was a lie">
+        <span class="lbl">Related Objects</span><span class="val">0</span><span class="fired"></span></div>
+      <div class="df" style="--i:5" data-b="Wall St, , , NY" data-a="Wall St, NY" data-at="ok" data-rule="Exception 3 · concatenated">
+        <span class="lbl">Domicile Address</span><span class="val">Wall St, , , NY</span><span class="fired"></span></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="k null"><i></i> Ambiguous — reader must guess</span>
+    <span class="k dash"><i></i> Correctly absent — emdash</span>
+    <span class="k ok"><i></i> Resolved to a real value</span>
+  </div>
+  <p class="mono-note">The address row is the one people miss: a concatenated field punctuating gaps that were never there.</p>
+
+  <!-- the result -->
+  <div class="sep" style="margin-top:var(--space-3xl)">
+    <div class="ln"></div>
+    <div class="rw"><span class="ix">04 · the result</span><span class="tag">brief</span></div>
+  </div>
+  <p class="claim">One everywhere-problem became one rule.</p>
+  <p class="prose">The rule set became the <b>single source of truth for null-value display</b> — written as deterministic logic the delivery org builds against, instead of a dozen judgment calls made at render time. Specifics are under NDA, but the win is simpler than a number: the guesswork left the screen.</p>
+
+  <div class="stats" style="margin-top:var(--space-xl)">
     <div class="stat"><span class="v">7</span><div class="r"></div><span class="l">Roles aligned</span></div>
     <div class="stat"><span class="v">4</span><div class="r"></div><span class="l">States of "empty"</span></div>
     <div class="stat"><span class="v">1</span><div class="r"></div><span class="l">Rule shipped</span><span class="n">(specifics under NDA)</span></div>
   </div>
+
+  <!-- ============ THE HARD BREAK ============ -->
+  <div class="hardbreak">
+    <div class="a"></div>
+    <div class="b"></div>
+    <div class="rw"><span class="l">Brief · complete</span><span class="r">Evidence follows · optional</span></div>
+  </div>
+  <p class="claim">Everything above is the argument.</p>
+  <p class="prose">Below: why the ambiguity cost real money, the four states you can pull apart yourself, the reasoning behind each exception, and the seven roles it took to make a rule into a standard. Nothing under this line is load-bearing — you already have the case.</p>
+
+  <div class="btn" style="margin-top:var(--space-xl)">
+    <span class="slab" aria-hidden="true"></span>
+    <a class="go" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20No%20Value">Talk to me about systems work <span aria-hidden="true">→</span></a>
+  </div>
 </div>
 
-<!-- ============================== BODY ============================== -->
-<div class="cs-grid" style="margin-top:var(--space-5xl)">
+<!-- ==================================================================
+     THE EVIDENCE — depth, explicitly optional
+     ================================================================== -->
+<div class="cs-grid" style="margin-top:var(--space-4xl)">
 
-  <!-- sticky index -->
-  <nav class="snav" aria-label="Case study sections">
-    <a href="#s01"><span class="n">01</span><span>The mess</span></a>
-    <a href="#s02"><span class="n">02</span><span>The problem</span></a>
-    <a href="#s03"><span class="n">03</span><span>The reframe</span></a>
-    <a href="#s04"><span class="n">04</span><span>The insight</span></a>
-    <a href="#s05"><span class="n">05</span><span>The system</span></a>
-    <a href="#s06"><span class="n">06</span><span>Circle of influence</span></a>
-    <a href="#s07"><span class="n">07</span><span>The fix, in practice</span></a>
-    <a href="#s08"><span class="n">08</span><span>The outcome</span></a>
-    <a href="#s09"><span class="n">09</span><span>Reflection</span></a>
+  <nav class="snav" aria-label="Evidence sections">
+    <a href="#e01"><span class="n">01</span><span>Why it cost</span></a>
+    <a href="#e02"><span class="n">02</span><span>The four states</span></a>
+    <a href="#e03"><span class="n">03</span><span>The rule set in full</span></a>
+    <a href="#e04"><span class="n">04</span><span>Circle of influence</span></a>
+    <a href="#e05"><span class="n">05</span><span>The shipped spec</span></a>
+    <a href="#e06"><span class="n">06</span><span>Reflection</span></a>
   </nav>
 
-  <main>
+  <div>
 
-    <!-- ===================== 01 ===================== -->
-    <section class="sec" id="s01" style="padding-top:0">
-      <div class="srule"><span class="eb">01 · The mess</span><span class="ln"></span><span class="sq"></span></div>
-      <h2 class="d-lg">One empty value.<br><span class="mark">Five</span> different answers.</h2>
-      <p class="prose">Across the CRM, an empty field was rendered however each screen's author felt that day. Same underlying state — no data — read five different ways to the advisor looking at it.</p>
-
-      <div class="demo" style="margin-top:var(--space-lg)">
-        <div class="bar"><span class="t">CRM · Investment Proposal · as-found</span></div>
-        <div class="grid">
-          <div class="df is-null"><span class="lbl">Description</span><span class="val">None</span></div>
-          <div class="df is-null"><span class="lbl">Location</span><span class="val">N/A</span></div>
-          <div class="df is-null"><span class="lbl">Channel</span><span class="val">(blank)</span></div>
-          <div class="df is-null"><span class="lbl">Expected Volume</span><span class="val">0</span></div>
-          <div class="df is-null"><span class="lbl">Related Objects</span><span class="val">null</span></div>
-          <div class="df is-null"><span class="lbl">Product</span><span class="val">—hidden—</span></div>
-        </div>
+    <!-- ===================== E01 ===================== -->
+    <section class="sec" id="e01" style="padding-top:0" data-pos="Evidence 01 / 06">
+      <div class="sep">
+        <div class="ln"></div>
+        <div class="rw"><span class="ix">evidence 01 · why it cost</span><span class="tag">01 / 06</span></div>
       </div>
-      <p class="mono-note">Inconsistent null-handling, sampled from real screens (reconstructed, NDA-safe).</p>
-    </section>
-
-    <!-- ===================== 02 ===================== -->
-    <section class="sec" id="s02">
-      <div class="srule"><span class="eb">02 · The problem</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">A blank is a question <span class="mark">the advisor can't afford</span> to guess.</h2>
       <p class="d-md">Is this data <em>missing</em>, or is the value <em>actually zero</em>?</p>
-      <p class="prose">In wealth management that ambiguity isn't cosmetic. A field that reads "0.00" when it should read "no data" misrepresents a client's position — and a field that reads "None" where a number is expected makes an advisor second-guess the whole record.</p>
-      <p class="prose">Inconsistent empties quietly erode trust in every screen they touch, and trust is the entire product.</p>
-
-      <div style="margin-top:var(--space-xl)">
-        <blockquote class="pq">
-          <q>Blank meant three different things depending on who read it.</q>
-          <div class="by"><span class="r"></span><span>Relationship Manager · discovery session</span></div>
-        </blockquote>
-      </div>
-    </section>
-
-    <!-- ===================== 03 ===================== -->
-    <section class="sec" id="s03">
-      <div class="srule"><span class="eb">03 · The reframe</span><span class="ln"></span><span class="sq"></span></div>
-      <p class="d-md">How might we make every empty field communicate its true meaning — consistently, on every screen?</p>
-      <p class="prose">The goal wasn't to pick a prettier placeholder. It was to make "empty" <b>legible and predictable</b> — so a
-        <button type="button" class="term" data-tip-label="Developer" data-tip="Whoever renders the field. Under the old system they had to decide what an empty value looked like — a design decision made a hundred times, inconsistently, at build time.">developer</button>
-        never has to make a judgment call, and an
+      <p class="prose">A field that reads "0.00" when it should read "no data" misrepresents a client's position — and a field that reads "None" where a number is expected makes an
         <button type="button" class="term" data-tip-label="Advisor" data-tip="The relationship manager reading a client's position on screen. They can't open the database to check whether a blank means zero — they act on what the interface tells them.">advisor</button>
-        never has to wonder.</p>
+        second-guess the whole record. Inconsistent empties quietly erode trust in every screen they touch, and trust is the entire product.</p>
+      <blockquote class="pq" style="margin-top:var(--space-xl)">
+        <q>Blank meant three different things depending on who read it.</q>
+        <div class="by"><span class="r"></span><span>Relationship Manager · discovery session</span></div>
+      </blockquote>
+      <p class="prose" style="margin-top:var(--space-xl)">So the goal was never a prettier placeholder. It was to make "empty" <b>legible and predictable</b> — so a
+        <button type="button" class="term" data-tip-label="Developer" data-tip="Whoever renders the field. Under the old system they had to decide what an empty value looked like — a design decision made a hundred times, inconsistently, at build time.">developer</button>
+        never has to make a judgment call.</p>
     </section>
 
-    <!-- ===================== 04 ===================== -->
-    <section class="sec" id="s04">
-      <div class="srule"><span class="eb">04 · The insight</span><span class="ln"></span><span class="sq"></span></div>
+    <!-- ===================== E02 ===================== -->
+    <section class="sec" id="e02" data-pos="Evidence 02 / 06">
+      <div class="sep">
+        <div class="ln"></div>
+        <div class="rw"><span class="ix">evidence 02 · the four states</span><span class="tag">02 / 06 · live</span></div>
+      </div>
       <h2 class="d-lg">"Empty" isn't one state. It's <span class="mark">four</span>.</h2>
       <p class="prose">The breakthrough was refusing to treat emptiness as a single case. Each of these means something different to the person reading it — so each earns a different treatment. Select one to see what it renders as.</p>
 
       <div data-states style="margin-top:var(--space-lg)">
-        <div class="states" role="tablist">
-          <button class="state" role="tab" aria-selected="true" data-tone="dash" data-token="—"
+        <div class="states" role="tablist" aria-label="States of empty">
+          <button class="state" role="tab" aria-selected="true" aria-controls="nv-state-out" data-tone="dash" data-token="—"
             data-rule="Nothing was entered and nothing was necessarily expected. The blanket rule applies: <b>show an emdash</b>, never a word that could be mistaken for content.">
             <span class="n">01</span><span class="t">No data</span>
             <span class="d">Nothing was entered, and nothing was necessarily expected.</span>
           </button>
-          <button class="state" role="tab" aria-selected="false" data-tone="ok" data-token="0.00"
+          <button class="state" role="tab" aria-selected="false" aria-controls="nv-state-out" data-tone="ok" data-token="0.00"
             data-rule="A financial field that exists and is expected to hold an amount. The zero is <b>intent, not absence</b> — so it must render as a real number.">
             <span class="n">02</span><span class="t">Zero, legitimately</span>
             <span class="d">A financial field that is genuinely, meaningfully zero.</span>
           </button>
-          <button class="state" role="tab" aria-selected="false" data-tone="dash" data-token="—"
+          <button class="state" role="tab" aria-selected="false" aria-controls="nv-state-out" data-tone="dash" data-token="—"
             data-rule="A number was expected but can't be resolved. You <b>can't</b> show 0.00 here — that would assert a position the system doesn't actually know.">
             <span class="n">03</span><span class="t">Invalid financial</span>
             <span class="d">A number was expected but can't be resolved.</span>
           </button>
-          <button class="state" role="tab" aria-selected="false" data-tone="ok" data-token="skip"
+          <button class="state" role="tab" aria-selected="false" aria-controls="nv-state-out" data-tone="ok" data-token="skip"
             data-rule="An optional part inside a concatenated output. <b>Skip the empty segment entirely</b> — never punctuate a gap that isn't there.">
             <span class="n">04</span><span class="t">Composed / optional</span>
             <span class="d">An optional part inside a concatenated output.</span>
           </button>
         </div>
-        <div class="state-out"><div class="txt"></div><div class="tok"></div></div>
+        <div class="state-out" id="nv-state-out" role="tabpanel" tabindex="0" aria-live="polite"><div class="txt"></div><div class="tok"></div></div>
       </div>
     </section>
 
-    <!-- ===================== 05 ===================== -->
-    <section class="sec" id="s05">
-      <div class="srule"><span class="eb">05 · The system</span><span class="ln"></span><span class="sq"></span></div>
+    <!-- ===================== E03 ===================== -->
+    <section class="sec" id="e03" data-pos="Evidence 03 / 06">
+      <div class="sep">
+        <div class="ln"></div>
+        <div class="rw"><span class="ix">evidence 03 · the rule set in full</span><span class="tag">03 / 06</span></div>
+      </div>
       <h2 class="d-lg">One blanket rule. Three exceptions.</h2>
-      <p class="prose">A
-        <button type="button" class="term" data-tip-label="Deterministic" data-tip="Given the same input, the rule always produces the same output — with no room for interpretation. That's what makes it buildable as logic rather than enforceable as a guideline.">deterministic</button>
-        rule set — no interpretation required. It starts with a single default, then handles the cases where the default would lie.</p>
+      <p class="prose">The same rule set as the brief, with the reasoning that earned each exception a place. It starts with a single default, then handles the three cases where that default would lie.</p>
 
       <div class="rules" style="margin-top:var(--space-lg)">
         <div class="rule blanket">
@@ -173,9 +372,12 @@
       </div>
     </section>
 
-    <!-- ===================== 06 ===================== -->
-    <section class="sec" id="s06">
-      <div class="srule"><span class="eb">06 · The circle of influence</span><span class="ln"></span><span class="sq"></span></div>
+    <!-- ===================== E04 ===================== -->
+    <section class="sec" id="e04" data-pos="Evidence 04 / 06">
+      <div class="sep">
+        <div class="ln"></div>
+        <div class="rw"><span class="ix">evidence 04 · circle of influence</span><span class="tag">04 / 06 · live</span></div>
+      </div>
       <h2 class="d-lg">The logic was the easy part. <span class="mark">Alignment</span> was the work.</h2>
       <p class="prose">A display rule only becomes a standard when the whole delivery org agrees to build against it. Turning "just show a dash" and "just show 0.00" into one deterministic rule meant winning — and being sharpened by — seven roles. Hover or tab through each one.</p>
 
@@ -192,66 +394,33 @@
         <div class="stage2">
           <svg class="edges" aria-hidden="true"></svg>
           <div class="hub">DJ<small>RULE OWNER</small></div>
-          <div class="desc"></div>
+          <div class="desc" aria-live="polite"></div>
         </div>
       </div>
       <p class="mono-note">Seven roles, one rule. This is what "systems thinking" looks like as a team sport.</p>
     </section>
 
-    <!-- ===================== 07 ===================== -->
-    <section class="sec" id="s07">
-      <div class="srule"><span class="eb">07 · The fix, in practice</span><span class="ln"></span><span class="sq"></span></div>
-      <h2 class="d-lg">The same screen, before and after the rule.</h2>
-      <p class="prose">Watch what the rule does to the mess from section 01 — ambiguity resolved into intent. Each field shows <b>which rule fired</b> once the standard is applied. Toggle it.</p>
-
-      <div class="demo" data-demo style="margin-top:var(--space-lg)">
-        <div class="bar">
-          <span class="t">CRM · Investment Proposal</span>
-          <div class="toggle" role="group" aria-label="Before or after the rule">
-            <button type="button" data-before class="active" aria-pressed="true">Before</button>
-            <button type="button" data-after aria-pressed="false">After the rule</button>
-          </div>
-        </div>
-        <div class="grid">
-          <div class="df" data-b="None" data-a="—" data-at="dash" data-rule="Blanket rule">
-            <span class="lbl">Description</span><span class="val">None</span><span class="fired"></span></div>
-          <div class="df" data-b="null" data-a="CHF 0.00" data-at="ok" data-rule="Exception 1 · financial, expected">
-            <span class="lbl">Expected Volume</span><span class="val">null</span><span class="fired"></span></div>
-          <div class="df" data-b="N/A" data-a="—" data-at="dash" data-rule="Blanket rule">
-            <span class="lbl">Location</span><span class="val">N/A</span><span class="fired"></span></div>
-          <div class="df" data-b="(blank)" data-a="—" data-at="dash" data-rule="Exception 2 · financial, invalid">
-            <span class="lbl">Expected Profit</span><span class="val">(blank)</span><span class="fired"></span></div>
-          <div class="df" data-b="0" data-a="—" data-at="dash" data-rule="Blanket rule · the 0 was a lie">
-            <span class="lbl">Related Objects</span><span class="val">0</span><span class="fired"></span></div>
-          <div class="df" data-b="Wall St, , , NY" data-a="Wall St, NY" data-at="ok" data-rule="Exception 3 · concatenated">
-            <span class="lbl">Domicile Address</span><span class="val">Wall St, , , NY</span><span class="fired"></span></div>
-        </div>
+    <!-- ===================== E05 ===================== -->
+    <section class="sec" id="e05" data-pos="Evidence 05 / 06">
+      <div class="sep">
+        <div class="ln"></div>
+        <div class="rw"><span class="ix">evidence 05 · the shipped spec</span><span class="tag">05 / 06</span></div>
       </div>
-
-      <div class="legend">
-        <span class="k null"><i></i> Ambiguous — reader must guess</span>
-        <span class="k dash"><i></i> Correctly absent — emdash</span>
-        <span class="k ok"><i></i> Resolved to a real value</span>
-      </div>
-      <p class="mono-note">The address row is the one people miss: a concatenated field punctuating gaps that were never there.</p>
-    </section>
-
-    <!-- ===================== 08 ===================== -->
-    <section class="sec" id="s08">
-      <div class="srule"><span class="eb">08 · The outcome</span><span class="ln"></span><span class="sq"></span></div>
-      <h2 class="d-lg">One everywhere-problem became <span class="mark">one rule</span>.</h2>
-      <p class="prose">The rule set became the <b>single source of truth for null-value display</b> — written as deterministic logic the delivery org could build against instead of a dozen judgment calls.</p>
-      <p class="prose">Specifics are under NDA (this ran on live client data), but the win is simpler than a number: the guesswork left the screen, and every empty field now says exactly what it means.</p>
+      <h2 class="d-lg">Written as logic, not as guidance.</h2>
+      <p class="prose">Guidance gets interpreted. Logic gets built. The rule set shipped as an implementation spec with no judgment calls left in it — which is the only reason it survived contact with seven teams.</p>
 
       <div class="slot" data-ratio="4/3" style="margin-top:var(--space-xl);max-width:520px">
-        <span class="idx">02</span>
+        <span class="idx">01</span>
         <span class="lbl">Rule set as shipped spec · redacted</span>
       </div>
     </section>
 
-    <!-- ===================== 09 ===================== -->
-    <section class="sec" id="s09">
-      <div class="srule"><span class="eb">09 · Reflection</span><span class="ln"></span><span class="sq"></span></div>
+    <!-- ===================== E06 ===================== -->
+    <section class="sec" id="e06" data-pos="Evidence 06 / 06">
+      <div class="sep">
+        <div class="ln"></div>
+        <div class="rw"><span class="ix">evidence 06 · reflection</span><span class="tag">06 / 06</span></div>
+      </div>
       <blockquote class="pq">
         <q>The work I'm proudest of is invisible. Nobody notices null-handling done right — they just trust the screen. That's the job.</q>
         <div class="by"><span class="r"></span><span>Djoaniel Hernandez · System note № 04</span></div>
@@ -259,17 +428,19 @@
 
       <div class="btn" style="margin-top:var(--space-xl)">
         <span class="slab" aria-hidden="true"></span>
-        <button type="button" onclick="location.href='mailto:djoaniel@gmail.com'">Talk to me about systems work <span aria-hidden="true">→</span></button>
+        <a class="go" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20No%20Value">Talk to me about systems work <span aria-hidden="true">→</span></a>
       </div>
     </section>
 
     <nav class="prevnext">
       <a class="pn plain" href="sarisari-snaps.html"><div class="k">← Previous case</div><div class="t">SariSari Snaps</div></a>
-      <a class="pn next plain" href="tessa.html"><div class="k">Next case →</div><div class="t">Tessa</div></a>
+      <a class="pn next plain" href="tessa.html"><div class="k">Next case →</div><div class="t">TESSA</div></a>
     </nav>
 
-  </main>
+  </div>
 </div>
+
+</main>
 
 <footer class="foot">
   <div class="in">
@@ -279,5 +450,47 @@
 </footer>
 
 <script src="../assets/eishiki-v3.js"></script>
+<script>
+/* Page-local behaviour. Loads after eishiki-v3.js so the demo's own
+   click handler is already bound — we drive it rather than duplicate it. */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* The instrument resolves as the reader reaches it. This is response,
+     not decoration: the state change is the argument. Under reduced
+     motion it simply arrives already resolved. */
+  var demo = document.querySelector('[data-demo]');
+  var after = demo && demo.querySelector('[data-after]');
+  if (demo && after) {
+    if (reduce || !('IntersectionObserver' in window)) {
+      after.click();
+    } else {
+      var fired = false;
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting || fired) return;
+          fired = true;
+          io.disconnect();
+          setTimeout(function () { after.click(); }, 420);
+        });
+      }, { threshold: 0.4 });
+      io.observe(demo);
+    }
+  }
+
+  /* Position readout — makes the document's shape visible while skimming. */
+  var out = document.querySelector('[data-readout]');
+  var marks = Array.prototype.slice.call(document.querySelectorAll('[data-pos]'));
+  if (out && marks.length && 'IntersectionObserver' in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) out.textContent = en.target.getAttribute('data-pos');
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    marks.forEach(function (m) { spy.observe(m); });
+  }
+})();
+</script>
 </body>
 </html>
