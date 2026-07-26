@@ -3,12 +3,22 @@
    Reconciled 1:1 against reference/design-export/tokens/*.css
    ("Djoaniel Style" — extracted verbatim from the .fig)
 
-   Five families, one job each:
-     Instrument Serif  — display, every big idea
-     Radio Canada      — body prose, 714px measure
-     Instrument Sans   — wordmark ONLY
-     IBM Plex Mono     — every label, caption, data value, nav
-     Anybody 900       — numbered section eyebrows ONLY
+   THREE families, three voices. Revised 2026-07-26.
+
+     Instrument Serif — THE ARGUMENT. Every headline, claim and quote.
+                        Sentence case, always. Never uppercase.
+     Radio Canada     — THE STRUCTURE. Wordmark, body prose, UI.
+     IBM Plex Mono    — THE MACHINE. Labels, readouts, eyebrows, data.
+
+   Removed: Instrument Sans (the type lock retired it) and Anybody 900
+   (it existed to set four eyebrow words per page; the eyebrow is a
+   machine label, so it belongs to the mono).
+
+   THE CASE RULE — the one thing that fixes the headline hierarchy:
+     uppercase belongs to Radio Canada (the wordmark) and to the mono
+     (labels). The serif is never uppercase. All-caps strips a serif of
+     its voice, and the negative tracking that made caps survivable was
+     crushing the counters at display size.
    ================================================================== */
 
 /* ---------------- TOKENS (verbatim) ---------------- */
@@ -51,10 +61,10 @@
 
   /* families */
   --font-display:"Instrument Serif",ui-serif,Georgia,"Times New Roman",serif;
-  --font-wordmark:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --font-sans:"Radio Canada",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-  --font-black:Anybody,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  /* the wordmark is Radio Canada 700 — J and I are tailed and barred */
+  --font-wordmark:var(--font-sans);
 
   /* type shorthands */
   --text-hero:88px/84.48px var(--font-display);
@@ -63,7 +73,7 @@
   --text-wordmark:188px/146.64px var(--font-wordmark);
   --text-body-lg:17px/29.75px var(--font-sans);
   --text-nav:12px/17.4px var(--font-mono);
-  --text-eyebrow:19px/19px var(--font-black);
+  --text-eyebrow:11px/1.1 var(--font-mono);
   --text-label:9px/100% var(--font-mono);
   --text-data-value:13px/19.5px var(--font-mono);
   --text-caption:10px/100% var(--font-mono);
@@ -110,12 +120,32 @@ body{margin:0;background:var(--surface-page);color:var(--text-body);
   -webkit-font-smoothing:subpixel-antialiased;-moz-osx-font-smoothing:auto;
   color:var(--text-primary);text-wrap:pretty;
 }
-.d-hero{font-size:clamp(46px,7.2vw,88px);line-height:.96;letter-spacing:-.035em;
-  text-transform:uppercase;margin:0 0 var(--space-lg)}
-.d-lg{font-size:clamp(32px,4.2vw,46px);line-height:1.13;letter-spacing:-.035em;
-  text-transform:uppercase;margin:0 0 var(--space-lg)}
-.d-md{font-size:clamp(27px,3.4vw,40px);line-height:1.14;letter-spacing:-.03em;margin:0 0 var(--space-md)}
-.d-md em,.pq em,.d-lg em{font-style:italic}
+/* THE LADDER — four rungs, each differentiated by role, not just size.
+   Tracking is near-zero: a sentence-case serif at display size already
+   has the sidebearings it wants, and negative tracking closes counters
+   the hairlines can't afford to lose. */
+
+/* 01 · page title — one per page */
+.d-hero{font-size:clamp(44px,6.1vw,76px);line-height:1.0;letter-spacing:-.018em;
+  margin:0 0 var(--space-lg)}
+
+/* 02 · section headline and brief claim — the same rung, so the same style.
+   A clear step down from the title rather than a near-match of it. */
+.d-lg,.claim{font-family:var(--font-display);font-weight:400;
+  font-synthesis-weight:none;font-synthesis-style:none;
+  -webkit-font-smoothing:subpixel-antialiased;-moz-osx-font-smoothing:auto;
+  color:var(--text-primary);text-wrap:pretty;
+  font-size:clamp(30px,3.3vw,41px);line-height:1.14;letter-spacing:-.012em;
+  margin:0 0 var(--space-lg);max-width:22ch}
+
+/* 03 · the posed question / aside — italic is the differentiator, not size.
+   It's the one thing this face does better than any sans, and it stops
+   this rung from reading as a second, smaller headline. */
+.d-md{font-size:clamp(26px,2.5vw,31px);line-height:1.2;letter-spacing:-.006em;
+  font-style:italic;color:var(--text-body);margin:0 0 var(--space-md);max-width:34ch}
+/* inside an italic line, emphasis reverses to roman */
+.d-md em{font-style:normal}
+.pq em,.d-lg em,.claim em{font-style:italic}
 
 /* ==================================================================
    PROSE — Radio Canada, 714px measure
@@ -132,13 +162,13 @@ body{margin:0;background:var(--surface-page);color:var(--text-body);
 .mono-note::before{content:'//';color:var(--text-faint);flex-shrink:0}
 
 /* ==================================================================
-   SECTION RULE — Anybody 900 eyebrow + 1px ink rule + 9px blue square.
+   SECTION RULE — mono eyebrow + 1px ink rule + blue square.
    The system's one recurring ornament.
    ================================================================== */
 .srule{display:flex;flex-direction:row;gap:var(--space-sm);align-items:center;
   width:100%;margin-bottom:var(--space-lg)}
-.srule .eb{font:var(--text-eyebrow);font-weight:900;letter-spacing:-.025em;
-  color:var(--text-primary);text-transform:uppercase;white-space:nowrap}
+.srule .eb{font:var(--text-eyebrow);font-weight:500;letter-spacing:.14em;
+  color:var(--text-muted);text-transform:uppercase;white-space:nowrap}
 .srule .ln{height:1px;background:var(--text-primary);flex-grow:1}
 .srule .sq{display:block;width:9px;height:9px;background:var(--accent);flex-shrink:0}
 
@@ -303,7 +333,7 @@ a.plain,a.arrow{text-decoration:none}
   padding:16px 15px;cursor:pointer;font:inherit;
   transition:border-color var(--dur-fast) linear,background var(--dur-fast) linear}
 .state:hover,.state.on{border-color:var(--accent);background:var(--white)}
-.state .n{font-family:var(--font-black);font-weight:900;font-size:19px;line-height:19px;
+.state .n{font-family:var(--font-mono);font-weight:600;font-size:15px;line-height:19px;
   letter-spacing:-.025em;color:var(--text-primary)}
 .state.on .n{color:var(--accent)}
 .state .t{font:var(--text-label);letter-spacing:.1em;text-transform:uppercase;
@@ -462,7 +492,7 @@ a.plain,a.arrow{text-decoration:none}
   align-items:start;padding:var(--space-xl) 0;border-bottom:var(--border-hair);
   text-decoration:none;transition:background var(--dur-fast) linear}
 .wrow:hover{background:var(--white);text-decoration:none}
-.wrow .n{font-family:var(--font-black);font-weight:900;font-size:19px;line-height:1;
+.wrow .n{font-family:var(--font-mono);font-weight:600;font-size:15px;line-height:1;
   letter-spacing:-.025em;color:var(--text-faint);padding-top:6px}
 .wrow:hover .n{color:var(--accent)}
 .wrow .t{font-family:var(--font-display);font-weight:400;
@@ -502,7 +532,7 @@ a.plain,a.arrow{text-decoration:none}
 .prow{display:grid;grid-template-columns:64px 1fr;gap:var(--space-md);
   padding:var(--space-md) var(--space-md);border-bottom:var(--border-hair)}
 .prow:last-child{border-bottom:0}
-.prow .n{font-family:var(--font-black);font-weight:900;font-size:19px;line-height:1.2;
+.prow .n{font-family:var(--font-mono);font-weight:600;font-size:15px;line-height:1.2;
   letter-spacing:-.025em;color:var(--text-faint)}
 .prow .t{font-family:var(--font-sans);font-weight:700;font-size:16px;
   color:var(--text-primary);margin-bottom:6px}
@@ -513,7 +543,7 @@ a.plain,a.arrow{text-decoration:none}
 .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-xs)}
 .step{border:var(--border-hair);background:var(--surface-card-30);padding:var(--space-md);
   border-top:2px solid var(--text-primary)}
-.step .n{font-family:var(--font-black);font-weight:900;font-size:19px;line-height:1;
+.step .n{font-family:var(--font-mono);font-weight:600;font-size:15px;line-height:1;
   color:var(--accent);margin-bottom:13px}
 .step .t{font:var(--text-label);letter-spacing:.1em;text-transform:uppercase;
   color:var(--text-primary);margin-bottom:9px}
