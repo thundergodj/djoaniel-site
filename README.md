@@ -18,9 +18,11 @@ assets/eishiki-v3.js          interaction for the case studies
 work/no-value.html            case study — null-value standard, private wealth
 work/tessa.html               case study — conversational career coach
 work/sarisari-snaps.html      case study — configurator, own product
+work/unhappy-path.html        case study — card 04
 work/accessibility-lab.html   the playable WCAG 2.2 AA audit lab
 type-lock.html                evidence for the 24px Instrument Serif floor
 vercel.json                   cleanUrls
+PUSH.md                       how to get this on djoaniel.com
 ```
 
 The homepage carries its own CSS inline — it's a single self-contained document and
@@ -28,6 +30,8 @@ does not load `eishiki-v3.css`. The case studies do. **These two are not yet
 reconciled.**
 
 ## Deploy
+
+The first push is a force-push — see `PUSH.md`. After that:
 
 ```bash
 git add -A
@@ -41,9 +45,11 @@ Vercel builds on push. `cleanUrls` is on, so `/work/no-value` resolves as well a
 
 ## Known open items
 
-Full backlog in `../docs/AUDIT-2026-07-25.md`. The ones that cost a first impression:
+Full backlog in `../docs/AUDIT-2026-07-25.md` (not in this repo — working material
+stays local). The ones that cost a first impression:
 
-- **Cards 04–06 on the homepage are `href="#"`** — Rudy Project, Altared State and Brady/Emedco have no destinations. Two of them say "Awaiting content" out loud.
+- **`about.html` and `colophon.html` do not exist.** The homepage footer links to both. Two 404s from the front door — this is the launch blocker.
+- **Cards 05 and 06 are `href="#"`** — Altared State and Brady/Emedco have no destinations, and say "Awaiting content" out loud.
 - **The case studies still link to `../index.html#work` / `#about` / `#archive`** — those anchors no longer exist on the console homepage. Dead links in every case-study header.
 - **The case studies still load Instrument Sans**, which the type lock removes from the system entirely.
 - **No LinkedIn, no CV, no OG tags, no favicon.** One `mailto:` is the entire contact surface.
@@ -59,3 +65,9 @@ Two that get broken by accident:
 - **Instrument Serif never renders below 24px.** Under that, titles swap to Radio Canada 700.
 - **Page scroll breaks the console.** Pane-internal scroll is fine; the frame stays at `100dvh`.
 - **Blue is bound to one meaning: *read this.*** It is not a hover colour. That refactor is not done — blue still carries interaction state in `eishiki-v3.css`.
+
+---
+
+© 2026 Djoaniel Hernandez. The code is public so you can read it; the work, the writing
+and the design system are not licensed for reuse. Client work shown here is recreated
+from memory under NDA — no client assets, no confidential figures.
