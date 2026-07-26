@@ -421,13 +421,13 @@ a.plain,a.arrow{text-decoration:none}
 .btn{position:relative;display:inline-block}
 .btn .slab{position:absolute;inset:0;transform:translate(4px,4px);
   background:var(--accent);pointer-events:none}
-.btn button{position:relative;display:inline-flex;align-items:center;gap:10px;
+.btn button,.btn a{position:relative;display:inline-flex;text-decoration:none;align-items:center;gap:10px;
   padding:12px 20px;font:var(--text-caption);font-weight:500;letter-spacing:.05em;
   text-transform:uppercase;background:var(--surface-inverse);color:var(--text-inverse);
   border:0.667px solid var(--surface-inverse);cursor:pointer;white-space:nowrap;
   transition:transform var(--dur-fast) var(--ease-snap)}
-.btn button:hover{transform:translate(1px,1px)}
-.btn button:active{transform:translate(4px,4px)}
+.btn button:hover,.btn a:hover{transform:translate(1px,1px)}
+.btn button:active,.btn a:active{transform:translate(4px,4px)}
 .spark{position:absolute;background:var(--accent);pointer-events:none;
   animation:ds-spark var(--dur-spark) var(--ease-out) forwards}
 
@@ -637,3 +637,26 @@ a.plain,a.arrow{text-decoration:none}
   .srule .eb{font-size:14px;white-space:normal}
   .top nav{gap:var(--space-md)}
 }
+
+/* ==================================================================
+   DESTINATION ICONS — Phosphor (regular).
+   The rule: an icon means the control LEAVES this page context.
+     ph-envelope-simple   hands off to the visitor's mail client
+     ph-arrow-square-out  leaves this site, in a new tab
+   Internal navigation keeps the bare -> <- arrows and takes NO icon,
+   so the presence of an icon is never ambiguous.
+   Every icon is aria-hidden and paired with a .sr-only phrase, so the
+   signal reaches screen readers as words rather than as decoration.
+   ================================================================== */
+.ph{flex:none;line-height:1;font-size:1.05em;
+  transition:transform var(--dur-fast) var(--ease-snap)}
+a:hover .ph-arrow-square-out{transform:translate(1.5px,-1.5px)}
+a:hover .ph-envelope-simple,.btn a:hover .ph-envelope-simple{transform:translateY(-1px)}
+/* leading icons sit inside running text and need optical alignment */
+.ph.lead{margin-right:.4em;vertical-align:-.09em;font-size:1em}
+
+/* Screen-reader-only destination text. Must never be display:none —
+   that would strip it from the accessibility tree, which is the whole
+   point of having it. */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}

@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/regular/style.css">
 <style>
 /* ============================================================
    EISHIKI v3 tokens — palette and type locked.
@@ -68,9 +70,11 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap
   width:var(--wm-block-w,.28em);height:.72em;background:var(--accent);
   margin-left:.09em;vertical-align:baseline;
 }
+/* Was clamp(17px,…) — which put Instrument Serif at 19px on a 768px
+   laptop, well under its own 24px floor. The floor is the clamp minimum. */
 .thesis{
-  font-family:var(--font-display);font-size:clamp(17px,2.5vh,29px);
-  line-height:1.2;letter-spacing:-.015em;margin:0;max-width:34ch;color:var(--text-primary);
+  font-family:var(--font-display);font-size:clamp(24px,2.9vh,32px);
+  line-height:1.22;letter-spacing:-.012em;margin:0;max-width:34ch;color:var(--text-primary);
 }
 .mark{
   background-image:linear-gradient(transparent 60%,rgba(11,63,255,.19) 60%,rgba(11,63,255,.19) 93%,transparent 93%);
@@ -80,7 +84,7 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap
 @keyframes stroke{to{background-size:100% 100%}}
 nav{display:flex;gap:18px;align-items:center;padding-bottom:4px}
 nav a{
-  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--text-muted);text-decoration:none;transition:color .16s var(--ease);
 }
 nav a:hover,nav a:focus-visible{color:var(--accent)}
@@ -103,33 +107,31 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
 .tz > .in{position:absolute;inset:0;padding:clamp(9px,1.5vh,16px);display:flex;flex-direction:column;gap:5px;justify-content:center}
 .cap{
   position:absolute;left:0;bottom:0;z-index:2;
-  font-family:var(--font-mono);font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--text-faint);background:var(--paper);padding:4px 7px;border-top:var(--hair);border-right:var(--hair);
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--text-muted);background:var(--paper);padding:5px 9px;border-top:var(--hair);border-right:var(--hair);
 }
 
 /* --- card foot --- */
 .ft{padding:clamp(9px,1.5vh,15px) clamp(11px,1.4vw,16px);display:grid;gap:5px}
 .cat{
-  font-family:var(--font-mono);font-size:8px;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--text-faint);display:flex;align-items:center;gap:7px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--text-muted);display:flex;align-items:center;gap:8px;
 }
 .cat i{width:6px;height:6px;background:var(--accent);font-style:normal;flex:none}
-.cat.retail i{background:var(--ink-400)}
-/* Instrument Serif never renders below its 24px floor — see type-lock.html.
-   Where the viewport can't afford 24px, titles fall back to Radio Canada. */
+.cat.retail i{background:var(--ink-600)}
+/* Card titles are ALWAYS Instrument Serif. The old sans fallback at short
+   viewports is removed — swapping the face mid-system was more damaging
+   than the thing it protected against. The 24px floor is now held by the
+   clamp minimum instead, so the serif never renders below it and never
+   has to be substituted. */
 .ct{
   font-family:var(--font-display);font-weight:400;
-  font-size:clamp(24px,2.35vh,27px);line-height:1.06;
-  letter-spacing:-.02em;margin:0;transition:color .16s var(--ease);
-}
-@media (max-height:900px){
-  .ct{
-    font-family:var(--font-sans);font-weight:700;
-    font-size:clamp(15px,2.05vh,19px);line-height:1.18;letter-spacing:-.012em;
-  }
+  font-size:clamp(24px,2.6vh,30px);line-height:1.08;
+  letter-spacing:-.016em;margin:0;transition:color .16s var(--ease);
+  font-synthesis-weight:none;-webkit-font-smoothing:subpixel-antialiased;
 }
 .card:hover .ct,.card:focus-visible .ct{color:var(--accent)}
-.cd{font-size:clamp(11px,1.4vh,13px);line-height:1.5;color:var(--text-body);margin:0;
+.cd{font-size:clamp(14px,1.7vh,16px);line-height:1.5;color:var(--text-body);margin:0;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
 /* ============================================================
@@ -138,47 +140,47 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
    ============================================================ */
 
 /* 01 · null-value table */
-.tbl{font-family:var(--font-mono);font-size:clamp(8px,1.12vh,10.5px);width:100%;border-collapse:collapse}
-.tbl th{font-weight:400;color:var(--text-faint);text-align:left;letter-spacing:.1em;
-  text-transform:uppercase;font-size:.82em;padding:0 0 5px;border-bottom:var(--hair)}
+.tbl{font-family:var(--font-mono);font-size:clamp(11px,1.35vh,13px);width:100%;border-collapse:collapse}
+.tbl th{font-weight:400;color:var(--text-muted);text-align:left;letter-spacing:.1em;
+  text-transform:uppercase;font-size:.88em;padding:0 0 6px;border-bottom:var(--hair)}
 .tbl td{padding:3.5px 0;border-bottom:var(--hair);color:var(--text-body)}
 .tbl td:last-child{text-align:right;font-variant-numeric:tabular-nums}
 .tbl .null td:last-child{color:var(--data-null);font-weight:600}
 .card:hover .tbl .null td:last-child::after{content:" · no value returned";font-size:.82em;opacity:.7}
 
 /* 02 · dialogue + branch */
-.bub{max-width:82%;padding:5px 8px;font-size:clamp(8.5px,1.15vh,11px);line-height:1.42;border:var(--hair)}
+.bub{max-width:82%;padding:5px 8px;font-size:clamp(12px,1.5vh,14px);line-height:1.42;border:var(--hair)}
 .bub.b{background:var(--white);align-self:flex-start}
 .bub.u{background:var(--ink-900);color:var(--white);align-self:flex-end;border-color:var(--ink-900)}
 .branch{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);
-  font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:2px}
+  font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:4px}
 .branch .ln{height:.667px;background:var(--accent);flex:1;opacity:.45}
 
 /* 03 · configurator steps */
-.steps{display:flex;align-items:center;gap:4px;font-family:var(--font-mono);font-size:7.5px;
-  letter-spacing:.09em;text-transform:uppercase}
-.steps span{border:var(--hair);padding:4px 6px;color:var(--text-faint);background:var(--white)}
+.steps{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:10.5px;
+  letter-spacing:.08em;text-transform:uppercase}
+.steps span{border:var(--hair);padding:5px 7px;color:var(--text-muted);background:var(--white)}
 .steps span.on{background:var(--accent);border-color:var(--accent);color:var(--white)}
-.steps .ar{color:var(--text-faint);border:0;padding:0}
+.steps .ar{color:var(--text-muted);border:0;padding:0}
 .frame{flex:1;border:var(--hair);background:var(--white);display:grid;place-items:center;min-height:0;
-  font-family:var(--font-mono);font-size:7.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-faint)}
+  font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
 .frame .ph{width:52%;aspect-ratio:4/3;border:var(--hair);
   background:repeating-linear-gradient(45deg,transparent 0 4px,rgba(9,9,9,.045) 4px 5px)}
 
 /* 04 · roster rows */
-.rost{font-family:var(--font-mono);font-size:clamp(8px,1.1vh,10px);display:grid;gap:0}
+.rost{font-family:var(--font-mono);font-size:clamp(11px,1.35vh,13px);display:grid;gap:0}
 .rost div{display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:var(--hair);color:var(--text-body)}
-.rost b{width:13px;color:var(--text-faint);font-weight:400}
-.rost .s{margin-left:auto;letter-spacing:.09em;text-transform:uppercase;font-size:.85em}
+.rost b{width:17px;color:var(--text-muted);font-weight:400}
+.rost .s{margin-left:auto;letter-spacing:.08em;text-transform:uppercase;font-size:.88em}
 .rost .s.ok{color:var(--data-ok)}
-.rost .s.wait{color:var(--text-faint)}
+.rost .s.wait{color:var(--text-muted)}
 .rost .add{color:var(--accent);border-bottom:0;padding-top:6px}
 
 /* 05 / 06 · honest awaiting-content frames */
 .await{flex:1;border:var(--hair);display:grid;place-items:center;
   background:repeating-linear-gradient(45deg,transparent 0 6px,rgba(9,9,9,.035) 6px 7px)}
-.await span{font-family:var(--font-mono);font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--text-faint);background:var(--paper);padding:5px 9px;border:var(--hair)}
+.await span{font-family:var(--font-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--text-muted);background:var(--paper);padding:5px 9px;border:var(--hair)}
 
 /* ================= RESPONSIVE ================= */
 @media (min-height:1000px){
@@ -200,6 +202,29 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
   .mark{background-size:100% 100%}
 }
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* ==================================================================
+   DESTINATION ICONS — Phosphor (regular).
+   The rule: an icon means the control LEAVES this page context.
+     ph-envelope-simple   hands off to the visitor's mail client
+     ph-arrow-square-out  leaves this site, in a new tab
+   Internal navigation keeps the bare -> <- arrows and takes NO icon,
+   so the presence of an icon is never ambiguous.
+   Every icon is aria-hidden and paired with a .sr-only phrase, so the
+   signal reaches screen readers as words rather than as decoration.
+   ================================================================== */
+.ph{flex:none;line-height:1;font-size:1.05em;
+  transition:transform var(--dur-fast) var(--ease-snap)}
+a:hover .ph-arrow-square-out{transform:translate(1.5px,-1.5px)}
+a:hover .ph-envelope-simple,.btn a:hover .ph-envelope-simple{transform:translateY(-1px)}
+/* leading icons sit inside running text and need optical alignment */
+.ph.lead{margin-right:.4em;vertical-align:-.09em;font-size:1em}
+
+/* Screen-reader-only destination text. Must never be display:none —
+   that would strip it from the accessibility tree, which is the whole
+   point of having it. */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
 </style>
 </head>
 <body>
