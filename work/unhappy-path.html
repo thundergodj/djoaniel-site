@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The unhappy path — Retail commerce system · Djoaniel Hernandez</title>
+<meta name="description" content="A US activewear retailer briefed six page templates. The states those pages could reach became the design system underneath them. Interactive recreations — drive the add-to-bag bar into failure yourself.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/regular/style.css">
+<link rel="stylesheet" href="../assets/eishiki-v3.css">
+<style>
+/* ==================================================================
+   THE UNHAPPY PATH — case-study-local components.
+
+   ONE deliberate exception to the site's palette lock. Every other
+   page resolves 100% to eishiki-v3 tokens. This one carries a second,
+   quarantined palette (--b-*) because the client's colour system IS
+   the subject matter — it is evidence, not decoration. It is scoped
+   to .brand and never touches the page chrome.
+
+   Everything structural still obeys the system: zero corner radius,
+   hairline borders, mono >= 12.5px at weight 500 when uppercase,
+   Instrument Serif never below 24px.
+
+   The recreations are set in THIS site's typefaces, not the client's.
+   No logos, no wordmarks, no client photography anywhere in the file.
+   ================================================================== */
+.brand{
+  --b-peacock:#7CB1AE;   /* attention + primary CTA accent */
+  --b-meadow:#BAC48C;    /* secondary pop */
+  --b-tidal:#BFE3ED;     /* accent */
+  --b-peony:#FCC2BD;     /* accent */
+  --b-sands:#FBD9D4;     /* neutral background */
+  --b-dandelion:#E1B283; /* complementary */
+  --b-stone:#E9E6E1;     /* light neutral / branded "white" */
+  --b-dusk:#3E4E56;      /* the text black */
+  --b-slab:#181D20;      /* button fill */
+  --b-error:#DA080B;     /* system feedback — outside the brand palette on purpose */
+  --b-line:#D7D5D0;
+  --b-field:#7D7D7D;
+}
+
+/* ---- shared frame for every recreation ---- */
+.spec{border:var(--border-hair);background:var(--surface-card-30)}
+.spec > .hd{display:flex;align-items:center;gap:var(--space-2xs);padding:13px 16px;
+  border-bottom:var(--border-hair);font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-primary)}
+.spec > .hd .r{margin-left:auto;font:var(--mono-caption);letter-spacing:var(--track-caption);
+  text-transform:none;color:var(--text-faint)}
+.spec > .bd{padding:var(--space-lg) var(--space-md)}
+.spec > .bd.flush{padding:0}
+
+/* readout strip — the rule that fired, in machine voice */
+.readout{display:grid;grid-template-columns:auto 1fr;gap:var(--space-md);align-items:baseline;
+  border-top:var(--border-hair);padding:14px 16px;background:var(--surface-card-25)}
+.readout .k{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--accent)}
+.readout .v{font:var(--mono-data);letter-spacing:var(--track-data);color:var(--text-body)}
+
+/* ==================================================================
+   01 · ADD-TO-BAG BAR — the four states, live
+   ================================================================== */
+.atb{background:var(--white);border-top:1px solid var(--b-line);
+  font-family:var(--font-sans);color:var(--b-dusk)}
+.atb .row{display:grid;grid-template-columns:minmax(0,1fr) auto auto minmax(190px,260px);
+  gap:var(--space-md);align-items:center;padding:14px 16px}
+@media(max-width:860px){.atb .row{grid-template-columns:1fr;gap:var(--space-xs)}}
+
+.atb .prod{display:flex;align-items:center;gap:13px;min-width:0}
+.atb .thumb{width:44px;height:56px;flex:none;background:var(--b-tidal);border:0.667px solid var(--b-line)}
+.atb .nm{font-size:14px;font-weight:600;line-height:1.3;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.atb .pr{font-size:13px;margin-top:3px;color:var(--b-error);font-weight:600}
+.atb .pr s{color:#8A8A84;font-weight:400;margin-left:6px}
+
+.atb .opt{display:flex;flex-direction:column;gap:6px}
+.atb .lbl{font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
+  color:#8A8A84}
+.atb .pick{display:flex;align-items:center;gap:6px}
+.atb .sw{width:26px;height:26px;border:1px solid var(--b-line);background:var(--b-tidal)}
+.atb .sw.on{outline:1px solid var(--b-dusk);outline-offset:2px}
+.atb .sz{min-width:34px;height:26px;display:grid;place-items:center;border:1px solid var(--b-line);
+  background:var(--white);font-size:12px;font-weight:600;letter-spacing:.02em}
+.atb .sz.on{background:var(--b-dusk);border-color:var(--b-dusk);color:#fff}
+.atb .sz.empty{color:#B4B2AC}
+.atb .sz.err{border-color:var(--b-error);color:var(--b-error)}
+
+.atb .cta{width:100%;padding:14px 18px;border:1px solid var(--b-slab);background:var(--b-slab);
+  color:#fff;font-family:var(--font-sans);font-size:12.5px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;cursor:pointer;text-align:center;line-height:1.2}
+.atb[data-state="nosize"] .cta{background:var(--white);color:var(--b-slab)}
+
+/* the tray that opens IN the bar rather than scrolling the page back up */
+.atb .tray{border-top:0.667px dashed var(--b-line);padding:14px 16px;display:flex;
+  align-items:center;gap:10px;flex-wrap:wrap;background:var(--b-stone)}
+.atb .tray .tl{font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
+  color:#6E6E68;margin-right:4px}
+.atb .msg{padding:9px 16px;background:var(--b-error);color:#fff;font-size:12.5px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase}
+
+/* ==================================================================
+   02 · PLP FILTER ROW — the max-load stress test
+   ================================================================== */
+.plp{font-family:var(--font-sans);color:var(--b-dusk);background:var(--white)}
+.plp .hdr{display:flex;align-items:baseline;gap:12px;padding:14px 16px;
+  border-bottom:0.667px solid var(--b-line)}
+.plp .hdr .t{font-size:19px;font-weight:600}
+.plp .hdr .c{font-size:13px;color:#8A8A84}
+.plp .hdr .sort{margin-left:auto;font-size:13px;color:#8A8A84}
+.plp .chips{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px;
+  border-bottom:0.667px solid var(--b-line);align-content:flex-start}
+.fchip{display:inline-flex;align-items:center;gap:7px;padding:5px 9px;border:1px solid var(--b-line);
+  background:var(--white);font-size:12px;font-weight:500;color:var(--b-dusk);cursor:pointer;
+  line-height:1.4}
+.fchip:hover{border-color:var(--b-dusk)}
+.fchip .x{color:#9A9892;font-size:11px}
+.fchip.clear{border-color:var(--b-dusk);font-weight:600}
+.plp .prods{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:16px}
+@media(max-width:700px){.plp .prods{grid-template-columns:repeat(2,1fr)}}
+.plp .prods .p .im{aspect-ratio:3/4;background:#E3E1DC;
+  background-image:repeating-linear-gradient(-45deg,transparent 0 9px,rgba(9,9,9,.02) 9px 18px)}
+.plp .prods .p .n{font-size:12.5px;margin-top:8px}
+.plp .prods .p .v{font-size:12.5px;color:#8A8A84;margin-top:2px}
+.plp .fold{position:relative;border-top:1px dashed var(--b-error)}
+.plp .fold span{position:absolute;right:8px;top:-9px;background:var(--white);padding:0 7px;
+  font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
+  color:var(--b-error)}
+
+.ctlbar{display:flex;flex-wrap:wrap;gap:var(--space-2xs);margin-bottom:var(--space-md)}
+.mini{padding:9px 14px;border:var(--border-hair);background:transparent;cursor:pointer;
+  font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-muted);transition:background var(--dur-fast) linear,color var(--dur-fast) linear}
+.mini:hover{background:var(--white);color:var(--text-primary)}
+.mini.on{background:var(--surface-inverse);border-color:var(--surface-inverse);color:var(--text-inverse)}
+
+/* ==================================================================
+   03 · HOMEPAGE TEMPLATE — populated vs. unpopulated
+   ================================================================== */
+.hp{background:var(--white);padding:14px;display:grid;gap:12px;font-family:var(--font-sans)}
+.hp .band{display:grid;place-items:center;text-align:center;border:0.667px solid var(--b-line);
+  min-height:104px;padding:16px;color:var(--b-dusk)}
+.hp .band .ttl{font-size:15px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  line-height:1.5}
+.hp .band .cta{margin-top:11px;font-size:10.5px;font-weight:600;letter-spacing:.09em;
+  text-transform:uppercase;background:var(--white);border:0.667px solid var(--b-line);padding:6px 12px}
+.hp .three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.hp .rail{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.hp .rail .c{aspect-ratio:3/4;border:0.667px solid var(--b-line)}
+.hp .give{min-height:74px}
+.hp .cap{font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
+  color:#9A9892}
+
+/* POPULATED: brand-palette colour fields stand in for the campaign
+   photography, which is the client's asset and is not reproduced. */
+.hp.on .band{background:var(--b-stone)}
+.hp.on .three .band:nth-child(1){background:var(--b-dandelion)}
+.hp.on .three .band:nth-child(2){background:var(--b-tidal)}
+.hp.on .three .band:nth-child(3){background:var(--b-meadow)}
+.hp.on .hero{background:var(--b-peony)}
+.hp.on .rail .c{background:var(--b-sands)}
+.hp.on .give{background:var(--b-tidal)}
+.hp.on .acc{background:var(--b-peacock)}
+
+/* UNPOPULATED: exactly how the template shipped to the merch team. */
+.hp.off .band,.hp.off .rail .c{background:#E3E1DC;
+  background-image:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(9,9,9,.022) 10px 20px)}
+.hp.off .band .cta{opacity:.5}
+
+/* ==================================================================
+   04 · FIELD STATE GRID
+   ================================================================== */
+.fields{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+@media(max-width:900px){.fields{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.fields{grid-template-columns:1fr}}
+.fcell{background:var(--white);padding:var(--space-md) 15px;font-family:var(--font-sans)}
+.fcell .st{font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
+  color:var(--text-faint);margin-bottom:11px}
+.fcell .fl{font-size:11.5px;color:var(--b-dusk);margin-bottom:5px}
+.inp{display:flex;align-items:center;border:1px solid var(--b-field);background:var(--white);
+  height:34px;padding:0 9px;font-size:12.5px;color:var(--b-dusk);gap:6px}
+.inp .gh{color:#B4B2AC}
+.inp.err{border-color:var(--b-error)}
+.inp.foc{border-color:var(--b-peony)}
+.inp.emp{border-color:var(--b-peacock)}
+.inp.dis{background:#EDEBE7;border-color:#D7D5D0;color:#A8A6A0}
+.inp.btnd{padding:0;border:0}
+.inp.btnd .f{flex:1;height:34px;border:1px solid var(--b-field);display:flex;align-items:center;
+  padding:0 9px}
+.inp.btnd .b{height:34px;padding:0 15px;background:var(--b-slab);color:#fff;font-size:10.5px;
+  font-weight:600;letter-spacing:.09em;text-transform:uppercase;display:grid;place-items:center}
+.fcell .hint{font-size:11px;margin-top:5px;color:var(--b-error)}
+.fcell .hint.ok{color:#4A7C59}
+
+/* ==================================================================
+   05 · PALETTE — job table
+   ================================================================== */
+.rule.job{grid-template-columns:190px 1fr 96px}
+@media(max-width:760px){.rule.job{grid-template-columns:1fr}}
+.rule.job .sw{display:flex;align-items:center;gap:11px}
+.rule.job .sw i{width:30px;height:30px;flex:none;border:0.667px solid rgba(9,9,9,.14);display:block}
+.rule.job .sw .nm{font-family:var(--font-sans);font-size:14px;font-weight:600;line-height:1.2}
+.rule.job .sw .hx{font:var(--mono-data);letter-spacing:var(--track-data);color:var(--text-faint)}
+.rule.job .jb{font-family:var(--font-sans);font-size:14px;line-height:1.55;color:var(--text-body)}
+.rule.job .tg{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-muted);text-align:right}
+@media(max-width:760px){.rule.job .tg{text-align:left}}
+
+/* ==================================================================
+   MISC
+   ================================================================== */
+.ledger{border-top:var(--border-hair)}
+.ledger .r{display:grid;grid-template-columns:180px 1fr;gap:var(--space-md);padding:14px 0;
+  border-bottom:var(--border-hair)}
+@media(max-width:700px){.ledger .r{grid-template-columns:1fr;gap:6px}}
+.ledger .k{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-muted)}
+.ledger .v{font-family:var(--font-sans);font-size:14.5px;line-height:1.6;color:var(--text-body)}
+.ledger .v b{font-weight:600;color:var(--text-primary)}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ============================== CHROME ============================== -->
+<header class="top">
+  <div class="in">
+    <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <nav>
+      <a href="../index.html" aria-current="page">Work</a>
+      <a href="../about.html">About</a>
+      <a href="../colophon.html">Colophon</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================== HERO ============================== -->
+<div class="inner" style="padding-top:var(--space-4xl)">
+  <a class="arrow plain" href="../index.html"><span class="g">&larr;</span> All work</a>
+  <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 05 &middot; Retail commerce &middot; Design system</p>
+  <h1 class="d-hero">The unhappy<br><span class="mark">path</span></h1>
+  <p class="prose lead">A US activewear retailer briefed six page templates. What the pages kept running into was not layout &mdash; it was
+    <button type="button" class="term" data-tip-label="State" data-tip="A state is what a component looks like once reality gets to it: nothing selected, everything selected, sold out, loading, empty, too long, too many. The happy path is one state out of a dozen.">state</button>:
+    the size nobody picked, the filter row with every chip in it, the hero image the merchandising team had not shipped yet. So the deliverable stopped being screens and became the component and state library the screens were assembled from. Below, the four artifacts that made the argument &mdash; rebuilt in code, and yours to break.</p>
+
+  <div class="facts" style="margin-top:var(--space-2xl)">
+    <div class="f"><div class="k">My role</div><div class="v">Design system &amp; templates<small>Began on comps, ended on the system</small></div></div>
+    <div class="f"><div class="k">Client</div><div class="v">US activewear retailer<small>One line inside a five-brand house</small></div></div>
+    <div class="f"><div class="k">Surfaces</div><div class="v">PDP &middot; PLP &middot; Homepage<small>Plus the component and state library</small></div></div>
+    <div class="f"><div class="k">Shown here</div><div class="v">Recreations<small>No logos, no client photography</small></div></div>
+  </div>
+
+  <div class="stats" style="margin-top:var(--space-2xl)">
+    <div class="stat"><span class="v">4</span><div class="r"></div><span class="l">States on one button</span></div>
+    <div class="stat"><span class="v">27</span><div class="r"></div><span class="l">Filter chips at max load</span><span class="n">(the row the grid had to survive)</span></div>
+    <div class="stat"><span class="v">5</span><div class="r"></div><span class="l">Sister brands in one header</span></div>
+  </div>
+  <p class="mono-note">No performance metrics appear on this page. I do not have them, and I will not estimate them.</p>
+</div>
+
+<!-- ============================== BODY ============================== -->
+<div class="cs-grid" style="margin-top:var(--space-5xl)">
+
+  <nav class="snav" aria-label="Case study sections">
+    <a href="#s01"><span class="n">01</span><span>The brief was pages</span></a>
+    <a href="#s02"><span class="n">02</span><span>The unhappy path</span></a>
+    <a href="#s03"><span class="n">03</span><span>The worst case</span></a>
+    <a href="#s04"><span class="n">04</span><span>The gray homepage</span></a>
+    <a href="#s05"><span class="n">05</span><span>Every colour has a job</span></a>
+    <a href="#s06"><span class="n">06</span><span>What I cannot show you</span></a>
+  </nav>
+
+  <main>
+
+    <!-- ===================== 01 ===================== -->
+    <section class="sec" id="s01" style="padding-top:0">
+      <div class="srule"><span class="eb">01 &middot; The brief was pages</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">Six templates. Then the <span class="mark">reason they broke.</span></h2>
+
+      <p class="prose">The engagement started the way retail engagements usually start: design the product detail page, the listing page, the homepage, and the supporting templates around them. Comps. Redlines. Ship.</p>
+
+      <p class="prose">The pages were not the hard part. The hard part showed up the first time somebody asked a question the comps could not answer &mdash; <em>what does the add-to-bag button say when no size is selected?</em> There were four plausible answers and no rule, and the same shape of question was waiting behind every other component. A page is one answer to that question. A system is the answer to all of them.</p>
+
+      <p class="prose">So the scope moved. I kept delivering templates, and underneath them I defined the thing the templates were actually made of: a component library, a state taxonomy for each component, and a colour system where every value carried a job description instead of a mood.</p>
+
+      <div class="ledger" style="margin-top:var(--space-xl)">
+        <div class="r"><div class="k">Asked for</div><div class="v">Six page templates, desktop and mobile, ready for build.</div></div>
+        <div class="r"><div class="k">Delivered</div><div class="v"><b>The templates, plus the system they exposed the need for</b> &mdash; components, states, semantic colour, and the redlines that made the handoff arguable rather than interpretive.</div></div>
+        <div class="r"><div class="k">Why it mattered</div><div class="v">The line sits inside a house of five sister brands sharing one global header. A decision made once on a page gets made five more times by somebody else. A decision made once in a system does not.</div></div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 ===================== -->
+    <section class="sec brand" id="s02">
+      <div class="srule"><span class="eb">02 &middot; The unhappy path</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The button that had to <span class="mark">say four things.</span></h2>
+
+      <p class="prose">This product page is long. Details, sizing, shipping, recommendations, paired products, ratings, a wall of customer photos, two more carousels. By the time a shopper has read enough to decide, the thing they decide <em>with</em> is a thousand pixels above them.</p>
+
+      <p class="prose">So the add-to-bag action detaches and follows &mdash; and once it follows, it has to carry the whole variant transaction with it, including the ways that transaction fails. <b>The most common add-to-bag failure is not a server error. It is an unselected size.</b> Which makes the error state the most important state on the most important control on the highest-value page on the site.</p>
+
+      <div class="spec" style="margin-top:var(--space-lg)">
+        <p class="hd">Sticky add-to-bag &middot; state machine <span class="r">Recreation &mdash; interactive</span></p>
+        <div class="bd">
+          <div class="states" id="atbStates" role="tablist" aria-label="Add to bag states">
+            <button class="state on" role="tab" aria-selected="true" data-st="default">
+              <span class="n">01</span><span class="t">Resolved</span>
+              <span class="d">Colour and size both chosen. The transaction is complete.</span></button>
+            <button class="state" role="tab" aria-selected="false" data-st="nosize">
+              <span class="n">02</span><span class="t">Incomplete</span>
+              <span class="d">A size was never picked. The shopper taps anyway.</span></button>
+            <button class="state" role="tab" aria-selected="false" data-st="sizetray">
+              <span class="n">03</span><span class="t">Size open</span>
+              <span class="d">Choosing without losing the button or the scroll position.</span></button>
+            <button class="state" role="tab" aria-selected="false" data-st="colortray">
+              <span class="n">04</span><span class="t">Colour open</span>
+              <span class="d">Seven colourways, each with its own size availability.</span></button>
+          </div>
+        </div>
+
+        <div class="atb" id="atbBar" data-state="default" aria-live="polite">
+          <div class="row">
+            <div class="prod">
+              <div class="thumb" id="atbThumb"></div>
+              <div style="min-width:0">
+                <div class="nm">Speed Tank</div>
+                <div class="pr">$25.99 <s>$59.95</s></div>
+              </div>
+            </div>
+            <div class="opt">
+              <span class="lbl">Colour</span>
+              <div class="pick"><span class="sw on" id="atbSw"></span></div>
+            </div>
+            <div class="opt">
+              <span class="lbl">Size</span>
+              <div class="pick"><span class="sz" id="atbSz">XS</span></div>
+            </div>
+            <button type="button" class="cta" id="atbCta">Add to bag</button>
+          </div>
+          <div class="tray" id="atbTray" hidden></div>
+        </div>
+
+        <div class="readout">
+          <span class="k">Rule</span><span class="v" id="atbRule"></span>
+        </div>
+      </div>
+      <p class="mono-note">Product name and prices are invented. The states, and the rule attached to each one, are the deliverable.</p>
+
+      <p class="prose" style="margin-top:var(--space-xl)">State 02 is the one worth arguing about. The obvious solution is a toast: leave the button saying <em>Add to bag</em>, and throw an error somewhere when it fails. We put the instruction <em>in the button itself</em>, because a toast is a message about a failure and a label is a description of what the control will do next. The shopper never gets told they did something wrong &mdash; the button simply tells them what it needs. Same information, no blame, nothing to dismiss, and it survives on a phone where a toast can land under a thumb.</p>
+
+      <blockquote class="pq" style="margin-top:var(--space-xl)">
+        <q>A disabled button is a designer refusing to say why.</q>
+        <div class="by"><span class="r"></span><span>Djoaniel Hernandez &middot; System note &#8470; 05</span></div>
+      </blockquote>
+    </section>
+
+    <!-- ===================== 03 ===================== -->
+    <section class="sec brand" id="s03">
+      <div class="srule"><span class="eb">03 &middot; The worst case</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">I designed the listing page <span class="mark">with every filter on.</span></h2>
+
+      <p class="prose">Filter chips are the easiest component in retail to design and one of the easiest to ship broken, because the comp always shows two or three of them. Nobody selects three filters. People select a colour family, then a couple of sizes, then a sleeve length, then change their mind and leave the old ones on.</p>
+
+      <p class="prose">So the specimen I designed against was the maximum: every colour, every size, every sleeve length, all applied at once. Push the chips yourself and watch the readout &mdash; <b>the number that matters is not the chip count, it is the height of the row</b>, because that height is subtracted from the products.</p>
+
+      <div class="ctlbar" style="margin-top:var(--space-lg)">
+        <button type="button" class="mini" id="fAll">Apply every filter</button>
+        <button type="button" class="mini" id="fSome">Realistic session</button>
+        <button type="button" class="mini on" id="fNone">Clear all</button>
+      </div>
+
+      <div class="spec">
+        <p class="hd">Listing page &middot; filter row at load <span class="r">Recreation &mdash; interactive</span></p>
+        <div class="bd flush">
+          <div class="plp">
+            <div class="hdr">
+              <span class="t">New Arrivals</span>
+              <span class="c">1,010 results</span>
+              <span class="sort">Sort by &#9662;</span>
+            </div>
+            <div class="chips" id="fChips"></div>
+            <div class="prods">
+              <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$59.95</div></div>
+              <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$79.95</div></div>
+              <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$169.95</div></div>
+              <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$69.95</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="readout">
+          <span class="k">Measured</span><span class="v" id="fRead"></span>
+        </div>
+      </div>
+      <p class="mono-note">Result count and product names are placeholder values, exactly as they were in the spec. The row height is measured live in your browser.</p>
+
+      <p class="prose" style="margin-top:var(--space-xl)">Three rules came out of that specimen. Chips wrap rather than scroll horizontally, because a horizontal chip rail hides the filters a shopper most wants to remove. <b>Clear all is pinned first and never wraps away from the row</b>, so the escape hatch cannot leave the screen when the mess is at its worst. And the grid keeps a fixed minimum above the fold regardless of chip count &mdash; the filters are allowed to get ugly, the products are not allowed to disappear.</p>
+    </section>
+
+    <!-- ===================== 04 ===================== -->
+    <section class="sec brand" id="s04">
+      <div class="srule"><span class="eb">04 &middot; The gray homepage</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The version nobody frames is <span class="mark">the real deliverable.</span></h2>
+
+      <p class="prose">The homepage went out twice: once dressed in campaign imagery, and once as gray boxes. The second one is the one I actually designed.</p>
+
+      <p class="prose">Because the person who touches this page every week is not the shopper. It is a
+        <button type="button" class="term" data-tip-label="Merchandiser" data-tip="The internal user who swaps hero imagery, promo copy, banner dates and product rails on a weekly or campaign cadence — usually through a CMS, usually without a designer in the room, usually on a Friday.">merchandiser</button>
+        swapping a hero, three promo tiles, a five-product rail and a give-back banner on a campaign cadence, through a CMS, with no designer in the room. If the layout only holds when the photography is beautiful, it does not hold. Every slot has to declare its ratio, its safe area, its character budget and what it does when it is empty &mdash; or the page degrades a little every week until somebody calls it a redesign.</p>
+
+      <div class="ctlbar" style="margin-top:var(--space-lg)">
+        <button type="button" class="mini on" id="hpOn">Populated</button>
+        <button type="button" class="mini" id="hpOff">As delivered</button>
+      </div>
+
+      <div class="spec">
+        <p class="hd">Homepage template <span class="r">Recreation &mdash; toggle the fill</span></p>
+        <div class="bd flush">
+          <div class="hp on" id="hpGrid">
+            <div class="band hero" style="min-height:150px"><div><div class="ttl">Welcome<br>Summer</div><div class="cta">Shop summer</div></div></div>
+            <div class="three">
+              <div class="band"><div><div class="ttl">Short<br>and sweet</div><div class="cta">Shop bottoms</div></div></div>
+              <div class="band"><div><div class="ttl">Up<br>lifted</div><div class="cta">Shop bras</div></div></div>
+              <div class="band"><div><div class="ttl">Top<br>it all</div><div class="cta">Shop tops</div></div></div>
+            </div>
+            <div class="cap">Summer's easiest picks</div>
+            <div class="rail">
+              <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
+            </div>
+            <div class="band acc" style="min-height:120px"><div><div class="ttl">The<br>accessories shop</div><div class="cta">Shop accessories</div></div></div>
+            <div class="band give"><div><div class="ttl">Give back</div><div class="cap" style="margin-top:7px">Full width &times; 330px banner</div></div></div>
+          </div>
+        </div>
+        <div class="readout">
+          <span class="k">Slot</span><span class="v" id="hpRead"></span>
+        </div>
+      </div>
+      <p class="mono-note">Campaign photography belongs to the client and is not reproduced. In the populated state the palette itself stands in for the imagery &mdash; which is, conveniently, the point being made.</p>
+    </section>
+
+    <!-- ===================== 05 ===================== -->
+    <section class="sec brand" id="s05">
+      <div class="srule"><span class="eb">05 &middot; Every colour has a job</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">A palette is not a mood board. <span class="mark">It is an assignment sheet.</span></h2>
+
+      <p class="prose">The colour documentation does not describe how the colours feel. Each value carries the job it is allowed to do, so that a developer, a merchandiser or the next designer can resolve a question without a taste debate. Two of the entries are arguments rather than choices.</p>
+
+      <div class="rules" style="margin-top:var(--space-lg)">
+        <div class="rule job"><div class="sw"><i style="background:#7CB1AE"></i><div><div class="nm">Peacock</div><div class="hx">#7CB1AE</div></div></div>
+          <div class="jb">Attention, highlighted information, and calls to action. The identity colour &mdash; so it is rationed, not spread.</div><div class="tg">CTA</div></div>
+        <div class="rule job"><div class="sw"><i style="background:#BAC48C"></i><div><div class="nm">Meadow</div><div class="hx">#BAC48C</div></div></div>
+          <div class="jb">Second in the palette. Pairs with peacock without competing with it.</div><div class="tg">Secondary</div></div>
+        <div class="rule job"><div class="sw"><i style="background:#BFE3ED"></i><div><div class="nm">Tidal</div><div class="hx">#BFE3ED</div></div></div>
+          <div class="jb">Pop accent. Large fields and category moments, never type.</div><div class="tg">Accent</div></div>
+        <div class="rule job"><div class="sw"><i style="background:#FCC2BD"></i><div><div class="nm">Peony</div><div class="hx">#FCC2BD</div></div></div>
+          <div class="jb">Accent that coordinates with the neutrals and provides a warm pop where fitting.</div><div class="tg">Accent</div></div>
+        <div class="rule job"><div class="sw"><i style="background:#E1B283"></i><div><div class="nm">Dandelion</div><div class="hx">#E1B283</div></div></div>
+          <div class="jb">Complementary to peacock. The warm counterweight in a cool palette.</div><div class="tg">Support</div></div>
+        <div class="rule job"><div class="sw"><i style="background:#FBD9D4"></i><div><div class="nm">Pink Sands</div><div class="hx">#FBD9D4</div></div></div>
+          <div class="jb">Neutral, not accent. Sits under content as a background tint.</div><div class="tg">Ground</div></div>
+        <div class="rule job blanket"><div class="sw"><i style="background:#E9E6E1"></i><div><div class="nm">Stone</div><div class="hx">#E9E6E1</div></div></div>
+          <div class="jb"><b>The branded white.</b> Backgrounds and supporting elements. Pure #FFFFFF was reserved for surfaces that need to read as raised against it &mdash; so "white" became a decision instead of a default.</div><div class="tg">Ground</div></div>
+        <div class="rule job blanket"><div class="sw"><i style="background:#3E4E56"></i><div><div class="nm">Dusk</div><div class="hx">#3E4E56</div></div></div>
+          <div class="jb"><b>The text black, and the only entry justified on legibility rather than taste.</b> Softer and warmer than #000 to suit the brand, but held dark enough to clear contrast at 14px body copy. Every text colour is a contrast decision first and a brand decision second.</div><div class="tg">Text</div></div>
+        <div class="rule job"><div class="sw"><i style="background:#DA080B"></i><i style="background:#27AE60"></i><div><div class="nm">Error / Success</div><div class="hx">System pair</div></div></div>
+          <div class="jb">Deliberately outside the brand palette. If failure and confirmation are drawn from brand colours, the brand starts meaning "something went wrong."</div><div class="tg">Semantic</div></div>
+      </div>
+
+      <p class="prose" style="margin-top:var(--space-xl)">The palette also shipped with PMS numbers, because this brand exists in stores. A colour that only resolves on a screen is half a colour system &mdash; the same peacock has to survive a printed tag, a window graphic and an OLED phone, and the one that governs all three is the one worth writing down.</p>
+
+      <h3 class="d-md" style="margin-top:var(--space-3xl)">And every field has seven.</h3>
+      <p class="prose">The same discipline, one level down. A text input is not a rectangle; it is seven rectangles a developer has to be told about before they guess.</p>
+
+      <div class="fields" style="margin-top:var(--space-lg)">
+        <div class="fcell"><div class="st">Default</div><div class="fl">Field label</div>
+          <div class="inp"><span class="gh">&nbsp;</span></div></div>
+        <div class="fcell"><div class="st">With icon</div><div class="fl">Password</div>
+          <div class="inp"><span style="flex:1"></span><i class="ph ph-eye" aria-hidden="true" style="font-size:15px"></i></div></div>
+        <div class="fcell"><div class="st">With button</div><div class="fl">Email address</div>
+          <div class="inp btnd"><span class="f"><span class="gh">Helper text</span></span><span class="b">Submit</span></div></div>
+        <div class="fcell"><div class="st">Hover / focus</div><div class="fl">Field label</div>
+          <div class="inp foc">Text entered</div></div>
+        <div class="fcell"><div class="st">Error</div><div class="fl">Phone</div>
+          <div class="inp err">(XXX) XXX-XX</div><div class="hint">Error message</div></div>
+        <div class="fcell"><div class="st">Success</div><div class="fl">Field label</div>
+          <div class="inp">Text entered</div><div class="hint ok">Looks good</div></div>
+        <div class="fcell"><div class="st">Empty-field highlight</div><div class="fl">Field label</div>
+          <div class="inp emp">Text entered</div></div>
+        <div class="fcell"><div class="st">Inactive</div><div class="fl">Field label</div>
+          <div class="inp dis">&nbsp;</div></div>
+      </div>
+      <p class="mono-note">Buttons carried the same treatment &mdash; four hierarchies, desktop and mobile, redlined to a 47px target.</p>
+    </section>
+
+    <!-- ===================== 06 ===================== -->
+    <section class="sec" id="s06">
+      <div class="srule"><span class="eb">06 &middot; What I cannot show you</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The honest <span class="mark">edges of this one.</span></h2>
+
+      <div class="ledger">
+        <div class="r"><div class="k">The client</div><div class="v">Named nowhere on this page, by choice. No logos, no wordmarks, no store photography, no campaign imagery.</div></div>
+        <div class="r"><div class="k">The screens</div><div class="v"><b>Every artifact above is a recreation I coded for this site</b>, set in my own typefaces, from my own working files. Nothing here is a lifted screenshot.</div></div>
+        <div class="r"><div class="k">The numbers</div><div class="v">There are none. I do not hold post-launch analytics for this engagement, so there is no conversion lift quoted, no error-rate reduction, no time-on-task. An invented number would be worth less than the blank.</div></div>
+        <div class="r"><div class="k">What is mine</div><div class="v">The state taxonomy, the component and colour system, the template specs and the redlines. The photography, the merchandising and the brand identity were not.</div></div>
+      </div>
+
+      <p class="prose" style="margin-top:var(--space-xl)">The reason this project sits in a portfolio next to a banking data standard and a chatbot architecture is that it is the same job. Find the moment the system is asked a question it has no answer for, and answer it once, in a place where the answer survives the next person. In banking that moment was a missing valuation. Here it was a shopper who had not picked a size.</p>
+
+      <div class="actions" style="margin-top:var(--space-xl)">
+        <div class="btn">
+          <span class="slab" aria-hidden="true"></span>
+          <a href="../index.html">See all work <span aria-hidden="true">&rarr;</span></a>
+        </div>
+        <a class="arrow plain" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20The%20unhappy%20path">Talk to me about system work<span class="sr-only"> (opens your email app)</span> <i class="ph ph-envelope-simple" aria-hidden="true"></i></a>
+      </div>
+    </section>
+
+    <nav class="prevnext">
+      <a class="pn plain" href="sarisari-snaps.html"><div class="k">&larr; Previous case</div><div class="t">SariSari Snaps</div></a>
+      <a class="pn next plain" href="no-value.html"><div class="k">Next case &rarr;</div><div class="t">No Value</div></a>
+    </nav>
+
+  </main>
+</div>
+
+<footer class="foot">
+  <div class="in">
+    <div class="z">Created by Djoaniel Hernandez &middot; NN/g #1046866 &middot; <a href="mailto:djoaniel@gmail.com"><i class="ph ph-envelope-simple inl" aria-hidden="true"></i> djoaniel@gmail.com<span class="sr-only"> (opens your email app)</span></a></div>
+    <div class="mk">意識</div>
+  </div>
+</footer>
+
+<script src="../assets/eishiki-v3.js"></script>
+<script>
+/* ==================================================================
+   Case-study-local behaviour. Vanilla, no dependencies. The shared
+   eishiki-v3.js still owns .term tooltips and .snav scrollspy.
+   ================================================================== */
+(function () {
+  'use strict';
+
+  /* ---------- 02 · add-to-bag state machine ---------- */
+  var bar  = document.getElementById('atbBar');
+  if (bar) {
+    var cta   = document.getElementById('atbCta'),
+        sz    = document.getElementById('atbSz'),
+        sw    = document.getElementById('atbSw'),
+        thumb = document.getElementById('atbThumb'),
+        tray  = document.getElementById('atbTray'),
+        rule  = document.getElementById('atbRule');
+
+    var COLOURS = ['#BFE3ED','#E1B283','#BAC48C','#3E4E56','#FFFFFF','#FCC2BD','#DA4A45'];
+
+    var SPEC = {
+      'default': {
+        size:'XS', szClass:'sz on', cta:'Add to bag', tray:null,
+        rule:'Variant complete → primary action enabled. The bar carries the whole transaction so the decision never has to scroll back up the page.'
+      },
+      'nosize': {
+        size:'–', szClass:'sz empty err', cta:'Please select size', tray:null,
+        rule:'Variant incomplete → the action label BECOMES the instruction. No toast, no disabled state, nothing to dismiss. The control says what it needs instead of reporting that you failed.'
+      },
+      'sizetray': {
+        size:'S', szClass:'sz on', cta:'Add to bag',
+        tray:{label:'Size', kind:'size', items:['XS','S','M','L','XL'], on:1},
+        rule:'Tray opens inside the bar, not the page → scroll position is preserved and the primary action never leaves the viewport while the shopper is choosing.'
+      },
+      'colortray': {
+        size:'XS', szClass:'sz on', cta:'Add to bag',
+        tray:{label:'Colour · 7', kind:'colour', items:COLOURS, on:0},
+        rule:'Colour is a variant, not a filter → it repaints the thumbnail and re-resolves size availability in place. Changing colourway must never cost the shopper their scroll position or their size.'
+      }
+    };
+
+    function render(key) {
+      var s = SPEC[key];
+      bar.setAttribute('data-state', key);
+      sz.className = s.szClass;
+      sz.textContent = s.size;
+      cta.textContent = s.cta;
+      rule.textContent = s.rule;
+
+      if (!s.tray) { tray.hidden = true; tray.innerHTML = ''; return; }
+      tray.hidden = false;
+      var html = '<span class="tl">' + s.tray.label + '</span>';
+      s.tray.items.forEach(function (it, i) {
+        html += (s.tray.kind === 'colour')
+          ? '<span class="sw' + (i === s.tray.on ? ' on' : '') + '" style="background:' + it + '"></span>'
+          : '<span class="sz' + (i === s.tray.on ? ' on' : '') + '">' + it + '</span>';
+      });
+      tray.innerHTML = html;
+      if (s.tray.kind === 'colour') { sw.style.background = COLOURS[s.tray.on]; thumb.style.background = COLOURS[s.tray.on]; }
+    }
+
+    var stateBtns = [].slice.call(document.querySelectorAll('#atbStates .state'));
+    stateBtns.forEach(function (b) {
+      function pick() {
+        stateBtns.forEach(function (x) { x.classList.remove('on'); x.setAttribute('aria-selected','false'); });
+        b.classList.add('on'); b.setAttribute('aria-selected','true');
+        render(b.getAttribute('data-st'));
+      }
+      b.addEventListener('click', pick);
+      b.addEventListener('focus', pick);
+    });
+    render('default');
+  }
+
+  /* ---------- 03 · filter row stress test ---------- */
+  var chipWrap = document.getElementById('fChips');
+  if (chipWrap) {
+    var GROUPS = [
+      ['Colour', ['Red','Orange','Yellow','Green','Blue','Indigo','Violet','White','Silver','Gray','Beige','Pink','Purple','Multi','Black']],
+      ['Size',   ['XS','S','M','L','XL','XXL','0','4','8','16']],
+      ['Sleeve', ['Sleeveless','Short sleeve','Long sleeve','Strap','3/4','Full sleeve']]
+    ];
+    var ALL = [];
+    GROUPS.forEach(function (g) { g[1].forEach(function (v) { ALL.push(v); }); });
+
+    var active = [];
+    var read = document.getElementById('fRead');
+
+    function paint() {
+      var html = '';
+      if (active.length) {
+        html += '<button class="fchip clear" type="button" data-clear>Clear all filters <span class="x">&times;</span></button>';
+      }
+      active.forEach(function (v) {
+        html += '<button class="fchip" type="button" data-v="' + v + '">' + v + ' <span class="x">&times;</span></button>';
+      });
+      if (!active.length) {
+        html += '<span class="fchip" style="border-style:dashed;color:#9A9892;cursor:default">No filters applied</span>';
+      }
+      chipWrap.innerHTML = html;
+
+      var h = Math.round(chipWrap.getBoundingClientRect().height);
+      var rows = Math.max(1, Math.round((h - 24) / 30));
+      var verdict = active.length >= ALL.length
+        ? ' · ROW OUTGROWS THE FIRST PRODUCT ROW'
+        : (rows > 2 ? ' · grid pushed down ' + (rows - 1) + ' rows' : '');
+      read.textContent = 'chips ' + active.length + '/' + ALL.length +
+        ' · row height ' + h + 'px · wraps to ' + rows + ' line' + (rows === 1 ? '' : 's') + verdict;
+    }
+
+    chipWrap.addEventListener('click', function (e) {
+      var c = e.target.closest('[data-clear]');
+      if (c) { active = []; setMode('fNone'); paint(); return; }
+      var b = e.target.closest('[data-v]');
+      if (!b) return;
+      active = active.filter(function (v) { return v !== b.getAttribute('data-v'); });
+      setMode(null); paint();
+    });
+
+    function setMode(id) {
+      ['fAll','fSome','fNone'].forEach(function (x) {
+        document.getElementById(x).classList.toggle('on', x === id);
+      });
+    }
+    document.getElementById('fAll').addEventListener('click', function () {
+      active = ALL.slice(); setMode('fAll'); paint();
+    });
+    document.getElementById('fSome').addEventListener('click', function () {
+      active = ['Blue','Black','Pink','S','M','Sleeveless','Short sleeve']; setMode('fSome'); paint();
+    });
+    document.getElementById('fNone').addEventListener('click', function () {
+      active = []; setMode('fNone'); paint();
+    });
+    window.addEventListener('resize', paint, { passive: true });
+    paint();
+  }
+
+  /* ---------- 04 · homepage fill toggle ---------- */
+  var hp = document.getElementById('hpGrid');
+  if (hp) {
+    var hpRead = document.getElementById('hpRead');
+    var COPY = {
+      on:  'Populated · what the stakeholder review saw. Palette fields stand in for campaign photography.',
+      off: 'As delivered · what the merchandising team receives. Every slot declares a ratio, a safe area and a character budget — so the page holds on a week when the assets are late.'
+    };
+    function fill(isOn) {
+      hp.classList.toggle('on', isOn);
+      hp.classList.toggle('off', !isOn);
+      document.getElementById('hpOn').classList.toggle('on', isOn);
+      document.getElementById('hpOff').classList.toggle('on', !isOn);
+      hpRead.textContent = isOn ? COPY.on : COPY.off;
+    }
+    document.getElementById('hpOn').addEventListener('click', function () { fill(true); });
+    document.getElementById('hpOff').addEventListener('click', function () { fill(false); });
+    fill(true);
+  }
+})();
+</script>
+</body>
+</html>

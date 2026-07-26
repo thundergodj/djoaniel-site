@@ -180,7 +180,27 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
 .rost .s.wait{color:var(--text-muted)}
 .rost .add{color:var(--accent);border-bottom:0;padding-top:6px}
 
-/* 05 / 06 · honest awaiting-content frames */
+/* 05 · sticky add-to-bag, caught in its error state.
+   The one teaser that carries a second palette: the client's dusk
+   (#3E4E56) and error red are the subject of the case study, so the
+   fragment would be a lie in site colours. Quarantined to .atbz. */
+.atbz{border:var(--hair);background:var(--white);display:grid;gap:0;color:#3E4E56}
+.atbz .p{display:flex;align-items:center;gap:8px;padding:7px 8px;border-bottom:var(--hair)}
+.atbz .th{width:26px;height:33px;flex:none;background:#BFE3ED;border:var(--hair)}
+.atbz .nm{font-size:clamp(11px,1.4vh,13px);font-weight:600;line-height:1.25}
+.atbz .nm b{display:block;font-weight:600;color:#DA080B;font-size:.92em;margin-top:2px}
+.atbz .o{display:flex;align-items:center;gap:7px;padding:6px 8px;border-bottom:var(--hair);
+  font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
+  font-weight:500;color:#8A8A84}
+.atbz .sw{width:17px;height:17px;background:#BFE3ED;border:1px solid #3E4E56;margin-left:auto}
+.atbz .sz{margin-left:auto;min-width:26px;height:19px;display:grid;place-items:center;
+  border:1px solid #DA080B;color:#DA080B;font-size:11.5px}
+.atbz .cta{padding:8px;text-align:center;background:var(--white);color:#181D20;
+  border-top:1px solid #181D20;font-size:clamp(10.5px,1.3vh,12px);font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase}
+.card:hover .atbz .cta{background:#181D20;color:var(--white)}
+
+/* 06 · honest awaiting-content frame */
 .await{flex:1;border:var(--hair);display:grid;place-items:center;
   background:repeating-linear-gradient(45deg,transparent 0 6px,rgba(9,9,9,.035) 6px 7px)}
 .await span{font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
@@ -333,14 +353,21 @@ a:hover .ph-envelope-simple{transform:translateY(-2px)}
     </a>
 
     <!-- 05 -->
-    <a class="card" href="#">
+    <a class="card" href="work/unhappy-path.html">
       <div class="tz">
-        <div class="in"><div class="await"><span>Awaiting content</span></div></div>
+        <div class="in">
+          <div class="atbz">
+            <div class="p"><span class="th"></span><span class="nm">Speed Tank<b>$25.99</b></span></div>
+            <div class="o">Colour<span class="sw"></span></div>
+            <div class="o">Size<span class="sz">—</span></div>
+            <div class="cta">Please select size</div>
+          </div>
+        </div>
       </div>
       <div class="ft">
-        <span class="cat retail"><i></i>Retail · Brand</span>
-        <h2 class="ct">Altared State</h2>
-        <p class="cd">Placeholder. Send me your account of the Altared State work and I'll write the claim that goes here.</p>
+        <span class="cat retail"><i></i>Retail · Commerce</span>
+        <h2 class="ct">The Unhappy Path</h2>
+        <p class="cd">Began as page comps for a US activewear retailer. Ended as the component and state library behind them.</p>
       </div>
     </a>
 
