@@ -4,8 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="../favicon.svg" type="image/svg+xml">
-<title>Break the interface — Accessibility audit lab · Djoaniel Hernandez</title>
-<meta name="description" content="Five surfaces, ten criteria, one platform pass. The WCAG 2.2 AA audit template I built for a Swiss banking design team — wired to live controls so you can break it yourself.">
+<title>Break It Yourself — Accessibility audit lab · Djoaniel Hernandez</title>
+<!-- Google Analytics · G-8897FSV2XF -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8897FSV2XF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8897FSV2XF');
+</script>
+
+<meta name="description" content="Five surfaces, ten criteria, one platform pass. The WCAG 2.2 AA audit template I built for a Swiss banking design team — wired to live controls so you can fail it on purpose.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -233,6 +242,23 @@ table.tb .isin{font-family:var(--font-mono);font-size:12px;opacity:.6;display:bl
   padding:12px 18px;z-index:99;font:var(--text-caption);letter-spacing:0.04em;text-transform:uppercase}
 .skip:focus{left:0;top:0}
 </style>
+
+<!-- Link preview — what a recruiter sees when this URL is pasted -->
+<link rel="canonical" href="https://djoaniel.com/work/accessibility-lab">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Djoaniel Hernandez">
+<meta property="og:url" content="https://djoaniel.com/work/accessibility-lab">
+<meta property="og:title" content="Break It Yourself — ten criteria, yours to fail">
+<meta property="og:description" content="Five surfaces, ten criteria, one platform pass. The WCAG 2.2 AA audit template I built for a Swiss banking design team — wired to live controls so you can fail it on purpose.">
+<meta property="og:image" content="https://djoaniel.com/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Djoaniel Hernandez — enterprise HUD design">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Break It Yourself — ten criteria, yours to fail">
+<meta name="twitter:description" content="Five surfaces, ten criteria, one platform pass. The WCAG 2.2 AA audit template I built for a Swiss banking design team — wired to live controls so you can fail it on purpose.">
+<meta name="twitter:image" content="https://djoaniel.com/assets/og.png">
+<meta name="theme-color" content="#F7F6F2">
 </head>
 <body>
 <a class="skip" href="#lab">Skip to the audit lab</a>
@@ -251,8 +277,8 @@ table.tb .isin{font-family:var(--font-mono);font-size:12px;opacity:.6;display:bl
 <!-- ============================== HERO ============================== -->
 <div class="inner" style="padding-top:var(--space-4xl)">
   <a class="arrow plain" href="../index.html"><span class="g">←</span> All work</a>
-  <p style="font:var(--text-label);letter-spacing:.14em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 02 · Accessibility governance · Enterprise banking</p>
-  <h1 class="d-hero">Break the<br>interface</h1>
+  <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 02 · Accessibility governance · Enterprise banking</p>
+  <h1 class="d-hero" style="view-transition-name:vt-access">Break It<br>Yourself</h1>
   <p class="prose lead">An EU directive gave a Swiss banking platform a date and a standard, but no method. I built the audit — five surfaces, ten criteria, one status taxonomy — and wired it to the design team's review gate. Below, that audit is live. Change a value; watch the verdict turn.</p>
 
   <div class="stats" style="margin-top:var(--space-2xl)">
@@ -442,6 +468,11 @@ table.tb .isin{font-family:var(--font-mono);font-size:12px;opacity:.6;display:bl
   <h2 class="d-lg">It passes its <span class="mark">own audit.</span></h2>
   <p class="prose">Every control here is reachable and operable from the keyboard alone. Each slider is duplicated by a −/+ button, so no part of this page depends on a dragging movement — the same criterion the artifact marks inherited. The verdict panel is a live region, so it is announced rather than merely shown. Contrast ratios are computed with the WCAG relative-luminance formula, not estimated.</p>
   <p class="mono-note">Claiming accessibility work without shipping an accessible artifact would be the tell.</p>
+
+  <nav class="prevnext">
+    <a class="pn plain" href="no-value.html"><div class="k">← Previous case</div><div class="t">The Art of Nothing</div></a>
+    <a class="pn next plain" href="tessa.html"><div class="k">Next case →</div><div class="t">TESSA</div></a>
+  </nav>
 </div>
 
 <footer class="foot">

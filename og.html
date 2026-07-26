@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>OG image source — 1200×630</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Radio+Canada:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ======================================================================
+   OG IMAGE SOURCE — not a page, a plate.
+   The link preview is the first design anyone sees, and it is the only
+   surface where the site cannot render itself. So it is built here in
+   the real system and exported once.
+
+   TO EXPORT (one minute, once):
+     1. Open this file in Chrome.
+     2. DevTools → ⋮ → More tools → Rendering isn't needed; instead use
+        Device Toolbar (Ctrl+Shift+M) → Responsive → 1200 × 630 → DPR 2.
+     3. Ctrl+Shift+P → "Capture screenshot".
+     4. Save as  assets/og.png
+   The og:image tags on every page already point at that path.
+   ====================================================================== */
+:root{
+  --ink:rgb(9,9,9); --paper:rgb(247,246,242); --line:rgb(214,213,208);
+  --muted:rgb(102,102,96); --accent:rgb(11,63,255);
+}
+*{box-sizing:border-box;margin:0}
+body{background:#555;display:grid;place-items:center;min-height:100vh;font-family:"Radio Canada",sans-serif}
+.plate{
+  width:1200px;height:630px;background:var(--paper);color:var(--ink);
+  padding:64px 72px;display:grid;grid-template-rows:auto 1fr auto;
+  position:relative;overflow:hidden;
+}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:500;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+}
+.wm{
+  font-family:"Radio Canada",sans-serif;font-weight:700;font-size:150px;line-height:.88;
+  letter-spacing:-.035em;text-transform:uppercase;align-self:center;margin-top:-12px;
+}
+.wm::after{
+  content:"";display:inline-block;width:.28em;height:.72em;background:var(--accent);
+  margin-left:.09em;vertical-align:baseline;
+}
+.thesis{
+  font-family:"Instrument Serif",serif;font-size:41px;line-height:1.18;
+  letter-spacing:-.012em;max-width:30ch;margin-top:14px;
+}
+.thesis .mark{
+  background-image:linear-gradient(transparent 60%,rgba(11,63,255,.19) 60%,rgba(11,63,255,.19) 93%,transparent 93%);
+}
+.foot{
+  display:flex;align-items:center;gap:14px;border-top:1px solid var(--ink);padding-top:18px;
+  font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:500;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--muted);
+}
+.foot .sq{width:11px;height:11px;background:var(--accent);flex:none}
+.foot .r{margin-left:auto;color:var(--ink)}
+/* hairline field, bottom right — the same instrument grid, quiet */
+.field{position:absolute;right:0;bottom:96px;width:300px;height:220px;opacity:.5;
+  background:
+    repeating-linear-gradient(to right,var(--line) 0 0.667px,transparent 0.667px 30px),
+    repeating-linear-gradient(to bottom,var(--line) 0 0.667px,transparent 0.667px 30px);
+  -webkit-mask-image:linear-gradient(to left,#000,transparent);
+          mask-image:linear-gradient(to left,#000,transparent);}
+.guide{position:fixed;bottom:14px;left:14px;color:#fff;font-family:"IBM Plex Mono",monospace;
+  font-size:12px;line-height:1.6;background:#000;padding:10px 12px}
+@media print{.guide{display:none}}
+</style>
+</head>
+<body>
+
+<div class="plate">
+  <div class="eyebrow">// Portfolio · Selected work</div>
+  <div>
+    <h1 class="wm">Djoaniel</h1>
+    <p class="thesis">Sixteen years of <span class="mark">heads-up displays</span> for industries that never called them that.</p>
+  </div>
+  <div class="foot">
+    <span class="sq"></span>
+    <span>djoaniel.com</span>
+    <span class="r">NN/g #1046866</span>
+  </div>
+  <div class="field"></div>
+</div>
+
+<div class="guide">
+  1200 × 630 · export at DPR 2 → save as assets/og.png<br>
+  Ctrl+Shift+M → 1200×630 → Ctrl+Shift+P → "Capture screenshot"
+</div>
+
+</body>
+</html>

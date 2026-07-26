@@ -7,6 +7,25 @@ Read §1, then run §2.
 
 ---
 
+## 0. One manual step before you push
+
+**Export the link-preview image.** Every page now carries Open Graph and
+Twitter tags pointing at `assets/og.png`, which doesn't exist yet — until it
+does, LinkedIn and Slack render a text-only card instead of a picture. The
+plate is already designed and set in the real typefaces:
+
+1. Open `og.html` in Chrome.
+2. `Ctrl+Shift+M` → set the viewport to **1200 × 630**, DPR **2**.
+3. `Ctrl+Shift+P` → type *Capture screenshot* → Enter.
+4. Save the file as **`assets/og.png`**.
+
+That's it — no tag edits needed, every page already points at it.
+
+Analytics is live: `G-8897FSV2XF` is wired into all eight pages and starts
+reporting the moment the domain resolves.
+
+---
+
 ## 1. Which folder is the repo
 
 **`djoaniel-site-v2/` is the repo.** Use it. Ignore the others.

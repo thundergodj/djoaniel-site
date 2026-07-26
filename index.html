@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <title>Djoaniel Hernandez</title>
+<!-- Google Analytics · G-8897FSV2XF -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8897FSV2XF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8897FSV2XF');
+</script>
+
+<meta name="description" content="Sixteen years of heads-up displays for industries that never called them that. Selected product, systems and retail work by Djoaniel Hernandez.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -38,9 +48,27 @@
   --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
 
   --hair:0.667px solid var(--line);
-  --ease:cubic-bezier(0.22,1,0.36,1);
   --gap:12px;
   --edge:clamp(16px,2.2vw,30px);
+
+  /* MOTION — mirrored from eishiki-v3.css on purpose.
+     This page is deliberately self-contained and never loads that
+     stylesheet, so every token it references has to be declared here.
+     It previously used --dur-fast and --ease-snap without declaring
+     either, which silently dropped the whole transition. */
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --ease-out:cubic-bezier(0.22,1,0.36,1);
+  --ease-snap:cubic-bezier(0.2,0.9,0.1,1);
+  --ease-hold:cubic-bezier(0.4,0,0.2,1);
+  --dur-fast:120ms;
+  --dur-med:220ms;
+  --dur-spark:560ms;
+  /* Tuned in experiments/richness-sandbox.html. Hover stays under
+     200ms — past that a pointer-driven change reads as lag, not craft. */
+  --dur-hover:190ms;
+  --dur-sweep:260ms;
+  --lift:3px;
+  --dur-vt:420ms;
 }
 
 *{box-sizing:border-box}
@@ -99,9 +127,30 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
 .card{
   border:var(--hair);background:var(--white);text-decoration:none;color:inherit;
   display:grid;grid-template-rows:minmax(0,1fr) auto;min-height:0;overflow:hidden;
-  transition:border-color .18s var(--ease),transform .18s var(--ease);
+  position:relative;
+  transition:border-color var(--dur-hover) var(--ease-out),transform var(--dur-hover) var(--ease-out);
 }
-.card:hover,.card:focus-visible{border-color:var(--ink-900);transform:translateY(-2px);outline:none}
+a.card:hover,a.card:focus-visible{border-color:var(--ink-900);transform:translateY(calc(var(--lift) * -1));outline:none}
+
+/* The arming hairline. Second layer of the hover, slower than the lift,
+   so the card reads as an instrument waking rather than as a highlight. */
+.card::before{
+  content:"";position:absolute;left:0;top:0;height:1px;width:100%;background:var(--accent);
+  transform:scaleX(0);transform-origin:left;z-index:2;
+  transition:transform var(--dur-sweep) var(--ease-out);
+}
+a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
+
+/* PENDING CARDS — no destination yet, so they are not links.
+   A card that looks clickable and goes nowhere is worse than one that
+   states its status. Same presence in the grid, no false affordance. */
+.card.pending{cursor:default}
+.card.pending .ct{color:var(--text-muted)}
+.status{
+  font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--text-muted);border:var(--hair);background:var(--paper);
+  padding:3px 7px;justify-self:start;
+}
 
 /* --- the teaser: a live fragment of the interface, rebuilt --- */
 .tz{position:relative;overflow:hidden;background:var(--paper);border-bottom:var(--hair);min-height:0}
@@ -117,10 +166,18 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
 .ft{padding:clamp(9px,1.5vh,15px) clamp(11px,1.4vw,16px);display:grid;gap:7px}
 .cat{
   font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
-  color:var(--text-muted);display:flex;align-items:center;gap:8px;
+  color:var(--text-muted);display:flex;align-items:center;gap:8px;min-width:0;
 }
 .cat i{width:6px;height:6px;background:var(--accent);font-style:normal;flex:none}
 .cat.retail i{background:var(--ink-600)}
+/* Card 05's role line is the longest string on the grid (37 characters:
+   the Jobs 1979 business-card title, abbreviated to VP so it holds one
+   line). One line is not a style preference — .cat wrapping on a single
+   card would push that card's foot a line taller than the other five and
+   break the alignment .cd's min-height exists to protect. It only has to
+   wrap in the single-column layout, where the feet no longer align by
+   design; there the dot goes top-aligned so it reads as a marker, not as
+   a bullet floating mid-paragraph. */
 /* Serif promoted from 24-30 to 28-36. At the old scale Instrument Serif
    sat at the very floor of its range beside a dense mono table, and read
    as underpowered rather than as the display voice. Same face, more
@@ -169,7 +226,9 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
 .steps .ar{color:var(--text-muted);border:0;padding:0}
 .frame{flex:1;border:var(--hair);background:var(--white);display:grid;place-items:center;min-height:0;
   font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted)}
-.frame .ph{width:52%;aspect-ratio:4/3;border:var(--hair);
+/* .phold, not .ph — Phosphor's stylesheet claims .ph as its icon base
+   class, so this placeholder was inheriting the icon webfont. */
+.frame .phold{width:52%;aspect-ratio:4/3;border:var(--hair);
   background:repeating-linear-gradient(45deg,transparent 0 4px,rgba(9,9,9,.045) 4px 5px)}
 
 /* 04 · roster rows */
@@ -201,11 +260,23 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
   letter-spacing:.09em;text-transform:uppercase}
 .card:hover .atbz .cta{background:#181D20;color:var(--white)}
 
-/* 06 · honest awaiting-content frame */
-.await{flex:1;border:var(--hair);display:grid;place-items:center;
-  background:repeating-linear-gradient(45deg,transparent 0 6px,rgba(9,9,9,.035) 6px 7px)}
-.await span{font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
-  color:var(--text-muted);background:var(--paper);padding:5px 9px;border:var(--hair)}
+/* 02 · WCAG criteria readout, caught mid-failure.
+   The honest awaiting-content frame (.await) that used to sit here is
+   gone with the Brady / Emedco card. Six cards, six pieces of evidence,
+   no IOUs on the grid.
+   This teaser is the only one whose subject is a verdict rather than an
+   interface, so it is built as a ledger: identifier, criterion, result,
+   right-aligned and tabular. The failing row states the measured ratio
+   instead of the word FAIL, because the number is the argument. */
+.crit{font-family:var(--font-mono);font-size:clamp(12px,1.35vh,13px);display:grid;gap:0}
+.crit div{display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:var(--hair);color:var(--text-body)}
+.crit b{color:var(--text-muted);font-weight:400;font-variant-numeric:tabular-nums;flex:none}
+.crit .s{margin-left:auto;letter-spacing:.08em;text-transform:uppercase;font-size:.88em;
+  font-variant-numeric:tabular-nums;flex:none}
+.crit .s.ok{color:var(--data-ok)}
+.crit .no b,.crit .no{color:var(--data-null)}
+.crit .no .s{color:var(--data-null);font-weight:600;letter-spacing:.02em;text-transform:none}
+.card:hover .crit .no .s::after{content:" · needs 3:1";font-size:.9em;opacity:.7;font-weight:400}
 
 /* ================= RESPONSIVE ================= */
 @media (min-height:1000px){
@@ -221,6 +292,10 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
   header{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr;grid-template-rows:none}
   .card{min-height:300px}
+  /* see the note at .cat — one column, so the feet no longer align and the
+     long role line is free to take a second line. */
+  .cat{flex-wrap:wrap;align-items:flex-start}
+  .cat i{margin-top:.42em}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none !important;transition:none !important}
@@ -256,9 +331,66 @@ a:hover .ph-envelope-simple{transform:translateY(-2px)}
    point of having it. */
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
   overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+
+/* Skip link — present on every other page, missing here until now. */
+.skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--ink-900);color:var(--paper);
+  padding:10px 16px;font-family:var(--font-mono);font-size:12.5px;font-weight:500;
+  letter-spacing:.05em;text-transform:uppercase;text-decoration:none}
+.skip:focus{left:0}
+
+/* ==================================================================
+   VIEW TRANSITIONS
+   The card title and the case study's H1 share a view-transition-name,
+   so on navigation the title travels between the two documents rather
+   than the page cutting. Navigation as state change, not travel —
+   §5 of NORTH-STAR surviving contact with multi-page reality.
+   Browsers without support get an instant navigation and lose nothing.
+   ================================================================== */
+/* Kept at top level — @view-transition inside @media is not reliably
+   supported. Reduced motion is honoured by collapsing the duration
+   instead, which is equivalent and works everywhere. */
+@view-transition{navigation:auto}
+::view-transition-group(*){
+  animation-duration:var(--dur-vt);
+  animation-timing-function:var(--ease-hold);
+}
+::view-transition-old(root),::view-transition-new(root){
+  animation-duration:var(--dur-vt);
+}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){
+    animation-duration:0.001ms !important;
+  }
+}
+/* Keyed on destination, not on position, so reordering the grid can
+   never silently mis-pair a title with the page it morphs into. */
+a.card[href$="no-value.html"]          .ct{view-transition-name:vt-no-value}
+a.card[href$="accessibility-lab.html"] .ct{view-transition-name:vt-access}
+a.card[href$="tessa.html"]             .ct{view-transition-name:vt-tessa}
+a.card[href$="sarisari-snaps.html"]    .ct{view-transition-name:vt-sarisari}
+a.card[href$="unhappy-path.html"]      .ct{view-transition-name:vt-unhappy}
 </style>
+
+<!-- Link preview — what a recruiter sees when this URL is pasted -->
+<link rel="canonical" href="https://djoaniel.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Djoaniel Hernandez">
+<meta property="og:url" content="https://djoaniel.com/">
+<meta property="og:title" content="Djoaniel Hernandez — enterprise HUD design">
+<meta property="og:description" content="Sixteen years of heads-up displays for industries that never called them that. Selected product, systems and retail work by Djoaniel Hernandez.">
+<meta property="og:image" content="https://djoaniel.com/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Djoaniel Hernandez — enterprise HUD design">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Djoaniel Hernandez — enterprise HUD design">
+<meta name="twitter:description" content="Sixteen years of heads-up displays for industries that never called them that. Selected product, systems and retail work by Djoaniel Hernandez.">
+<meta name="twitter:image" content="https://djoaniel.com/assets/og.png">
+<meta name="theme-color" content="#F7F6F2">
 </head>
 <body>
+
+<a class="skip" href="#work">Skip to the work</a>
 
 <div class="page">
 
@@ -274,7 +406,7 @@ a:hover .ph-envelope-simple{transform:translateY(-2px)}
     </nav>
   </header>
 
-  <main class="grid">
+  <main class="grid" id="work">
 
     <!-- 01 -->
     <a class="card" href="work/no-value.html">
@@ -291,12 +423,31 @@ a:hover .ph-envelope-simple{transform:translateY(-2px)}
       </div>
       <div class="ft">
         <span class="cat"><i></i>Enterprise banking · Avaloq</span>
-        <h2 class="ct">The "No Value" System</h2>
-        <p class="cd">One everywhere-problem resolved into one deterministic rule — and the seven roles it took to ship it.</p>
+        <h2 class="ct">The Art of Nothing</h2>
+        <p class="cd">An empty cell meant five different things to five teams. One deterministic rule, seven roles to ship it.</p>
       </div>
     </a>
 
     <!-- 02 -->
+    <a class="card" href="work/accessibility-lab.html">
+      <div class="tz">
+        <div class="in">
+          <div class="crit">
+            <div><b>1.4.3</b> Contrast (minimum) <span class="s ok">Pass</span></div>
+            <div><b>2.4.7</b> Focus visible <span class="s ok">Pass</span></div>
+            <div class="no"><b>1.4.11</b> Non-text contrast <span class="s">2.9:1</span></div>
+            <div><b>2.5.8</b> Target size <span class="s ok">Pass</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ft">
+        <span class="cat"><i></i>Accessibility · Enterprise banking</span>
+        <h2 class="ct">Break It Yourself</h2>
+        <p class="cd">The WCAG 2.2 AA audit template I built for a bank, wired to live controls so you can fail it on purpose.</p>
+      </div>
+    </a>
+
+    <!-- 03 -->
     <a class="card" href="work/tessa.html">
       <div class="tz">
         <div class="in">
@@ -313,7 +464,30 @@ a:hover .ph-envelope-simple{transform:translateY(-2px)}
       </div>
     </a>
 
-    <!-- 03 -->
+    <!-- 04 · aliased. "Rider" in the roster was the last identifying word
+         in this fragment; "Athlete" is true of the product and true of the
+         alias. -->
+    <div class="card pending">
+      <div class="tz">
+        <div class="in">
+          <div class="rost">
+            <div><b>01</b> Athlete — captain <span class="s ok">Confirmed</span></div>
+            <div><b>02</b> Athlete <span class="s ok">Confirmed</span></div>
+            <div><b>03</b> Athlete <span class="s wait">Awaiting</span></div>
+            <div><b>04</b> — <span class="s wait">Open slot</span></div>
+            <div class="add">+ Add athlete</div>
+          </div>
+        </div>
+      </div>
+      <div class="ft">
+        <span class="cat retail"><i></i>Retail · Campaign</span>
+        <h2 class="ct">Sports Maximum</h2>
+        <p class="cd">A team registration portal for a sports brand, and the token system built to outlive the campaign calendar.</p>
+        <span class="status">Case study in preparation</span>
+      </div>
+    </div>
+
+    <!-- 05 -->
     <a class="card" href="work/sarisari-snaps.html">
       <div class="tz">
         <div class="in">
@@ -323,37 +497,17 @@ a:hover .ph-envelope-simple{transform:translateY(-2px)}
             <span>03 Photos</span><span class="ar">→</span>
             <span>04 Review</span>
           </div>
-          <div class="frame"><div class="ph"></div></div>
+          <div class="frame"><div class="phold"></div></div>
         </div>
       </div>
       <div class="ft">
-        <span class="cat"><i></i>Commerce · Founder</span>
+        <span class="cat"><i></i>Commerce · VP, New Product Development</span>
         <h2 class="ct">SariSari Snaps</h2>
         <p class="cd">Orders lived in Messenger threads. I built the configurator so the inbox stopped being the storefront.</p>
       </div>
     </a>
 
-    <!-- 04 -->
-    <a class="card" href="#">
-      <div class="tz">
-        <div class="in">
-          <div class="rost">
-            <div><b>01</b> Rider — captain <span class="s ok">Confirmed</span></div>
-            <div><b>02</b> Rider <span class="s ok">Confirmed</span></div>
-            <div><b>03</b> Rider <span class="s wait">Awaiting</span></div>
-            <div><b>04</b> — <span class="s wait">Open slot</span></div>
-            <div class="add">+ Add rider</div>
-          </div>
-        </div>
-      </div>
-      <div class="ft">
-        <span class="cat retail"><i></i>Retail · Campaign</span>
-        <h2 class="ct">Rudy Project</h2>
-        <p class="cd">A Team Challenge registration portal and the token system behind it, built to survive a campaign calendar.</p>
-      </div>
-    </a>
-
-    <!-- 05 -->
+    <!-- 06 -->
     <a class="card" href="work/unhappy-path.html">
       <div class="tz">
         <div class="in">
@@ -369,18 +523,6 @@ a:hover .ph-envelope-simple{transform:translateY(-2px)}
         <span class="cat retail"><i></i>Retail · Commerce</span>
         <h2 class="ct">The Unhappy Path</h2>
         <p class="cd">Began as page comps for a US activewear retailer. Ended as the component and state library behind them.</p>
-      </div>
-    </a>
-
-    <!-- 06 -->
-    <a class="card" href="#">
-      <div class="tz">
-        <div class="in"><div class="await"><span>Awaiting content</span></div></div>
-      </div>
-      <div class="ft">
-        <span class="cat retail"><i></i>Retail · Industrial</span>
-        <h2 class="ct">Brady / Emedco</h2>
-        <p class="cd">Placeholder. Send me your account of the Brady / Emedco work and I'll write the claim that goes here.</p>
       </div>
     </a>
 
