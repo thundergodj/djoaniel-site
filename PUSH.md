@@ -1,52 +1,53 @@
 # PUSH — getting this on djoaniel.com
 
-The repo is built and ready: branch `main`, 7 commits, `origin` already set to
+The repo is built: branch `main`, 8 commits, `origin` already set to
 `https://github.com/thundergodj/djoaniel-site.git`. Nothing left to configure.
 
-**Read the folder note first, then run the script.**
+Read §1, then run §2.
 
 ---
 
-## 1. The folder note
+## 1. Which folder is the repo
 
-This clean repo lives in **`djoaniel-site-repo/`**, next to the old `djoaniel-site/`.
+**`djoaniel-site-v2/` is the repo.** Use it. Ignore the others.
 
-Why: the Cowork sandbox mounts your Drive in a way that allows writes but forbids
-*deletes*, and git needs to delete its own lock files to commit. Working in place left
-the old `djoaniel-site/.git` in a broken state that I can't clean from inside the
-sandbox. So the repo was rebuilt in a fresh folder where git is healthy.
+Why there are others: the Cowork sandbox mounts your project folder with writes
+allowed but **deletes forbidden**, and git has to delete its own lock files to
+commit. That left debris I can't clean from inside the sandbox:
 
-`djoaniel-site-repo/` has the same 13 files plus full history. Nothing was lost.
+| folder | what it is | do |
+|---|---|---|
+| `djoaniel-site-v2/` | clean repo, full history, current files | **keep — this is it** |
+| `djoaniel-site/` | your working folder; files are identical, `.git` is broken | delete after the swap |
+| `djoaniel-site-repo/` | a failed intermediate copy | delete |
+| `_tmptest/` | permission-probe debris | delete |
 
-Swap them (PowerShell, from the project root):
+The working files in `djoaniel-site-v2/` are byte-identical to `djoaniel-site/`.
+Nothing was lost and nothing was edited behind your back.
+
+Swap and clean up (PowerShell, from the project root):
 
 ```powershell
 cd "$env:USERPROFILE\Claude\Projects\OVERDRIVE The Portfolio of Djoaniel Hernandez"
 
-Rename-Item djoaniel-site djoaniel-site-OLD
-Rename-Item djoaniel-site-repo djoaniel-site
-Remove-Item -Recurse -Force djoaniel-site-OLD, _tmptest
+Remove-Item -Recurse -Force djoaniel-site, djoaniel-site-repo, _tmptest
+Rename-Item djoaniel-site-v2 djoaniel-site
 ```
-
-(`_tmptest` is sandbox debris from the same permission problem — safe to delete.)
-
-Skip the swap if you'd rather; everything below works from whatever the folder is
-named. But do delete the old one eventually, or you'll edit the wrong copy.
 
 ## 2. Push
 
 **This has to run in your own terminal.** The sandbox is blocked from reaching GitHub
 (HTTP 403 through the proxy), so the network step is yours.
 
-**It's a force-push.** The GitHub repo currently holds the old redirect placeholder,
-which is *older* than this. A plain `git push` gets rejected as non-fast-forward. Do
-not "clone fresh to fix it" — that would overwrite the real site with the redirect stub.
+**It's a force-push.** The GitHub repo still holds the old redirect placeholder, which
+is *older* than this — a plain `git push` gets rejected as non-fast-forward. Do not
+"clone fresh to fix it"; that would overwrite the real site with the redirect stub.
 
 ```powershell
 cd "$env:USERPROFILE\Claude\Projects\OVERDRIVE The Portfolio of Djoaniel Hernandez\djoaniel-site"
 
 git status          # expect: clean, on main
-git log --oneline -7
+git log --oneline -8
 git remote -v       # expect: origin -> thundergodj/djoaniel-site
 
 git push --force origin main
@@ -70,8 +71,8 @@ Three ways to handle it, in order of how they read to someone hiring you:
    broken About is a mistake. This is the safe ship.
 3. **Push as-is.** Only if this is a backup and you're not sending the link to anyone yet.
 
-Cards 05 and 06 are still `href="#"` and say "Awaiting content" out loud — that's a
-smaller wound than a 404, but it's the next one to close.
+Cards 05 and 06 are still `href="#"` and say "Awaiting content" out loud — a smaller
+wound than a 404, but the next one to close.
 
 ## 4. Verify after the push
 
@@ -81,7 +82,7 @@ curl.exe -sI https://www.djoaniel.com/work/no-value | Select-String "HTTP"
 ```
 
 Expect a 308 apex → www, then 200 on the case study. Then open
-https://www.djoaniel.com in a real browser at 1× on a Windows laptop — that's the
+https://www.djoaniel.com in a real browser at 1x on a Windows laptop — that's the
 audience the type lock is calibrated for.
 
 ## 5. If it goes wrong
@@ -90,7 +91,7 @@ audience the type lock is calibrated for.
 - `Authentication failed` → GitHub wants a Personal Access Token, not your password.
   `gh auth login` if you have the GitHub CLI, otherwise a classic PAT with `repo` scope,
   used as the password.
-- `Another git process seems to be running` → you're in the old folder. Check with `pwd`.
+- `Another git process seems to be running` → you're in the old folder. Check `pwd`.
 
 **Rolling back:** Vercel keeps every prior deployment. Deployments → the old one →
 **Promote to Production**. No git needed. The placeholder commit also stays in GitHub's
