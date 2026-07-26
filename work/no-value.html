@@ -74,6 +74,19 @@
 .brief{padding-top:var(--space-3xl)}
 .brief .kick{font:var(--mono);letter-spacing:.14em;color:var(--text-muted);
   text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)}
+/* THE DESIGNATION — the exact string on the homepage card.
+   The card said one thing and this page said another, so a visitor
+   clicking "The No Value System" landed on "The Art of Nothing" and
+   spent a beat wondering whether they'd hit the wrong tile. Neither
+   title is wrong: one is what the thing is called inside the bank,
+   the other is what the case study is about. So both are on the page,
+   in that order, and the view transition now carries the card's title
+   into its own line before the essay title resolves underneath it. */
+.brief .sysname{
+  font-family:var(--font-display);font-weight:400;
+  font-size:clamp(24px,2.6vw,30px);line-height:1.1;letter-spacing:-.02em;
+  color:var(--text-muted);margin:0 0 var(--space-xs);
+}
 /* .claim is styled in eishiki-v3.css — it shares rung 02 with .d-lg,
    because a brief claim and a section headline do the same job. */
 
@@ -171,6 +184,13 @@
 <div class="cs-head brief" data-pos="The brief">
   <a class="arrow plain" href="../index.html"><span class="g">←</span> All work</a>
   <p class="kick">// Case study 01 · Design systems · Enterprise banking</p>
+  <!-- The transition name moved off .sysname and onto the h1, because the
+       card it morphs from now reads "The Art of Nothing" — anchoring the
+       morph to a string the grid no longer contains would have paired the
+       title with the wrong element. .sysname keeps its original job: the
+       internal name of the artifact, which is what a colleague would call
+       it, not what the essay calls it. -->
+  <p class="sysname">Null-state display rule · platform-wide</p>
   <h1 class="d-hero" style="view-transition-name:vt-no-value">The Art<br>of Nothing</h1>
   <p class="prose lead">In private wealth software, a blank field isn't nothing — it's a
     <button type="button" class="term" data-tip-label="Why it's a question" data-tip="A blank can mean &ldquo;nothing was entered,&rdquo; &ldquo;this doesn't apply,&rdquo; or &ldquo;the value is genuinely zero.&rdquo; The screen looks identical in all three cases — so the reader has to guess.">question</button>.

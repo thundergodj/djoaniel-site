@@ -143,14 +143,11 @@ a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
 
 /* PENDING CARDS — no destination yet, so they are not links.
    A card that looks clickable and goes nowhere is worse than one that
-   states its status. Same presence in the grid, no false affordance. */
-.card.pending{cursor:default}
-.card.pending .ct{color:var(--text-muted)}
-.status{
-  font-family:var(--font-mono);font-size:11px;font-weight:500;letter-spacing:.05em;
-  text-transform:uppercase;color:var(--text-muted);border:var(--hair);background:var(--paper);
-  padding:3px 7px;justify-self:start;
-}
+   states its status — but a card that states its status is still an IOU,
+   just a politer one. .card.pending and .status are deleted along with
+   the Sports Maximum tile they existed for. Six cards, six destinations,
+   nothing on the grid that asks the reader to come back later. About was
+   promoted into the vacated slot. */
 
 /* --- the teaser: a live fragment of the interface, rebuilt --- */
 .tz{position:relative;overflow:hidden;background:var(--paper);border-bottom:var(--hair);min-height:0}
@@ -231,34 +228,39 @@ a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
 .frame .phold{width:52%;aspect-ratio:4/3;border:var(--hair);
   background:repeating-linear-gradient(45deg,transparent 0 4px,rgba(9,9,9,.045) 4px 5px)}
 
-/* 04 · roster rows */
-.rost{font-family:var(--font-mono);font-size:clamp(12px,1.35vh,13px);display:grid;gap:0}
-.rost div{display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:var(--hair);color:var(--text-body)}
-.rost b{width:17px;color:var(--text-muted);font-weight:400}
-.rost .s{margin-left:auto;letter-spacing:.08em;text-transform:uppercase;font-size:.88em}
-.rost .s.ok{color:var(--data-ok)}
-.rost .s.wait{color:var(--text-muted)}
-.rost .add{color:var(--accent);border-bottom:0;padding-top:6px}
+/* 06 · the record, rendered as data.
+   Replaces the roster teaser (.rost), which died with the Sports Maximum
+   card. This is the thesis turned on its author: if the claim is that I
+   render dense live state so it reads in a moment, the résumé is the last
+   thing that should arrive as prose. Tabular mono, sentence case, ZERO
+   tracking — the data exception in the mono lock, because a mono column
+   is already a grid. */
+.rec{font-family:var(--font-mono);font-size:clamp(12px,1.35vh,13px);display:grid;gap:0;letter-spacing:0}
+.rec div{display:flex;align-items:baseline;gap:9px;padding:4px 0;border-bottom:var(--hair);color:var(--text-body)}
+.rec b{width:52px;flex:none;color:var(--text-muted);font-weight:400;
+  letter-spacing:.04em;text-transform:uppercase;font-size:.88em}
+.rec .n{margin-left:auto;flex:none;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.card:hover .rec div:first-child b{color:var(--accent)}
 
 /* 05 · sticky add-to-bag, caught in its error state.
    The one teaser that carries a second palette: the client's dusk
-   (#3E4E56) and error red are the subject of the case study, so the
+   (#3C4B54) and error red are the subject of the case study, so the
    fragment would be a lie in site colours. Quarantined to .atbz. */
-.atbz{border:var(--hair);background:var(--white);display:grid;gap:0;color:#3E4E56}
+.atbz{border:var(--hair);background:var(--white);display:grid;gap:0;color:#3C4B54}
 .atbz .p{display:flex;align-items:center;gap:8px;padding:7px 8px;border-bottom:var(--hair)}
-.atbz .th{width:26px;height:33px;flex:none;background:#BFE3ED;border:var(--hair)}
+.atbz .th{width:26px;height:33px;flex:none;background:#C2E0E8;border:var(--hair)}
 .atbz .nm{font-size:clamp(11px,1.4vh,13px);font-weight:600;line-height:1.25}
-.atbz .nm b{display:block;font-weight:600;color:#DA080B;font-size:.92em;margin-top:2px}
+.atbz .nm b{display:block;font-weight:600;color:#D01218;font-size:.92em;margin-top:2px}
 .atbz .o{display:flex;align-items:center;gap:7px;padding:6px 8px;border-bottom:var(--hair);
   font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
   font-weight:500;color:#8A8A84}
-.atbz .sw{width:17px;height:17px;background:#BFE3ED;border:1px solid #3E4E56;margin-left:auto}
+.atbz .sw{width:17px;height:17px;background:#C2E0E8;border:1px solid #3C4B54;margin-left:auto}
 .atbz .sz{margin-left:auto;min-width:26px;height:19px;display:grid;place-items:center;
-  border:1px solid #DA080B;color:#DA080B;font-size:11.5px}
-.atbz .cta{padding:8px;text-align:center;background:var(--white);color:#181D20;
-  border-top:1px solid #181D20;font-size:clamp(10.5px,1.3vh,12px);font-weight:700;
+  border:1px solid #D01218;color:#D01218;font-size:11.5px}
+.atbz .cta{padding:8px;text-align:center;background:var(--white);color:#1A2023;
+  border-top:1px solid #1A2023;font-size:clamp(10.5px,1.3vh,12px);font-weight:700;
   letter-spacing:.09em;text-transform:uppercase}
-.card:hover .atbz .cta{background:#181D20;color:var(--white)}
+.card:hover .atbz .cta{background:#1A2023;color:var(--white)}
 
 /* 02 · WCAG criteria readout, caught mid-failure.
    The honest awaiting-content frame (.await) that used to sit here is
@@ -369,6 +371,7 @@ a.card[href$="accessibility-lab.html"] .ct{view-transition-name:vt-access}
 a.card[href$="tessa.html"]             .ct{view-transition-name:vt-tessa}
 a.card[href$="sarisari-snaps.html"]    .ct{view-transition-name:vt-sarisari}
 a.card[href$="unhappy-path.html"]      .ct{view-transition-name:vt-unhappy}
+a.card[href$="about.html"]             .ct{view-transition-name:vt-about}
 </style>
 
 <!-- Link preview — what a recruiter sees when this URL is pasted -->
@@ -399,8 +402,10 @@ a.card[href$="unhappy-path.html"]      .ct{view-transition-name:vt-unhappy}
       <h1 class="wm">Djoaniel</h1>
       <p class="thesis">Sixteen years of <span class="mark">heads-up displays</span> for industries that never called them that.</p>
     </div>
+    <!-- About is a card now, so it is gone from here. One destination in two
+         places on a page that never scrolls is clutter, and the card carries
+         it at far greater presence than a 13px nav link ever did. -->
     <nav aria-label="Primary">
-      <a href="about.html">About</a>
       <a href="colophon.html">Colophon</a>
       <a href="mailto:djoaniel@gmail.com"><i class="ph ph-envelope-simple inl" aria-hidden="true"></i> djoaniel@gmail.com<span class="sr-only"> (opens your email app)</span></a>
     </nav>
@@ -441,9 +446,9 @@ a.card[href$="unhappy-path.html"]      .ct{view-transition-name:vt-unhappy}
         </div>
       </div>
       <div class="ft">
-        <span class="cat"><i></i>Accessibility · Enterprise banking</span>
+        <span class="cat"><i></i>Accessibility · Avaloq</span>
         <h2 class="ct">Break It Yourself</h2>
-        <p class="cd">The WCAG 2.2 AA audit template I built for a bank, wired to live controls so you can fail it on purpose.</p>
+        <p class="cd">A directive gives you a standard, never a method. I made the inspection sheet the design team audits with.</p>
       </div>
     </a>
 
@@ -464,30 +469,7 @@ a.card[href$="unhappy-path.html"]      .ct{view-transition-name:vt-unhappy}
       </div>
     </a>
 
-    <!-- 04 · aliased. "Rider" in the roster was the last identifying word
-         in this fragment; "Athlete" is true of the product and true of the
-         alias. -->
-    <div class="card pending">
-      <div class="tz">
-        <div class="in">
-          <div class="rost">
-            <div><b>01</b> Athlete — captain <span class="s ok">Confirmed</span></div>
-            <div><b>02</b> Athlete <span class="s ok">Confirmed</span></div>
-            <div><b>03</b> Athlete <span class="s wait">Awaiting</span></div>
-            <div><b>04</b> — <span class="s wait">Open slot</span></div>
-            <div class="add">+ Add athlete</div>
-          </div>
-        </div>
-      </div>
-      <div class="ft">
-        <span class="cat retail"><i></i>Retail · Campaign</span>
-        <h2 class="ct">Sports Maximum</h2>
-        <p class="cd">A team registration portal for a sports brand, and the token system built to outlive the campaign calendar.</p>
-        <span class="status">Case study in preparation</span>
-      </div>
-    </div>
-
-    <!-- 05 -->
+    <!-- 04 -->
     <a class="card" href="work/sarisari-snaps.html">
       <div class="tz">
         <div class="in">
@@ -501,7 +483,11 @@ a.card[href$="unhappy-path.html"]      .ct{view-transition-name:vt-unhappy}
         </div>
       </div>
       <div class="ft">
-        <span class="cat"><i></i>Commerce · VP, New Product Development</span>
+        <!-- The Jobs 1979 business-card title lives in about.html, with the
+             footnote that makes it a joke instead of a claim. On the grid,
+             unfootnoted, a stranger reads a self-appointed VP title at a
+             one-person business as inflation — the opposite of the intent. -->
+        <span class="cat"><i></i>Commerce · Founder, solo</span>
         <h2 class="ct">SariSari Snaps</h2>
         <p class="cd">Orders lived in Messenger threads. I built the configurator so the inbox stopped being the storefront.</p>
       </div>
@@ -520,9 +506,33 @@ a.card[href$="unhappy-path.html"]      .ct{view-transition-name:vt-unhappy}
         </div>
       </div>
       <div class="ft">
-        <span class="cat retail"><i></i>Retail · Commerce</span>
+        <span class="cat retail"><i></i>Retail · Component &amp; state library</span>
         <h2 class="ct">The Unhappy Path</h2>
         <p class="cd">Began as page comps for a US activewear retailer. Ended as the component and state library behind them.</p>
+      </div>
+    </a>
+
+    <!-- 06 · About, promoted from a nav link.
+         It earns a card because on a flat grid the reader decides who to
+         trust and what got made in the same glance, and a 13px nav link
+         loses that argument before it starts. The teaser is the résumé as
+         tabular data rather than prose — the site's own thesis applied to
+         its author. -->
+    <a class="card" href="about.html">
+      <div class="tz">
+        <div class="in">
+          <div class="rec">
+            <div><b>Now</b> Senior Product Designer, Avaloq <span class="n">2021→</span></div>
+            <div><b>Before</b> UX Associate Manager, Accenture <span class="n">2015–21</span></div>
+            <div><b>Cert</b> NN/g Certified UX Expert <span class="n">#1046866</span></div>
+            <div><b>Based</b> Quezon City <span class="n">30 days' notice</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ft">
+        <span class="cat"><i></i>Profile · Sixteen years in practice</span>
+        <h2 class="ct">About</h2>
+        <p class="cd">Sixteen years, four regulated industries, one discipline. The record, and what that seniority bought.</p>
       </div>
     </a>
 
