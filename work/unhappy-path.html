@@ -211,7 +211,10 @@
 /* ==================================================================
    MISC
    ================================================================== */
-.ledger{border-top:var(--border-hair)}
+/* the ledger carries running text, so it stays measured: key column + gap +
+   --prose, which lands the value column on the exact same width as a <p>. */
+.ledger{border-top:var(--border-hair);
+  max-width:calc(180px + var(--space-md) + var(--prose))}
 .ledger .r{display:grid;grid-template-columns:180px 1fr;gap:var(--space-md);padding:14px 0;
   border-bottom:var(--border-hair)}
 @media(max-width:700px){.ledger .r{grid-template-columns:1fr;gap:6px}}
@@ -238,7 +241,7 @@
 </header>
 
 <!-- ============================== HERO ============================== -->
-<div class="inner" style="padding-top:var(--space-4xl)">
+<div class="cs-head" style="padding-top:var(--space-4xl)">
   <a class="arrow plain" href="../index.html"><span class="g">&larr;</span> All work</a>
   <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 05 &middot; Retail commerce &middot; Design system</p>
   <h1 class="d-hero">The unhappy<br><span class="mark">path</span></h1>

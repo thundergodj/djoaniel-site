@@ -133,12 +133,25 @@
   --inner:1060px;
   --prose:714px;
   --gut:52px;
+
+  /* case-study rail + band.
+     The rail lives in the left margin now; it is no longer paid for out of
+     the content width. Body band = outer - 2*gut - rail - railgap = 1000px,
+     which is the width every specimen, demo and data grid gets by default.
+     Prose stays at --prose inside that band, so the measure token finally
+     binds instead of being silently overridden by a narrower column. */
+  --rail:220px;
+  --railgap:var(--space-3xl);
+  --csmax:var(--outer);  /* case-study container; drops to --inner once the rail is gone */
 }
 @keyframes ds-spark{0%{opacity:1;transform:translate(0,0) scale(1)}70%{opacity:.9}
   100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(.35)}}
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+/* overflow-x:clip, not hidden — clip does not create a scroll container, so
+   the sticky topbar and sticky .snav keep working. Guards .bleed against the
+   classic-scrollbar gap on Windows, where 100vw > the visible viewport. */
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
 body{margin:0;background:var(--surface-page);color:var(--text-body);
   font:var(--text-body-lg);text-rendering:optimizeLegibility}
 
@@ -251,9 +264,32 @@ a.plain,a.arrow{text-decoration:none}
 .inner{max-width:var(--inner);margin:0 auto;padding:0 var(--gut)}
 .sec{padding:var(--space-5xl) 0}
 
-/* case-study body: sticky index rail + content */
-.cs-grid{display:grid;grid-template-columns:220px 1fr;gap:var(--space-3xl);
-  max-width:var(--inner);margin:0 auto;padding:0 var(--gut)}
+/* case-study masthead: same container as .cs-grid, so the H1's left edge and
+   the rail's left edge sit on one line. Tracks --csmax through breakpoints. */
+.cs-head{max-width:var(--csmax);margin:0 auto;padding:0 var(--gut)}
+
+/* case-study body: sticky index rail + content band.
+   Container is --outer, matching .top .in and the case-study hero, so the
+   rail's left edge sits on the same optical line as the logo and the H1.
+   minmax(0,1fr) not 1fr: stops wide children (tables, code, overflow
+   scrollers) from blowing the track out past the container. */
+.cs-grid{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);
+  gap:var(--railgap);
+  max-width:var(--csmax);margin:0 auto;padding:0 var(--gut)}
+
+/* Everything in the band is full-band by default; only prose is measured.
+   That inversion is the whole point — a paragraph wants 714px, a four-up
+   product grid does not, and the old layout gave them both 684px. */
+.cs-grid > :not(.snav){min-width:0}
+
+/* ---- escape hatch: right-bleed to the viewport edge ----
+   Bleeds right only. The sticky rail occupies the left margin, so a
+   symmetric full-bleed would slide under it; bleeding right reads as the
+   specimen running off the page, which is the gesture we want anyway.
+   max() clamps to 0 below --outer, where it degrades to eating the gutter. */
+.bleed{margin-right:calc(-1 * (var(--gut) + max(0px,(100vw - var(--csmax))/2)))}
+.bleed-fade{-webkit-mask-image:linear-gradient(to right,#000 88%,transparent);
+  mask-image:linear-gradient(to right,#000 88%,transparent)}
 
 /* ---- sticky numbered section nav ---- */
 .snav{position:sticky;top:var(--space-xl);display:flex;flex-direction:column;gap:2px;
@@ -647,7 +683,10 @@ a.plain,a.arrow{text-decoration:none}
 }
 
 @media(max-width:1100px){
-  .cs-grid{grid-template-columns:1fr;gap:0}
+  /* rail gone: reclaim its width, but clamp the railless body to --inner so
+     the single column doesn't sprawl to full-viewport on a large tablet */
+  :root{--csmax:var(--inner)}
+  .cs-grid{grid-template-columns:minmax(0,1fr);gap:0}
   .snav{display:none}
   .demo .grid{grid-template-columns:repeat(2,1fr)}
 }
