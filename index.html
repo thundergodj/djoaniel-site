@@ -209,9 +209,20 @@ a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
    ============================================================ */
 
 /* 01 · null-value table */
-.tbl{font-family:var(--font-mono);font-size:clamp(12px,1.35vh,13px);width:100%;border-collapse:collapse}
+/* table-layout:fixed is load-bearing. The teaser tick swaps this cell
+   between '—' and '0.00', and :hover appends '· no value returned' —
+   under auto layout each of those recomputes the column widths, and the
+   left-aligned header slides with the moving column edge. Fixed layout
+   sizes columns from the widths below and ignores content entirely. */
+.tbl{font-family:var(--font-mono);font-size:clamp(12px,1.35vh,13px);width:100%;border-collapse:collapse;table-layout:fixed}
 .tbl th{font-weight:400;color:var(--text-muted);text-align:left;letter-spacing:.1em;
   text-transform:uppercase;font-size:.88em;padding:0 0 6px;border-bottom:var(--hair)}
+.tbl th:first-child{width:44%}
+/* The header must share the figures' right edge — that edge is the table's
+   and never moves. letter-spacing adds a trailing space after the final E,
+   so the empty ::after with negative margin claws it back for optical align. */
+.tbl th:last-child{width:56%;text-align:right}
+.tbl th:last-child::after{content:"";display:inline-block;margin-left:-.1em}
 .tbl td{padding:3.5px 0;border-bottom:var(--hair);color:var(--text-body)}
 .tbl td:last-child{text-align:right;font-variant-numeric:tabular-nums}
 .tbl .null td:last-child{color:var(--data-null);font-weight:600}
