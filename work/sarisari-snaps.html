@@ -45,12 +45,20 @@
   text-transform:uppercase;color:var(--text-primary)}
 .cfg .hd .r{margin-left:auto;font:var(--mono-caption);letter-spacing:var(--track-caption);
   text-transform:none;color:var(--text-muted);font-variant-numeric:tabular-nums}
-.cfg .bd{display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:var(--space-lg);
+/* The preview is a CLASS-03 OBJECT (see the width scale): it depicts one
+   physical frame. It used to be minmax(0,1fr), so at container width the
+   4/3 box computed to 1018 x 763 — an empty rectangle the size of a
+   window, which is what "doesn't need a builder" was pointing at. Now the
+   preview takes its own size and the panel takes the room it was eating.
+   The panel is the part that actually rewards width: it holds the step
+   controls, the price and the running order summary. */
+.cfg .bd{display:grid;grid-template-columns:minmax(0,1fr) 230px;
+  gap:var(--space-lg);
   padding:var(--space-lg) var(--space-md);align-items:start}
-@media(max-width:820px){.cfg .bd{grid-template-columns:1fr}}
+@media(max-width:820px){.cfg .bd{grid-template-columns:1fr;gap:var(--space-lg)}}
 
 /* the live preview — a frame with a photo well, nothing more */
-.cfg .prev{aspect-ratio:4/3;border:var(--border-hair);background:var(--white);
+.cfg .prev{aspect-ratio:4/3;max-height:340px;border:var(--border-hair);background:var(--white);
   display:grid;place-items:center;padding:22px;
   transition:background var(--dur-step,260ms) linear,border-color var(--dur-step,260ms) linear}
 .cfg .well{width:74%;aspect-ratio:1;display:grid;place-items:end center;padding-bottom:9px;
@@ -241,6 +249,7 @@
           <span class="ln"></span>
           <span class="live-note">Four steps &middot; no dead ends</span>
         </div>
+      <div class="pair">
       <div class="cfg" id="cfg">
         <p class="hd">Configurator · recreation <span class="r" id="cfgStep">Step 1 of 4</span></p>
         <div class="bd">
@@ -250,6 +259,14 @@
           <div class="panel" id="cfgPanel"></div>
         </div>
         <p class="rd" id="cfgRead"></p>
+      </div>
+        <div class="aside">
+          <span class="k">What to watch</span>
+          <p><b>The price is on screen before anything else.</b> Step one shows &#8369;349 next to the size, because "how much?" was the most-sent message in the inbox this flow replaced. Answering it first is the whole reason the flow works.</p>
+          <p><b>Every step is reversible and nothing is lost.</b> Go back and change the frame after typing your engraving — the text survives. A four-step path a customer can reverse is what makes it safe to start.</p>
+          <p><b>The engraving field validates as you type</b>, per line, against the space the physical frame actually has. The detail that used to arrive across a dozen messages and ship wrong is now structured at the point of entry.</p>
+          <p class="note">A recreation, rebuilt in this site's own type and palette. The live storefront is the real thing; this is the flow it runs.</p>
+        </div>
       </div>
       </div><!-- /live -->
       <p class="mono-note">A recreation, rebuilt in this site's own type and palette. The live storefront is the real thing; this is the flow it runs.</p>

@@ -164,12 +164,30 @@
    sit above the lab inside the same eyeful, so they come out of the total
    before the panes get theirs. 300 + 336 leaves the specimen ~600px, which
    is what a four-column banking table actually needs. */
+/* ------------------------------------------------------------------
+   ONE SCROLLBAR, NOT FOUR.
+   This grid used to be height-clamped to one viewport, on the principle
+   that a reader should see controls, specimen and verdict in a single
+   eyeful. The principle is right. The execution inverted it: ten
+   criteria, each with a name and an explanation, do not fit in 632px of
+   a 300px column — so the controls pane scrolled, and because the panes
+   were stretched to match, the specimen and the audit sheet scrolled
+   too. Three nested scroll regions inside a page that also scrolls, and
+   a reader who moves the wrong wheel loses their place in all of them.
+
+   Now the panes take their natural height and the PAGE scrolls once.
+   The specimen and the verdict sheet are sticky, so they stay on screen
+   while you work down the list of controls — which delivers what the
+   clamp was aiming at, without trapping anything.
+   ------------------------------------------------------------------ */
 .lab{display:grid;
-  grid-template-columns:300px minmax(0,1fr) 336px;
+  grid-template-columns:340px minmax(0,1fr) 336px;
   grid-template-areas:"ctl stg aud";
-  gap:var(--space-2xs);align-items:stretch;margin-top:var(--space-2xs);
-  height:clamp(500px,calc(100svh - 268px),780px)}
-.lab > *{min-height:0;min-width:0}
+  gap:var(--space-2xs);align-items:start;margin-top:var(--space-2xs)}
+.lab > *{min-width:0}
+/* the two panes you watch stay put; the one you operate scrolls the page */
+.a-stg,.a-aud{position:sticky;top:calc(var(--chrome-h) + var(--space-2xs));
+  max-height:calc(100svh - var(--chrome-h) - var(--space-lg))}
 .a-ctl{grid-area:ctl} .a-stg{grid-area:stg} .a-aud{grid-area:aud}
 
 /* ------------------------------------------------------------------
@@ -185,17 +203,13 @@
    ------------------------------------------------------------------ */
 /* two-up: the bench keeps its pairing, the sheet runs full width beneath */
 @container live (max-width:1180px){
-  .lab{grid-template-columns:282px minmax(0,1fr);
-    grid-template-areas:"ctl stg" "aud aud";
-    grid-template-rows:minmax(0,1fr) auto;
-    height:auto;max-height:none}
-  .a-ctl{max-height:640px}
-  .a-aud{max-height:520px}
+  .lab{grid-template-columns:300px minmax(0,1fr);
+    grid-template-areas:"ctl stg" "aud aud"}
+  .a-aud{position:static;max-height:none}
 }
 @container live (max-width:860px){
-  .lab{grid-template-columns:1fr;grid-template-areas:"stg" "ctl" "aud";
-    grid-template-rows:auto auto auto;gap:var(--space-2xs)}
-  .a-ctl,.a-aud{max-height:440px}
+  .lab{grid-template-columns:1fr;grid-template-areas:"stg" "ctl" "aud";gap:var(--space-2xs)}
+  .a-stg{position:sticky;top:var(--chrome-h);max-height:none}
 }
 /* Fallback for engines without container queries: fold on the window at
    the width where the band is guaranteed to be too narrow either way. */
@@ -226,6 +240,12 @@
 .box > .hd .r{margin-left:auto;font:var(--text-caption);letter-spacing:0.02em;
   color:var(--text-muted)}
 .box .bd{padding:var(--space-xs) 14px;flex:1;min-height:0}
+/* The controls pane is the one you operate, so it is the one that must
+   never trap a wheel. It takes its natural height and the page carries
+   it; only the two sticky panes keep an internal scroller, and only for
+   the case where a criterion list outruns a short viewport. */
+.a-ctl{overflow:visible}
+.a-ctl .scr{overflow-y:visible;border-bottom:0}
 
 /* Scroll containers get a thin gutter and a hairline foot that appears only
    while there is more below. The obvious move here is a gradient fade — and

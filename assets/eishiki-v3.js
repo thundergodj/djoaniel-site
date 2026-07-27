@@ -254,22 +254,32 @@
            once the path is in the document */
         var len = p.getTotalLength();
         p.style.strokeDasharray = len;
-        p.style.strokeDashoffset = REDUCED ? 0 : len;
+        /* Drawn at rest, not hidden. Holding every edge at full offset
+           meant the diagram showed seven unconnected dots until someone
+           guessed there was something to hover — and the claim being made
+           is a shape, which has to be legible before it is explorable. */
+        p.style.strokeDashoffset = 0;
         var s = document.createElement('div');
         s.className = 'sat'; s.id = coi.id + '-s' + i;
         s.style.left = x + 'px'; s.style.top = y + 'px';
+        /* the role's own name, so a satellite says what it is */
+        s.textContent = (b.querySelector('b') || {}).textContent || '';
+        /* keep labels inside the stage: past the centre, sit them left */
+        if (x > cx) { s.style.transform = 'translate(-100%,-50%)'; s.style.flexDirection = 'row-reverse'; }
         stage.appendChild(s);
       });
     }
     function activate(b, i) {
       btns.forEach(function (x) { x.classList.remove('active'); });
       b.classList.add('active');
-      coi.querySelectorAll('.edge,.sat').forEach(function (e) {
-        e.classList.remove('lit');
-        if (e.classList.contains('edge') && !REDUCED) e.style.strokeDashoffset = e.style.strokeDasharray;
-      });
+      coi.querySelectorAll('.edge,.sat').forEach(function (x) { x.classList.remove('lit'); });
       var e = document.getElementById(coi.id + '-e' + i), s = document.getElementById(coi.id + '-s' + i);
-      if (e) { void e.getBoundingClientRect(); e.classList.add('lit'); }
+      /* re-run the draw on the one being promoted: reset the offset, force
+         a reflow, then light it. The others stay drawn and faint. */
+      if (e) {
+        if (!REDUCED) { e.style.strokeDashoffset = e.style.strokeDasharray; void e.getBoundingClientRect(); }
+        e.classList.add('lit');
+      }
       if (s) s.classList.add('lit');
       if (desc) { desc.textContent = b.dataset.d; desc.classList.add('show'); }
     }

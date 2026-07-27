@@ -147,11 +147,45 @@
   --dur-count:780ms;
   --stagger-count:90ms;
 
-  /* measure */
+  /* ==================================================================
+     THE WIDTH SCALE — three classes, allocated by what the content IS.
+     ------------------------------------------------------------------
+     This replaces "everything gets the container." An in-browser audit
+     found that rule producing both failure modes at once: the SariSari
+     configurator rendering a 1018x763 empty picture frame, and the audit
+     bench squeezed until all three of its panes grew scrollbars. Same
+     stylesheet, opposite complaints — because width is not one problem.
+
+     01 · MEASURE  --prose 714px
+          Running prose. Never wider: past ~75 characters the eye loses
+          the line return. This is a reading limit, not a taste.
+
+     02 · BAND  the container, plus a right bleed
+          Content made of REPEATED CELLS — tables, card grids, state
+          explorers, filter rows, the audit bench. More width means more
+          columns visible at once, so these get strictly better as the
+          viewport grows. These are the only things that should bleed.
+
+     03 · OBJECT  --object 620px
+          Content that depicts ONE THING — a phone preview, a message
+          column, a product frame, a diagram stage. These have a true
+          size. Stretching them past it does not show more, it shows the
+          same thing bigger, and eventually absurd. Capped, and paired
+          with an .aside so the space beside them carries the reading.
+
+     The test when adding an instrument: does more width reveal more
+     content, or just inflate the same content? Cells bleed. Objects cap.
+     ================================================================== */
   --outer:1376px;
   --inner:1060px;
   --prose:714px;
+  --object:620px;
   --gut:52px;
+  /* Widest a bleeding band may ever get. Past this, a row of repeated
+     cells stops being scannable — the eye has to travel the full width to
+     pair a label on the left with its value on the right, and on a 2560
+     display that is a head turn. Width is a resource, not a target. */
+  --band-max:1400px;
 
   /* case-study rail + band.
      The rail lives in the left margin now; it is no longer paid for out of
@@ -299,7 +333,13 @@ a.plain,a.arrow{text-decoration:none}
    ================================================================== */
 .wide{max-width:var(--outer);margin:0 auto;padding:0 var(--gut)}
 .inner{max-width:var(--inner);margin:0 auto;padding:0 var(--gut)}
-.sec{padding:var(--space-5xl) 0}
+/* Padding on the TOP only. Every section used to pay --space-5xl at both
+   ends, so consecutive sections put 172px of nothing between a paragraph
+   and the rule that follows it — measured in-browser, and on a 3,000px
+   document that is most of a screen per boundary, spent on air. One
+   section's opening space is the previous one's closing space. */
+.sec{padding:var(--space-5xl) 0 0}
+.sec:last-child{padding-bottom:var(--space-5xl)}
 /* Every jump target clears the sticky top bar. The .crumb links land on
    sections, the hero status bar lands on a .live band, and the skip link
    lands on main — without this all three arrive underneath the chrome.
@@ -335,7 +375,10 @@ section[id],main[id],.live[id],.sec[id]{
    a left bleed would break the one left edge the whole site is aligned to,
    and that edge is doing more work than a symmetric gesture would buy.
    max() clamps to 0 below --outer, where it degrades to eating the gutter. */
-.bleed{margin-right:calc(-1 * (var(--gut) + max(0px,(100vw - var(--sbw,0px) - var(--csmax))/2)))}
+.bleed{margin-right:calc(-1 * min(
+    max(0px, (100vw - var(--sbw,0px) - var(--csmax))/2),
+    var(--band-max) - var(--csmax) + var(--gut)*2
+  ))}
 .bleed-fade{-webkit-mask-image:linear-gradient(to right,#000 88%,transparent);
   mask-image:linear-gradient(to right,#000 88%,transparent)}
 
@@ -441,8 +484,22 @@ section[id],main[id],.live[id],.sec[id]{
    scrollbar — so the band bled ~15px past the visible edge and html's
    overflow-x:clip silently ate the last characters of every right-aligned
    label in the band header. */
-.cs-body .live{
-  margin-right:calc(-1 * (var(--gut) + max(0px,(100vw - var(--sbw,0px) - var(--csmax))/2)))}
+/* THE BLEED, WITH A GUTTER AND A CEILING.
+   Two bugs this replaces, both visible on a wide window:
+   (1) the old value included var(--gut), which spent the container's own
+       right padding — so the band's right edge landed EXACTLY on the
+       viewport edge and every right-aligned label, and the primary
+       button, sat flush against the browser chrome. Measured: 0px.
+   (2) it was uncapped, so at 1920 the band ran ~1600px and at 2560 it
+       kept going. A row you cannot scan without turning your head is
+       not "more width", it is a worse layout.
+   Now: bleed by whatever room exists outside the container, but never
+   past --band-max, and always leave the gutter intact. */
+.cs-body .live,.cs-head .live{
+  margin-right:calc(-1 * min(
+    max(0px, (100vw - var(--sbw,0px) - var(--csmax))/2),
+    var(--band-max) - var(--csmax) + var(--gut)*2
+  ))}
 
 /* A PAIRED BAND DOES NOT BLEED. The bleed exists for instruments that
    need more width than the page column — the audit lab, the listing
@@ -450,7 +507,7 @@ section[id],main[id],.live[id],.sec[id]{
    it just moves the empty space further right and makes the aside column
    wider than the text it holds. Stopping at the container keeps the
    specimen, its reading, and the prose above all on one right edge. */
-.cs-body .live:has(.pair){margin-right:0}
+.cs-body .live:has(.pair),.cs-head .live:has(.pair){margin-right:0}
 /* anything in the band that is prose rather than instrument gets the inset */
 .live > .legend,.live > p{padding:0 0 var(--space-md)}
 /* The instrument is mounted on the bench, so it drops its own outer frame
@@ -475,8 +532,17 @@ section[id],main[id],.live[id],.sec[id]{
    Wide instruments (the audit lab, the listing page, the homepage) do
    not use this. They already fill the width honestly.
    ------------------------------------------------------------------ */
-.pair{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);
+.pair{display:grid;grid-template-columns:minmax(0,var(--object)) minmax(0,1fr);
   gap:var(--space-3xl);align-items:start}
+/* CLASS 03 · OBJECT. Anything depicting a single artifact is capped here
+   whether or not it has been paired yet, so a new instrument cannot
+   silently inflate to container width. The configurator preview was the
+   proof: a 4/3 box at container width computed to 763px tall and drew an
+   empty rectangle the size of a window. */
+/* .stage2 is deliberately NOT here. A circle of seven labelled satellites
+   is repeated cells, not one object — more width spreads the labels apart
+   instead of inflating a picture. It fills the band. */
+.cfg .prev,.chat,.slot{max-width:var(--object)}
 .live > .pair{padding:var(--space-lg) 0}
 .cs-body > main .pair,.cs-head > .pair{margin-top:var(--space-lg)}
 
@@ -750,24 +816,45 @@ section[id],main[id],.live[id],.sec[id]{
   color:var(--text-primary)}
 .chip small{font:var(--text-label);letter-spacing:0.04em;text-transform:uppercase;
   color:var(--text-muted);margin-top:3px}
-.stage2{position:relative;min-height:420px;border:var(--border-hair);
+/* ------------------------------------------------------------------
+   THE STAGE, LEGIBLE AT REST.
+   Audited in-browser: at rest this drew a blue box, seven unlabelled 9px
+   dots, and nothing joining them — because every edge was held at full
+   stroke-dashoffset until hovered. So an instrument occupying 420px of
+   height communicated nothing until the reader guessed there was
+   something to hover, and then showed one relationship at a time.
+
+   The whole claim of the section is "seven roles, one rule." That is a
+   SHAPE, and a shape has to be visible before it can be explored. Edges
+   now sit drawn and faint at rest, satellites carry their role name, and
+   hovering promotes one edge rather than revealing the first.
+   ------------------------------------------------------------------ */
+.stage2{position:relative;min-height:360px;border:var(--border-hair);
   background:var(--surface-card-16)}
 .stage2 svg.edges{position:absolute;inset:0;width:100%;height:100%}
 .edge{fill:none;stroke:var(--border-default);stroke-width:1;
   transition:stroke var(--dur-fast) linear,stroke-width var(--dur-fast) linear}
+/* drawn at rest so the shape reads before anyone interacts */
+.edge{stroke-dashoffset:0}
 /* Seven roles aligning is the story of that case, so the edge draws from
    the centre outward — alignment happening, not a diagram highlighted. */
 .edge.lit{stroke:var(--accent);stroke-width:1.6;
   animation:coi-draw var(--dur-draw) var(--ease-out) forwards}
 @keyframes coi-draw{to{stroke-dashoffset:0}}
-.sat{position:absolute;width:9px;height:9px;background:var(--text-faint);
-  transform:translate(-50%,-50%);transition:all var(--dur-fast) linear}
-.sat.lit{background:var(--accent);width:12px;height:12px;
+.sat{position:absolute;transform:translate(-50%,-50%);
+  display:flex;align-items:center;gap:6px;white-space:nowrap;
+  font:var(--mono-caption);letter-spacing:var(--track-caption);
+  text-transform:uppercase;color:var(--text-muted);
+  transition:color var(--dur-fast) linear}
+.sat::before{content:"";width:9px;height:9px;flex:none;background:var(--text-faint);
+  transition:all var(--dur-fast) linear}
+.sat.lit{color:var(--text-primary)}
+.sat.lit::before{background:var(--accent);width:12px;height:12px;
   animation:coi-pop var(--dur-draw) var(--ease-snap)}
+/* the pop lives on the dot now, not the .sat box — the box carries the
+   -50%,-50% centring and re-declaring it here would fight the label */
 @keyframes coi-pop{
-  0%{transform:translate(-50%,-50%) scale(1)}
-  55%{transform:translate(-50%,-50%) scale(var(--pop-sat))}
-  100%{transform:translate(-50%,-50%) scale(1)}
+  0%{transform:scale(1)} 55%{transform:scale(var(--pop-sat))} 100%{transform:scale(1)}
 }
 .hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   background:var(--accent);color:var(--text-inverse);font:var(--text-data-value);
