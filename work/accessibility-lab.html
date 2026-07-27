@@ -99,6 +99,16 @@
   .surf:not(.platform) .s{display:none}
 }
 
+@media(max-width:440px){
+  .benchhd{flex-wrap:wrap}
+  .benchhd .ln{display:none}
+  .benchhd .bs{flex:1 0 100%}
+  .surfaces{grid-template-columns:1fr}
+  .surf{min-width:0;border-right:0}
+  .tb-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}
+  .tb-scroll table.tb{min-width:340px}
+}
+
 /* ---- bench: the tab strip and the lab are one object ----
    Previously the strip lived in its own section, two headings and a screen
    away from the thing it controlled. Nothing about that told the reader the
@@ -427,7 +437,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
   letter-spacing:-.01em;color:var(--ui)}
 #spec .sp{flex:1}
 #spec .bd2{padding:var(--space-md) 15px}
-#spec h4{font-family:var(--ui-sans);font-weight:600;font-size:19px;line-height:1.25;
+#spec h3{font-family:var(--ui-sans);font-weight:600;font-size:19px;line-height:1.25;
   letter-spacing:-.01em;color:var(--tx);margin:0 0 4px;text-transform:none}
 #spec .cr{font-family:var(--ui-sans);font-size:12px;letter-spacing:0;text-transform:none;
   color:var(--tx);opacity:.65;margin:0 0 var(--space-sm)}
@@ -534,20 +544,20 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 </style>
 
 <!-- Link preview — what a recruiter sees when this URL is pasted -->
-<link rel="canonical" href="https://djoaniel.com/work/accessibility-lab">
+<link rel="canonical" href="https://www.djoaniel.com/work/accessibility-lab">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Djoaniel Hernandez">
-<meta property="og:url" content="https://djoaniel.com/work/accessibility-lab">
+<meta property="og:url" content="https://www.djoaniel.com/work/accessibility-lab">
 <meta property="og:title" content="Break It Yourself — ten criteria, yours to fail">
 <meta property="og:description" content="Five surfaces, ten criteria, one platform pass. The WCAG 2.2 AA inspection sheet I made for Avaloq's design team to audit with — wired to live controls so you can fail it on purpose.">
-<meta property="og:image" content="https://djoaniel.com/assets/og.png">
+<meta property="og:image" content="https://www.djoaniel.com/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Djoaniel Hernandez — enterprise HUD design">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Break It Yourself — ten criteria, yours to fail">
 <meta name="twitter:description" content="Five surfaces, ten criteria, one platform pass. The WCAG 2.2 AA inspection sheet I made for Avaloq's design team to audit with — wired to live controls so you can fail it on purpose.">
-<meta name="twitter:image" content="https://djoaniel.com/assets/og.png">
+<meta name="twitter:image" content="https://www.djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
 </head>
 <body>
@@ -567,7 +577,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
         <li><a href="#s04" data-t="What I cannot show you"><span class="n">04</span><span>What I cannot show you</span></a></li>
       </ul>
     </div>
-    <nav>
+    <nav aria-label="Primary">
       <a href="../index.html" aria-current="page">Work</a>
       <a href="../about.html">About</a>
       <a href="../colophon.html">Colophon</a>
@@ -690,7 +700,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
       <span class="ln"></span>
       <span class="live-note">Nothing here is a screenshot</span>
       <span class="btn"><span class="slab" aria-hidden="true"></span>
-        <button type="button" id="failfirst">Fail one for me →</button></span>
+        <button type="button" id="failfirst"><i class="ph ph-arrow-u-up-left" aria-hidden="true"></i><span data-label>Put it back</span></button></span>
     </div>
 
   <div class="bench">
@@ -739,11 +749,12 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
             <!-- ===== TABLES ===== -->
             <div data-view="tables">
               <p class="cr">Home › Trading</p>
-              <h4>Savings plan</h4>
+              <h3>Savings plan</h3>
               <div style="display:flex;gap:8px;margin:var(--space-sm) 0">
                 <button class="ab gh" type="button">Filter</button>
                 <button class="ab pri" type="button">New savings plan</button>
               </div>
+              <div class="tb-scroll">
               <table class="tb">
                 <thead><tr>
                   <th data-th="Instrument" scope="col">Instrument</th>
@@ -762,12 +773,13 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
                       <td><span class="ch cl"><i></i><span>Closed</span></span></td></tr>
                 </tbody>
               </table>
+              </div>
             </div>
 
             <!-- ===== FORMS ===== -->
             <div data-view="forms" hidden>
               <p class="cr">Home › Trading › New</p>
-              <h4>New savings plan</h4>
+              <h3>New savings plan</h3>
               <div class="fld" id="f-amt">
                 <label for="i-amt" data-lbl="Savings amount">Savings amount</label>
                 <input id="i-amt" type="text" value="50,000" aria-describedby="f-amt-h f-amt-e">
@@ -789,7 +801,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
             <!-- ===== STATUS ===== -->
             <div data-view="status" hidden>
               <p class="cr">Component · Status indicators</p>
-              <h4>Plan states</h4>
+              <h3>Plan states</h3>
               <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:var(--space-sm)">
                 <span class="ch ok"><i></i><span>Active</span></span>
                 <span class="ch wa"><i></i><span>Paused</span></span>
@@ -802,7 +814,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
             <!-- ===== TRANSACTIONS ===== -->
             <div data-view="txn" hidden>
               <p class="cr">Home › Payments</p>
-              <h4>Confirm payment</h4>
+              <h3>Confirm payment</h3>
               <div class="fld bad" id="t-iban">
                 <label for="i-iban" data-lbl="Beneficiary IBAN">Beneficiary IBAN</label>
                 <input id="i-iban" type="text" value="CH93 0076 2011 6238 5295 8" aria-describedby="t-iban-e">
@@ -892,7 +904,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 
   <p class="mono-note">The same rule governs every case on this site: the artifact is the evidence, the client keeps the outcome.</p>
 
-  <nav class="prevnext">
+  <nav class="prevnext" aria-label="Case study pagination">
     <a class="pn plain" href="no-value.html"><div class="k">← Previous case</div><div class="t">The Art of Nothing</div></a>
     <a class="pn next plain" href="tessa.html"><div class="k">Next case →</div><div class="t">TESSA</div></a>
   </nav>
@@ -1269,7 +1281,9 @@ if(ff) ff.addEventListener('click',function(){
   if(!tg){ return; }
   tg.click();
   var on=tg.getAttribute('aria-pressed')==='true';
-  ff.textContent=on?'Put it back ←':'Fail one for me →';
+  var icon=ff.querySelector('.ph'), label=ff.querySelector('[data-label]');
+  if(icon) icon.className=on?'ph ph-arrow-u-up-left':'ph ph-arrow-right';
+  if(label) label.textContent=on?'Put it back':'Fail one for me';
   var hit=rows.querySelector('.is-no,.b-no,[data-st="no"]');
   if(hit&&hit.scrollIntoView) hit.scrollIntoView({block:'nearest',behavior:'smooth'});
   tg.focus({preventScroll:true});

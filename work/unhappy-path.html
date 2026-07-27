@@ -309,6 +309,16 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 .hpg .cap{font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
   color:#9A9892}
 
+@media(max-width:440px){
+  .ticks{flex-wrap:wrap;row-gap:4px}
+  .ticks .tx{margin-left:auto}
+  #s04 .pair > *{min-width:0}
+  #s04 .hpg .three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #s04 .hpg .cardstrip{grid-template-columns:repeat(5,minmax(0,1fr))}
+  #s04 .hpg .band{min-width:0}
+  #s04 .hpg .ttl,#s04 .hpg .cta{overflow-wrap:anywhere}
+}
+
 /* POPULATED: brand-palette colour fields stand in for the campaign
    photography, which is the client's asset and is not reproduced. */
 .hpg.on .band{background:var(--b-stone)}
@@ -396,23 +406,24 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 </style>
 
 <!-- Link preview — what a recruiter sees when this URL is pasted -->
-<link rel="canonical" href="https://djoaniel.com/work/unhappy-path">
+<link rel="canonical" href="https://www.djoaniel.com/work/unhappy-path">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Djoaniel Hernandez">
-<meta property="og:url" content="https://djoaniel.com/work/unhappy-path">
+<meta property="og:url" content="https://www.djoaniel.com/work/unhappy-path">
 <meta property="og:title" content="The Unhappy Path — the component and state library behind the comps">
 <meta property="og:description" content="A US activewear retailer briefed six page templates. The states those pages could reach became the design system underneath them. Interactive recreations — drive the add-to-bag bar into failure yourself.">
-<meta property="og:image" content="https://djoaniel.com/assets/og.png">
+<meta property="og:image" content="https://www.djoaniel.com/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Djoaniel Hernandez — enterprise HUD design">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Unhappy Path — the component and state library behind the comps">
 <meta name="twitter:description" content="A US activewear retailer briefed six page templates. The states those pages could reach became the design system underneath them. Interactive recreations — drive the add-to-bag bar into failure yourself.">
-<meta name="twitter:image" content="https://djoaniel.com/assets/og.png">
+<meta name="twitter:image" content="https://www.djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
 </head>
 <body>
+<a class="skip" href="#main">Skip to content</a>
 
 <!-- ============================== CHROME ============================== -->
 <header class="top">
@@ -431,7 +442,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
         <li><a href="#s06" data-t="What I cannot show you"><span class="n">06</span><span>What I cannot show you</span></a></li>
       </ul>
     </div>
-    <nav>
+    <nav aria-label="Primary">
       <a href="../index.html" aria-current="page">Work</a>
       <a href="../about.html">About</a>
       <a href="../colophon.html">Colophon</a>
@@ -474,7 +485,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 <div class="cs-body" style="margin-top:var(--space-5xl)">
 
 
-  <main>
+  <main id="main">
 
     <!-- ===================== 01 ===================== -->
     <section class="sec" id="s01">
@@ -787,7 +798,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
       </div>
     </section>
 
-    <nav class="prevnext">
+    <nav class="prevnext" aria-label="Case study pagination">
       <a class="pn plain" href="sarisari-snaps.html"><div class="k">&larr; Previous case</div><div class="t">SariSari Snaps</div></a>
       <a class="pn next plain" href="no-value.html"><div class="k">Next case &rarr;</div><div class="t">The Art of Nothing</div></a>
     </nav>
