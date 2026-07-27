@@ -180,7 +180,28 @@
   --inner:1060px;
   --prose:714px;
   --object:620px;
+  /* A PAGE template is class 03 too — it depicts one thing — but its true
+     size is a page, not a handset. At --object the five-card rail computes
+     to 106px cards and the silhouette stops reading as a page. */
+  --object-lg:760px;
   --gut:52px;
+  /* ------------------------------------------------------------------
+     BAND RHYTHM. One inset and two vertical steps, declared once.
+     Before this, four rows stacked inside a single band carried four
+     different vertical paddings — 18 / 13 / 24 / 14 — each inherited
+     from whenever that instrument was written. Stacked, they read as
+     carelessness, because that is what they were.
+
+     Two steps, because a band has two kinds of row:
+       --band-row    a single line of mono label. 15px against a 16.25px
+                     line box gives a 46px row: enough to sit a caption
+                     between two hairlines without it looking trapped.
+       --band-block  a content area. 24px, matching --live-pad, so the
+                     inset is square on all four sides of a block.
+     ------------------------------------------------------------------ */
+  --live-pad:24px;
+  --band-row:15px;
+  --band-block:24px;
   /* Widest the page may ever get. Past this, a row of repeated cells
      stops being scannable — the eye has to travel the full width to pair
      a label on the left with its value on the right, and on a 2560
@@ -518,6 +539,27 @@ section[id],main[id],.live[id],.sec[id]{
    ------------------------------------------------------------------ */
 .pair{display:grid;grid-template-columns:minmax(0,var(--object)) minmax(0,1fr);
   gap:var(--space-3xl);align-items:start}
+/* .pair-wide — the same pairing, one size up, for a PAGE-sized object.
+   The homepage template is the only instrument that needs it: it was
+   already capped at 760 and argued for in its own stylesheet, but it was
+   never paired, so it sat at 59% of a 1296 band and stranded 536px of
+   white inside a bordered bench. Capped-and-unpaired is the worst of both
+   widths — an OBJECT wearing a BAND's frame. This is the column that
+   holds it; the aside takes the ~490 that was doing nothing, which is
+   still more than the 52ch its prose will use. */
+.pair-wide{grid-template-columns:minmax(0,var(--object-lg)) minmax(0,1fr)}
+/* THREE TIERS, because a fixed 760 column does not yield.
+   760 is a floor, not a preference: the aside gets whatever is left, and
+   at a 1100px window that was 144px — a column of prose one word wide,
+   which is worse than the void it replaced. So the wide column is only
+   claimed when there is room for a readable reading beside it. Measured:
+   the aside needs ~284px (what the standard pair leaves at its own
+   breakpoint), so 760 + 52 gap + 284 = a 1096 band = a 1320 window.
+   Below that it is just a pair; below 980 it stacks with everything else.
+   MUST stay above the 980 block — same specificity, later wins. */
+@media(max-width:1320px){
+  .pair-wide{grid-template-columns:minmax(0,var(--object)) minmax(0,1fr)}
+}
 /* CLASS 03 · OBJECT. Anything depicting a single artifact is capped here
    whether or not it has been paired yet, so a new instrument cannot
    silently inflate to container width. The configurator preview was the
@@ -530,14 +572,28 @@ section[id],main[id],.live[id],.sec[id]{
 .live > .pair{padding:var(--space-lg) 0}
 .cs-body > main .pair,.cs-head > .pair{margin-top:var(--space-lg)}
 
-.aside{display:flex;flex-direction:column;gap:var(--space-md);
-  border-left:0.667px solid var(--border-default);padding-left:var(--space-lg)}
-.aside .k{font:var(--mono-label);letter-spacing:var(--track-label);
-  text-transform:uppercase;color:var(--accent);margin-bottom:-6px}
-.aside p{margin:0;font-family:var(--font-sans);font-size:14px;line-height:1.55;
-  color:var(--text-body);max-width:52ch}
+/* ------------------------------------------------------------------
+   THE ASIDE — a reading column, so it is set like one.
+   The old version used a flat flex gap for every child and then fought
+   it with margin-bottom:-6px on the label to pull the heading back down.
+   A negative margin cancelling a gap is a rhythm that does not exist.
+
+   Now: the label sits close to the paragraph it introduces (it is a
+   heading, and headings belong to what follows), paragraphs are spaced
+   by their own margin at roughly one line of leading, and the closing
+   note is pushed further off because it changes voice. The rule on the
+   left gets --space-lg of air, matching the band's own inset, so the
+   column reads as set from the rule rather than crowded against it.
+   ------------------------------------------------------------------ */
+.aside{border-left:0.667px solid var(--border-default);
+  padding-left:var(--space-lg)}
+.aside .k{display:block;font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--accent);margin:0 0 var(--space-2xs)}
+.aside p{margin:0 0 var(--space-md);font-family:var(--font-sans);
+  font-size:14px;line-height:1.62;color:var(--text-body);max-width:52ch}
+.aside p:last-child{margin-bottom:0}
 .aside p b{color:var(--text-primary)}
-.aside .note{font:var(--mono-caption);letter-spacing:var(--track-caption);
+.aside .note{margin-top:var(--space-lg);font:var(--mono-caption);letter-spacing:var(--track-caption);
   color:var(--text-muted);line-height:1.5}
 
 @media(max-width:980px){
@@ -560,22 +616,38 @@ section[id],main[id],.live[id],.sec[id]{
    insets had nothing left to inset from. They just read as things
    failing to line up, which is exactly what they were.
 
-   Inside a band, an instrument's OUTER padding is zero. Its rows now
-   start where the band starts, which is where the H1 starts. Padding
-   between rows, and inside cells, is untouched — this only removes the
-   outer frame's inset, because the outer frame is gone.
+   The fix is ONE inset, declared once on the band and inherited by
+   everything in it, rather than zero. Zero was correct about alignment
+   and wrong about comfort: it put the LIVE chip, the first table label
+   and the slider hard against the band's edge, and pushed right-aligned
+   captions flush to the boundary where they read as clipped.
+
+   So: the band carries --live-pad on both sides, and every instrument's
+   own outer padding drops to zero. The rules top and bottom still span
+   the full width — borders sit outside padding — so the band still reads
+   as a bench with content set in from its edges. Padding BETWEEN rows and
+   INSIDE cells is untouched; this only removes each instrument's private
+   outer inset, which had nothing left to inset from once the band's own
+   borders went, and only ever showed up as things failing to line up.
    ------------------------------------------------------------------ */
+.live{padding-left:var(--live-pad);padding-right:var(--live-pad)}
+/* label rows — one line of mono between hairlines */
 .live > .demo > .bar,
-.live > .demo > .grid,
 .live > .spec > .hd,
-.live > .spec > .bd,
 .live > .cfg > .hd,
-.live > .cfg > .bd,
-.live > .cfg > .rd,
 .live > .spec > .readout,
+.live > .cfg > .rd{padding:var(--band-row) 0}
+/* content areas — square against the band's own inset */
+.live > .demo > .grid,
+.live > .spec > .bd,
+.live > .cfg > .bd{padding:var(--band-block) 0}
 .live > .legend{padding-left:0;padding-right:0}
-/* the .pair inset is deliberate — a paired instrument keeps its frame */
-.live > .pair > * {padding-left:revert;padding-right:revert}
+/* No guard needed for .pair: the zeroing rules above are direct-child
+   chains (.live > .cfg > .bd), and inside a pair the structure is
+   .live > .pair > .cfg > .bd, so they never match. An earlier attempt to
+   protect paired children with padding:revert was actively harmful —
+   revert discards the AUTHOR value, so it silently stripped the aside's
+   own padding-left and pushed its text against the rule. */
 
 /* header: the marker, the imperative, the rule, the aside. One row. */
 /* 5px of right padding, not 0: the primary control's offset slab sits
@@ -583,7 +655,7 @@ section[id],main[id],.live[id],.sec[id]{
    IS the clipped viewport edge — so a flush header sheared the shadow
    off the one button the band exists to point at. */
 .live-hd{display:flex;align-items:baseline;gap:var(--space-sm);
-  flex-wrap:wrap;padding:var(--space-md) 0;
+  flex-wrap:wrap;padding:var(--band-block) 0;
   border-bottom:var(--border-hair);margin-bottom:0}
 .live-mk{display:inline-flex;align-items:center;gap:7px;flex:none;
   background:var(--accent);color:var(--text-inverse);
@@ -644,7 +716,7 @@ section[id],main[id],.live[id],.sec[id]{
     padding:var(--space-sm) var(--space-md)}
 }
 @media(max-width:860px){
-  .live-hd{padding:var(--space-sm) 0}
+  .live-hd{padding:var(--band-row) 0}
   .live > .legend,.live > p{padding:0 0 var(--space-sm)}
   .live-hd .ln{display:none}
 }
@@ -772,10 +844,18 @@ section[id],main[id],.live[id],.sec[id]{
    FOUR STATES — interactive
    ================================================================== */
 .states{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-2xs)}
-.state{text-align:left;border:var(--border-hair);background:var(--surface-card-30);
-  padding:16px 15px;cursor:pointer;font:inherit;
-  transition:border-color var(--dur-fast) linear,background var(--dur-fast) linear}
-.state:hover,.state.on{border-color:var(--accent);background:var(--white)}
+.state{position:relative;text-align:left;border:var(--border-hair);
+  background:var(--surface-card-30);padding:16px 15px 16px 19px;cursor:pointer;font:inherit;
+  transition:border-color var(--dur-fast) linear,background var(--dur-fast) linear,
+             box-shadow var(--dur-fast) linear}
+/* Hover and selected were one rule, so pointing at a card looked exactly
+   like having chosen it — four tiles, any of which could be the live one.
+   Hover is now a darkening of the edge; selection is the accent slab, the
+   same 4px slab the primary button carries. Chosen outranks pointed-at. */
+.state:hover{border-color:var(--ink-700);background:var(--white)}
+.state.on{border-color:var(--accent);background:var(--white);
+  box-shadow:inset 4px 0 0 var(--accent)}
+.state.on .t{color:var(--text-primary)}
 /* The three parts are <span>s inside a <button>, so they need an explicit
    box. Without this they run inline — "01RESOLVED Colour and size both
    chosen." — and the margins on .t silently do nothing, because vertical
