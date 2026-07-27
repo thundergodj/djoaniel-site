@@ -13,6 +13,8 @@
   --ink:rgb(9,9,9);--body:rgb(62,62,58);--muted:rgb(102,102,96);--faint:rgb(150,149,143);
   --line:rgb(214,213,208);--paper:rgb(247,246,242);--white:rgb(255,255,255);
   --accent:rgb(11,63,255);--null:rgb(169,46,38);--ok:oklch(0.56 0.05 155);
+  --operator-orange:rgb(243,142,32);--state-operator:var(--operator-orange);
+  --state-operator-rgb:243,142,32;--data-null:var(--null);--data-ok:var(--ok);
   --serif:"Instrument Serif",Georgia,serif;
   --sans:"Radio Canada",system-ui,sans-serif;
   --mono:"IBM Plex Mono",monospace;
@@ -76,6 +78,9 @@ td code{font-family:var(--mono);font-size:11.5px;color:var(--accent)}
 @media (max-width:720px){.cmp{grid-template-columns:1fr}.cmp>div:first-child{border-right:0;border-bottom:var(--hair)}
   .rung{grid-template-columns:58px 1fr;}.rung .vd{grid-column:1/-1;text-align:left}}
 </style>
+<!-- Localhost-only accent comparison -->
+<link rel="stylesheet" href="assets/local-debug.css">
+<script defer src="assets/local-debug.js"></script>
 </head>
 <body>
 <div class="w">

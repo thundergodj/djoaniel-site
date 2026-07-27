@@ -107,6 +107,9 @@
 <meta name="twitter:description" content="Turning Messenger DMs into a self-serve ritual — a four-step configurator and the Lucy design system for a Philippine home studio selling custom magnetic photo frames.">
 <meta name="twitter:image" content="https://www.djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
+<!-- Localhost-only accent comparison -->
+<link rel="stylesheet" href="../assets/local-debug.css">
+<script defer src="../assets/local-debug.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -117,7 +120,7 @@
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
     <div class="crumb">
       <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
-        <span class="n">01 / 07</span><span class="t">The situation</span><i class="ph ph-caret-down icon-action cv" aria-hidden="true"></i>
+        <span class="n">01 / 07</span><span class="t">The situation</span><i class="ph ph-caret-down icon-header cv" aria-hidden="true"></i>
       </button>
       <ul class="crumb-l" id="crumb-l" hidden>
         <li><a href="#s01" data-t="The situation"><span class="n">01</span><span>The situation</span></a></li>
@@ -142,7 +145,7 @@
   <a class="arrow plain" href="../index.html"><i class="ph ph-arrow-left icon-action g" aria-hidden="true"></i> All work</a>
   <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 04 · E-commerce · Design system</p>
   <h1 class="d-hero" style="view-transition-name:vt-sarisari">Turning DMs into<br>a <span class="mark">self-serve ritual</span></h1>
-  <p class="prose lead">SariSari Snaps sells custom magnetic photo frames out of a home studio in the Philippines. Orders lived in Messenger threads — names misspelled, prices re-explained fifty times a week. I designed a four-step configurator and the design system behind it, so a customer could build, personalize, and confirm a keepsake in under two minutes, on their own.</p>
+  <p class="prose lead">SariSari Snaps sells custom magnetic photo frames from a home studio in the Philippines. Orders lived in Messenger threads, where names and details got lost and prices were re-explained all week. I built a four-step configurator and its design system so customers could personalise and confirm a keepsake in under two minutes — without the owner online.</p>
 
   <div class="hero-live">
     <span class="live-mk">Live</span>
@@ -170,7 +173,7 @@
       <div class="srule"><span class="eb">01 · The situation</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">A micro-business drowning in <span class="mark">its own success.</span></h2>
       <p class="prose">"The Celebrant" ran SariSari Snaps the way a lot of Filipino home businesses run: entirely through Facebook Messenger. A customer would send a photo, ask the price, get talked through the options, send four more photos, change their mind on the colour, and — somewhere in that thread — the engraving text would get lost. Every order was a manual conversation, and the busier the shop got, the more orders slipped.</p>
-      <p class="prose">The product itself is lovely: a matte magnetic frame that holds four photos, personalized with a name or short message, engraved free. The problem was never demand. It was that <b>the ordering experience didn't match the care of the product</b> — and it didn't scale past the owner's own thumbs.</p>
+      <p class="prose">The product itself is lovely: a matte magnetic frame that holds four photos, personalised with a name or short message, engraved free. The problem was never demand. It was that <b>the ordering experience didn't match the care of the product</b> — and it didn't scale past the owner's own thumbs.</p>
 
       <div class="cards3" style="margin-top:var(--space-lg)">
         <div class="cardx"><div class="n">Friction 01</div><div class="t">No price clarity</div><div class="d">"How much?" was the most-sent message. Pricing lived in the owner's head, re-typed all day.</div></div>
@@ -234,7 +237,7 @@
     <section class="sec" id="s04">
       <div class="srule"><span class="eb">04 · The flow</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">Four steps, <span class="mark">no dead ends.</span></h2>
-      <p class="prose">The whole Messenger conversation compresses into a locked four-step path. Each step does exactly one job, shows progress, and lets you go back without losing anything. Personalization — the thing that used to get lost in the thread — gets its own dedicated step, with live character limits so nothing ships too long to fit.</p>
+      <p class="prose">The whole Messenger conversation compresses into a locked four-step path. Each step does exactly one job, shows progress, and lets you go back without losing anything. Personalisation — the thing that used to get lost in the thread — gets its own dedicated step, with live character limits so nothing ships too long to fit.</p>
 
       <div class="steps" data-cfg role="tablist" aria-label="Configurator steps" style="margin-top:var(--space-lg)">
         <button type="button" class="step" role="tab" data-step="0" aria-selected="true" data-done="0"><div class="n">1</div><div class="t">Choose frame</div><div class="d">Pick the SKU. Price is visible up front — the question that used to fill the inbox is answered before it's asked.</div></button>
@@ -280,7 +283,7 @@
 
       <p class="prose"><b>The button that stamps.</b> The primary CTA is Honey fill on Ink text — a 9.5:1 contrast ratio, so it's both the loudest thing on screen and fully accessible. Its signature is a hard 6px offset shadow with no blur: Ink at rest, Selection Magenta on hover, and on press the offset collapses to zero so the button physically stamps down like a rubber stamp. A tiny piece of tactility that makes committing to an order feel good.</p>
 
-      <p class="prose"><b>Naming the field "Your text."</b> "Inscription" and "Engraving" tested as intimidating — they made people feel they needed something profound. "Your text" gave permission to be casual, and casual is exactly the tone that gets orders finished. The label is a UX decision, not a copy afterthought.</p>
+      <p class="prose"><b>Naming the field "Your text."</b> "Inscription" and "Engraving" read as intimidating — they made people feel they needed something profound. "Your text" gave permission to be casual, and casual is exactly the tone that gets orders finished. The label is a UX decision, not a copy afterthought.</p>
 
       <p class="prose"><b>Voice, all the way into the errors.</b> Most design systems let the brand voice evaporate at the system messages. Here it's the opposite — the errors are where the warmth matters most, because that's where people feel stupid.</p>
 
@@ -313,6 +316,38 @@
         <div class="stat"><span class="v">24/7</span><div class="r"></div><span class="l">Orders accepted without the owner online</span></div>
       </div>
       <p class="mono-note">Directional outcomes framed from the design goals of a personal project, not audited business metrics.</p>
+    </section>
+
+    <!-- ===================== SYSTEM OF INFLUENCE ===================== -->
+    <section class="sec influence-sec" aria-labelledby="influence-sarisari-title">
+      <div class="srule"><span class="eb">System of influence</span><span class="ln"></span><span class="tag">Interactive</span><span class="sq"></span></div>
+      <h2 class="d-lg" id="influence-sarisari-title">Solo build. <span class="mark">Not solo inputs.</span></h2>
+      <p class="prose">I designed and built this end to end, but the system still had an orbit: the owner’s operation, customer questions, Messenger’s failure pattern, mobile constraints and the GCash handoff all shaped the configurator.</p>
+
+      <div class="influence-map" data-influence aria-label="What shaped the SariSari Snaps configurator">
+        <div class="influence-stage">
+          <svg class="influence-edges" aria-hidden="true"></svg>
+          <div class="influence-hub">
+            <span class="k">Shared artifact</span>
+            <strong>Self-serve configurator</strong>
+            <small>My role · End-to-end lead</small>
+          </div>
+          <div class="influence-nodes">
+            <button type="button" class="influence-node" aria-pressed="true" data-kind="People" data-facet="Operational reality" data-copy="Revealed the real bottleneck: every order depended on one person reconstructing a Messenger thread.">Shop Owner</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="People" data-facet="Self-serve clarity" data-copy="Needed pricing, colour, engraving and confirmation to be understandable without a live reply.">Customers</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Evidence" data-facet="Broken baseline" data-copy="Supplied the failure pattern: scattered details, repeated prices and decisions buried in chat.">Messenger</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="System" data-facet="Interaction model" data-copy="Compressed the conversation into a path that remained reversible without losing order data.">Four-step Flow</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="System" data-facet="Visual structure" data-copy="Carried the brand while keeping the transaction itself calm and predictable.">Lucy System</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Constraint" data-facet="Primary platform" data-copy="Made small-screen speed and thumb-level clarity the default rather than a later adaptation.">Mobile Web</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Delivery" data-facet="Checkout handoff" data-copy="Closed the self-serve flow with payment behavior already familiar to the audience.">GCash</button>
+          </div>
+        </div>
+        <div class="influence-detail" aria-live="polite">
+          <div class="influence-detail-key"><span class="influence-kind">People</span><strong class="influence-title">Shop Owner · Operational reality</strong></div>
+          <p class="influence-copy">Revealed the real bottleneck: every order depended on one person reconstructing a Messenger thread.</p>
+        </div>
+      </div>
+      <p class="mono-note">Seven inputs, one self-serve flow. Solo ownership does not mean context-free design.</p>
     </section>
 
     <!-- ===================== 07 ===================== -->

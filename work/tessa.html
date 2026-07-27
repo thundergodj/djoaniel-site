@@ -14,7 +14,7 @@
   gtag('config', 'G-8897FSV2XF');
 </script>
 
-<meta name="description" content="How TESSA translated ordinary life into résumé-ready skills for young Filipino jobseekers—plus the validation loop that failed.">
+<meta name="description" content="How TESSA translated ordinary life into résumé-ready skills for young Filipino jobseekers — plus the validation loop that failed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -28,16 +28,19 @@
 <meta property="og:site_name" content="Djoaniel Hernandez">
 <meta property="og:url" content="https://www.djoaniel.com/work/tessa">
 <meta property="og:title" content="TESSA — they had the skills. Nobody had given them the words.">
-<meta property="og:description" content="A Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. The questionnaire never asks &quot;what are your skills.&quot; Conversation design case study by Djoaniel Hernandez.">
+<meta property="og:description" content="A Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. The questionnaire never asks &quot;What are your skills?&quot; Conversation design case study by Djoaniel Hernandez.">
 <meta property="og:image" content="https://www.djoaniel.com/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Djoaniel Hernandez — enterprise HUD design">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="TESSA — they had the skills. Nobody had given them the words.">
-<meta name="twitter:description" content="A Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. The questionnaire never asks &quot;what are your skills.&quot;">
+<meta name="twitter:description" content="A Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. The questionnaire never asks &quot;What are your skills?&quot;">
 <meta name="twitter:image" content="https://www.djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
+<!-- Localhost-only accent comparison -->
+<link rel="stylesheet" href="../assets/local-debug.css">
+<script defer src="../assets/local-debug.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -48,7 +51,7 @@
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
     <div class="crumb">
       <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
-        <span class="n">01 / 06</span><span class="t">The barrier</span><i class="ph ph-caret-down icon-action cv" aria-hidden="true"></i>
+        <span class="n">01 / 06</span><span class="t">The barrier</span><i class="ph ph-caret-down icon-header cv" aria-hidden="true"></i>
       </button>
       <ul class="crumb-l" id="crumb-l" hidden>
         <li><a href="#s01" data-t="The barrier"><span class="n">01</span><span>The barrier</span></a></li>
@@ -71,10 +74,10 @@
 <div class="cs-head" style="padding-top:var(--space-4xl)">
   <a class="arrow plain" href="../index.html"><i class="ph ph-arrow-left icon-action g" aria-hidden="true"></i> All work</a>
   <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 03 · Conversation design · Social impact</p>
-  <h1 class="d-hero" style="view-transition-name:vt-tessa">They had the skills.<br>Nobody had given them<br>the <span class="mark">words.</span></h1>
-  <p class="prose lead">TESSA — the Training &amp; Employment Support Services Assistant — is a Facebook Messenger career coach built by Accenture for Plan International Philippines. It takes the way a young Filipino jobseeker describes their own ordinary life and hands back
-    <button type="button" class="term" data-tip-label="Résumé vocabulary" data-tip="Hiring runs on a controlled vocabulary &mdash; a small set of nouns like &ldquo;stakeholder management&rdquo; or &ldquo;prioritisation.&rdquo; Not knowing those nouns reads to a recruiter as not having the skills.">the vocabulary hiring actually prices</button>.
-    I designed the conversational engine, and the portable skills module at the centre of it.</p>
+  <h1 class="d-hero" style="view-transition-name:vt-tessa">They had the skills.<br>Nobody gave them<br>the <span class="mark">words.</span></h1>
+  <p class="prose lead">TESSA is a Facebook Messenger career coach built by Accenture for Plan International Philippines. It translates the way a young Filipino jobseeker describes ordinary life into
+    <button type="button" class="term" data-tip-label="Résumé vocabulary" data-tip="Hiring runs on a controlled vocabulary &mdash; a small set of nouns like &ldquo;stakeholder management&rdquo; or &ldquo;prioritisation.&rdquo; Not knowing those nouns reads to a recruiter as not having the skills.">vocabulary employers recognise</button>.
+    I designed the conversational engine and the portable skills module at its centre.</p>
 
   <div class="hero-live">
     <span class="live-mk">Live</span>
@@ -101,22 +104,22 @@
     <section class="sec" id="s01">
       <div class="srule"><span class="eb">01 · The barrier</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">The barrier wasn't jobs.<br>It was <span class="mark">vocabulary.</span></h2>
-      <p class="prose">Every job platform opens with a version of the same question: <i>what are your skills?</i> For a first-generation jobseeker that question is unanswerable — not because the skills are missing, but because nobody ever taught them the nouns their skills are filed under. They have run a sari-sari store's stock. They have talked a price down at the palengke. They have been the one the family asks for advice. None of it arrives with a label attached.</p>
+      <p class="prose">Every job platform opens with a version of the same question: <i>What are your skills?</i> For a young jobseeker navigating formal hiring for the first time, that question is unanswerable — not because the skills are missing, but because nobody ever taught them the nouns their skills are filed under. They have run a sari-sari store's stock. They have talked a price down at the palengke. They have been the one the family asks for advice. None of it arrives with a label attached.</p>
       <p class="prose">So the résumé comes back blank, and the blankness gets read as <b>having nothing to offer</b>. The gap wasn't listings. It was somewhere to ask <i>"what am I even qualified for?"</i> without embarrassment.</p>
 
       <div class="cards3" style="margin-top:var(--space-lg)">
-        <div class="cardx"><div class="n">Barrier 01</div><div class="t">No coach, no map</div><div class="d">Career counselling barely exists for this audience. First-generation jobseekers navigate hiring blind, and usually get one attempt at it.</div></div>
+        <div class="cardx"><div class="n">Barrier 01</div><div class="t">No coach, no map</div><div class="d">Career counselling barely exists for this audience. Young jobseekers entering formal hiring navigate it blind, and usually get one attempt.</div></div>
         <div class="cardx"><div class="n">Barrier 02</div><div class="t">Portals assume readiness</div><div class="d">Forms, filters and CV uploads presume a user who already knows how hiring works — and quietly reject the ones who don't.</div></div>
         <div class="cardx"><div class="n">Barrier 03</div><div class="t">A new app is a cost</div><div class="d">Mobile data is expensive and trust is scarce. Asking this audience to install something new is asking them to leave.</div></div>
       </div>
 
-      <p class="prose">Messenger answered the third barrier almost by itself — already installed, already trusted, free-rated on most Philippine mobile plans. The channel was the easy part. The interesting problem was what had to happen inside it.</p>
+      <p class="prose">In 2018, Messenger answered the third barrier almost by itself — already installed, already trusted, and often free-rated on Philippine mobile plans. The channel was the easy part. The interesting problem was what had to happen inside it.</p>
     </section>
 
     <!-- ===================== 02 ===================== -->
     <section class="sec" id="s02">
       <div class="srule"><span class="eb">02 · Before the first question</span><span class="ln"></span><span class="sq"></span></div>
-      <h2 class="d-lg">Trust gets built <span class="mark">before any data is asked for.</span></h2>
+      <h2 class="d-lg">Trust comes <span class="mark">before the first data request.</span></h2>
 
       <p class="prose">End to end, the conversation does four things in order. Each stage has to earn the next one.</p>
 
@@ -163,7 +166,7 @@
     <!-- ===================== 03 ===================== -->
     <section class="sec" id="s03">
       <div class="srule"><span class="eb">03 · The translation engine</span><span class="ln"></span><span class="sq"></span></div>
-      <h2 class="d-lg">The questionnaire never asks <span class="mark">"what are your skills."</span></h2>
+      <h2 class="d-lg">The questionnaire never asks <span class="mark">&ldquo;What are your skills?&rdquo;</span></h2>
       <p class="prose">It asks which of three ordinary sentences sounds most like you. The sentences are deliberately domestic and unglamorous — haggling at the market, being the one people come to for advice, keeping a list and actually following it. Nothing in them sounds like a résumé. That is the point: <b>they're answerable.</b></p>
 
       <div class="live" id="chat-live">
@@ -278,7 +281,7 @@
     <!-- ===================== 05 ===================== -->
     <section class="sec" id="s05">
       <div class="srule"><span class="eb">05 · What I'd change</span><span class="ln"></span><span class="sq"></span></div>
-      <h2 class="d-lg">The phone number field asked <span class="mark">three times.</span></h2>
+      <h2 class="d-lg">The bot asked for the same phone number <span class="mark">three times.</span></h2>
       <p class="prose">Here is the flow failing, in my own test conversation. The prompt wants an international format. My first two attempts didn't match it. The bot re-sent the identical message, twice, without ever saying what was wrong — and the repetition is the part a static screenshot can't convey.</p>
 
       <div class="live" id="loop-live">
@@ -322,11 +325,43 @@
       </div>
     </section>
 
+    <!-- ===================== SYSTEM OF INFLUENCE ===================== -->
+    <section class="sec influence-sec" aria-labelledby="influence-tessa-title">
+      <div class="srule"><span class="eb">System of influence</span><span class="ln"></span><span class="tag">Interactive</span><span class="sq"></span></div>
+      <h2 class="d-lg" id="influence-tessa-title">The conversation was a <span class="mark">translation system,</span> not a script.</h2>
+      <p class="prose">The portable skills module sat between lived language and the vocabulary hiring recognises. Client purpose, delivery context, platform limits, trust and the résumé handoff all shaped what the conversation was allowed to do.</p>
+
+      <div class="influence-map" data-influence aria-label="What shaped the TESSA portable skills module">
+        <div class="influence-stage">
+          <svg class="influence-edges" aria-hidden="true"></svg>
+          <div class="influence-hub">
+            <span class="k">Shared artifact</span>
+            <strong>Portable skills module</strong>
+            <small>My role · Dialogue architect</small>
+          </div>
+          <div class="influence-nodes">
+            <button type="button" class="influence-node" aria-pressed="true" data-kind="People" data-facet="Lived language" data-copy="Ordinary experiences became the input; users were never asked to supply professional vocabulary first.">Young Jobseekers</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="People" data-facet="Client mission" data-copy="Set the social-impact purpose and the audience the service had to respect.">Plan International PH</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="People" data-facet="Delivery context" data-copy="Provided the programme and implementation setting in which the service was built.">Accenture</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Platform" data-facet="Low-friction access" data-copy="Kept the experience available without a separate install and shaped every conversational constraint.">Messenger</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="System" data-facet="Translation model" data-copy="Converted recognisable life situations into language that employers and résumés understand.">Hiring Vocabulary</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Rule" data-facet="Conversation principle" data-copy="Made permission, skipping and reassurance part of the architecture before personal data was requested.">Trust and Consent</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Delivery" data-facet="Portable outcome" data-copy="Ended the conversation with an artifact the jobseeker could keep and use elsewhere.">Résumé Handoff</button>
+          </div>
+        </div>
+        <div class="influence-detail" aria-live="polite">
+          <div class="influence-detail-key"><span class="influence-kind">People</span><strong class="influence-title">Young Jobseekers · Lived language</strong></div>
+          <p class="influence-copy">Ordinary experiences became the input; users were never asked to supply professional vocabulary first.</p>
+        </div>
+      </div>
+      <p class="mono-note">Seven forces, one portable module. The architecture is where the translation holds.</p>
+    </section>
+
     <!-- ===================== 06 ===================== -->
     <section class="sec" id="s06">
       <div class="srule"><span class="eb">06 · What I cannot show you</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">The outcome data isn't <span class="mark">mine to publish.</span></h2>
-      <p class="prose">Conversation volumes, beneficiary counts, employment results — that belongs to Plan International, and releasing it isn't a decision I get to make. So there are no numbers on this page. What I can point to is that I was invited to teach the work, which leaks nothing and happened in public.</p>
+      <p class="prose">Conversation volumes, beneficiary counts, employment results — that belongs to Plan International, and releasing it isn't a decision I get to make. So there are no numbers on this page. The public evidence I can offer is that I was invited to teach the work.</p>
 
       <div class="marks" style="margin-top:var(--space-xl)">
         <span>Feb 2019 · <a href="https://mini.formfunctionclass.com/history">MiniFFC #53 · with DevCon</a></span>
@@ -334,9 +369,9 @@
         <span>Accenture Liquid Studio, Taguig</span>
       </div>
 
-      <p class="prose" style="margin-top:var(--space-xl)">One piece of housekeeping, because the internet is inconsistent about it: TESSA was showcased during <b>WEF Davos in January 2018, while still in pilot</b>. It wasn't a session, and it wasn't a results announcement. Plan International Philippines has published one testimonial video from a user who found work. That is the whole of the public record, and I'd rather state its size than let it be inferred as larger.</p>
+      <p class="prose" style="margin-top:var(--space-xl)">One clarification, because the public record is inconsistent: TESSA was showcased during <b>WEF Davos in January 2018, while still in pilot</b>. It was not a session or a results announcement. Plan International Philippines has published one testimonial video from a user who found work. That is the full public record; I would rather state its limits than let it look larger.</p>
 
-      <p class="prose">The timestamps in this conversation run from September 2018 to February 2019, which is honest in a different way: this is legacy work. The engine reasoning is the part that aged well.</p>
+      <p class="prose">The conversation shown here runs from September 2018 to February 2019. This is legacy work; the engine reasoning is what aged well.</p>
 
       <blockquote class="pq" style="margin-top:var(--space-2xl)">
         <q>The model generating the words matters less than the architecture deciding where the conversation is allowed to go.</q>

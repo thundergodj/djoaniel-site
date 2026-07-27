@@ -35,6 +35,14 @@
   --paper:rgb(247,246,242);
   --white:rgb(255,255,255);
   --accent:rgb(11,63,255);
+  --accent-rgb:11,63,255;
+  --operator-orange:rgb(243,142,32);
+  --operator-orange-rgb:243,142,32;
+  --operator-orange-ink:rgb(134,64,0);
+  --state-operator:var(--operator-orange);
+  --state-operator-rgb:var(--operator-orange-rgb);
+  --state-operator-ink:var(--operator-orange-ink);
+  --state-operator-on:var(--ink-900);
   --data-null:rgb(169,46,38);
   --data-ok:oklch(0.56 0.05 155);
   --icon-action-size:26px;
@@ -107,7 +115,7 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap
    one card, every nine seconds. The cell flashes; the digit does not fade. */
 .tick-flash{animation:cellflash var(--dur-flash,220ms) linear}
 @keyframes cellflash{
-  0%{background:rgba(11,63,255,.135)}
+  0%{background:rgba(var(--state-operator-rgb),.16)}
   100%{background:transparent}
 }
 /* Was clamp(17px,…) — which put Instrument Serif at 19px on a 768px
@@ -117,7 +125,7 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap
   line-height:1.22;letter-spacing:-.012em;margin:0;max-width:34ch;color:var(--text-primary);
 }
 .mark{
-  background-image:linear-gradient(transparent 60%,rgba(11,63,255,.19) 60%,rgba(11,63,255,.19) 93%,transparent 93%);
+  background-image:linear-gradient(transparent 60%,rgba(var(--accent-rgb),.19) 60%,rgba(var(--accent-rgb),.19) 93%,transparent 93%);
   background-repeat:no-repeat;background-size:0 100%;
   animation:stroke .6s var(--ease) .3s forwards;
 }
@@ -127,7 +135,8 @@ nav a{
   font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
   color:var(--text-muted);text-decoration:none;transition:color .16s var(--ease);
 }
-nav a:hover,nav a:focus-visible{color:var(--accent)}
+nav a:hover{color:var(--text-primary)}
+nav a:focus-visible{color:var(--text-primary);outline:2px solid var(--accent);outline-offset:4px}
 
 /* ================= WORK GRID — six, all present ================= */
 .grid{
@@ -141,16 +150,19 @@ nav a:hover,nav a:focus-visible{color:var(--accent)}
   position:relative;
   transition:border-color var(--dur-hover) var(--ease-out),transform var(--dur-hover) var(--ease-out);
 }
-a.card:hover,a.card:focus-visible{border-color:var(--ink-900);transform:translateY(calc(var(--lift) * -1));outline:none}
+a.card:hover{border-color:var(--ink-900);transform:translateY(calc(var(--lift) * -1))}
+a.card:focus-visible{border-color:var(--ink-900);transform:translateY(calc(var(--lift) * -1));
+  outline:2px solid var(--accent);outline-offset:2px}
 
 /* The arming hairline. Second layer of the hover, slower than the lift,
    so the card reads as an instrument waking rather than as a highlight. */
 .card::before{
-  content:"";position:absolute;left:0;top:0;height:1px;width:100%;background:var(--accent);
+  content:"";position:absolute;left:0;top:0;height:1px;width:100%;background:var(--state-operator);
   transform:scaleX(0);transform-origin:left;z-index:2;
   transition:transform var(--dur-sweep) var(--ease-out);
 }
-a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
+a.card:hover::before{transform:scaleX(1)}
+a.card:focus-visible::before{transform:scaleX(1);background:var(--accent)}
 
 /* PENDING CARDS — no destination yet, so they are not links.
    A card that looks clickable and goes nowhere is worse than one that
@@ -196,12 +208,12 @@ a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
   letter-spacing:-.022em;margin:0;transition:color .16s var(--ease);
   font-synthesis-weight:none;-webkit-font-smoothing:subpixel-antialiased;
 }
-.card:hover .ct,.card:focus-visible .ct{color:var(--accent)}
-/* Claims are written to a 100-110 character band = exactly two lines at
-   this measure. min-height reserves both lines so the six card feet align
-   even where the copy is a placeholder and runs short. */
+/* The arming line carries hover. The title stays ink; focus is the blue outline. */
+/* Claims are kept short enough for two lines at the narrow two-column
+   measure. min-height reserves both lines so the six card feet align
+   even where one runs short. */
 .cd{font-size:clamp(14px,1.7vh,16px);line-height:1.5;color:var(--text-body);margin:0;
-  min-height:3em;
+  min-height:3em;text-wrap:pretty;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
 /* ============================================================
@@ -281,7 +293,7 @@ a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
 .rec b{width:52px;flex:none;color:var(--text-muted);font-weight:400;
   letter-spacing:.04em;text-transform:uppercase;font-size:.88em}
 .rec .n{margin-left:auto;flex:none;color:var(--text-muted);font-variant-numeric:tabular-nums}
-.card:hover .rec div:first-child b{color:var(--accent)}
+.card:hover .rec div:first-child b{color:var(--text-primary)}
 
 /* 05 · sticky add-to-bag, caught in its error state.
    The one teaser that carries a second palette: the client's dusk
@@ -323,7 +335,6 @@ a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
 
 /* ================= RESPONSIVE ================= */
 @media (min-height:1000px){
-  .cd{-webkit-line-clamp:3;min-height:4.5em}
   :root{--gap:15px}
 }
 @media (max-width:1100px){
@@ -335,6 +346,7 @@ a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
   header{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr;grid-template-rows:none}
   .card{min-height:300px}
+  .cd{display:block;min-height:0;overflow:visible}
   /* see the note at .cat — one column, so the feet no longer align and the
      long role line is free to take a second line. */
   .cat{flex-wrap:wrap;align-items:flex-start}
@@ -429,6 +441,9 @@ a.card[href$="about.html"]             .ct{view-transition-name:vt-about}
 <meta name="twitter:description" content="Sixteen years of heads-up displays for industries that never called them that. Selected product, systems and retail work by Djoaniel Hernandez.">
 <meta name="twitter:image" content="https://www.djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
+<!-- Localhost-only accent comparison -->
+<link rel="stylesheet" href="assets/local-debug.css">
+<script defer src="assets/local-debug.js"></script>
 </head>
 <body>
 
@@ -468,7 +483,7 @@ a.card[href$="about.html"]             .ct{view-transition-name:vt-about}
       <div class="ft">
         <span class="cat"><i></i>Enterprise banking · Avaloq</span>
         <h2 class="ct">The Art of Nothing</h2>
-        <p class="cd">An empty cell meant five different things to five teams. One deterministic rule, seven roles to ship it.</p>
+        <p class="cd">One empty cell meant five things to five teams. One rule, shipped by seven roles.</p>
       </div>
     </a>
 
@@ -487,7 +502,7 @@ a.card[href$="about.html"]             .ct{view-transition-name:vt-about}
       <div class="ft">
         <span class="cat"><i></i>Accessibility · Avaloq</span>
         <h2 class="ct">Break It Yourself</h2>
-        <p class="cd">A directive gives you a standard, never a method. I made the inspection sheet the design team audits with.</p>
+        <p class="cd">The directive set the standard, not the method. I built the team's inspection sheet.</p>
       </div>
     </a>
 
@@ -504,7 +519,7 @@ a.card[href$="about.html"]             .ct{view-transition-name:vt-about}
       <div class="ft">
         <span class="cat"><i></i>Conversational · Plan International</span>
         <h2 class="ct">TESSA</h2>
-        <p class="cd">A career coach for young Filipino jobseekers. I designed the decision engine underneath the dialogue.</p>
+        <p class="cd">A career coach for young Filipino jobseekers. I designed the engine under the dialogue.</p>
       </div>
     </a>
 
@@ -528,7 +543,7 @@ a.card[href$="about.html"]             .ct{view-transition-name:vt-about}
              one-person business as inflation — the opposite of the intent. -->
         <span class="cat"><i></i>Commerce · Founder, solo</span>
         <h2 class="ct">SariSari Snaps</h2>
-        <p class="cd">Orders lived in Messenger threads. I built the configurator so the inbox stopped being the storefront.</p>
+              <p class="cd">Orders lived in Messenger. I built the storefront that replaced the inbox.</p>
       </div>
     </a>
 
@@ -547,7 +562,7 @@ a.card[href$="about.html"]             .ct{view-transition-name:vt-about}
       <div class="ft">
         <span class="cat retail"><i></i>Retail · Component &amp; state library</span>
         <h2 class="ct">The Unhappy Path</h2>
-        <p class="cd">Began as page comps for a US activewear retailer. Ended as the component and state library behind them.</p>
+        <p class="cd">Began as six page comps. Ended as the component-and-state library behind them.</p>
       </div>
     </a>
 
@@ -571,7 +586,7 @@ a.card[href$="about.html"]             .ct{view-transition-name:vt-about}
       <div class="ft">
         <span class="cat"><i></i>Profile · Sixteen years in practice</span>
         <h2 class="ct">About</h2>
-        <p class="cd">Sixteen years, four regulated industries, one discipline. The record, and what that seniority bought.</p>
+        <p class="cd">Sixteen years. Four regulated industries. One discipline — and what seniority bought.</p>
       </div>
     </a>
 

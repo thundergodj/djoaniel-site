@@ -36,8 +36,11 @@
   --white:rgb(255,255,255);
   --black:rgb(0,0,0);
   --accent-blue:rgb(11,63,255);
+  --accent-rgb:11,63,255;
+  --operator-orange:rgb(243,142,32);
+  --operator-orange-rgb:243,142,32;
+  --operator-orange-ink:rgb(134,64,0);
   --data-red:rgb(169,46,38);
-  --ochre:oklch(0.74 0.115 74);
   --sage:oklch(0.56 0.05 155);
   --icon-action-size:26px;
 
@@ -56,8 +59,12 @@
   --border-default:var(--line);
   --border-strong:var(--ink-900);
   --accent:var(--accent-blue);
+  --state-operator:var(--operator-orange); /* live, working, armed, or attention required */
+  --state-operator-rgb:var(--operator-orange-rgb);
+  --state-operator-ink:var(--operator-orange-ink); /* readable orange text on paper */
+  --state-operator-on:var(--ink-900);      /* readable text on the orange fill */
   --data-null:var(--data-red);      /* ambiguous / unknown */
-  --accent-warm:var(--ochre);       /* annotation, in-progress */
+  --accent-warm:var(--state-operator); /* legacy alias */
   --data-ok:var(--sage);            /* resolved — the "after" side of a fix */
 
   /* families */
@@ -278,7 +285,7 @@ body{margin:0;background:var(--surface-page);color:var(--text-body);
 .d-lg,.claim{font-family:var(--font-display);font-weight:400;
   font-synthesis-weight:none;font-synthesis-style:none;
   -webkit-font-smoothing:subpixel-antialiased;-moz-osx-font-smoothing:auto;
-  color:var(--text-primary);text-wrap:pretty;
+  color:var(--text-primary);text-wrap:balance;
   font-size:clamp(30px,3.3vw,41px);line-height:1.14;letter-spacing:-.012em;
   margin:0 0 var(--space-lg);max-width:22ch}
 
@@ -302,7 +309,7 @@ body{margin:0;background:var(--surface-page);color:var(--text-body);
 
 /* mono "//" aside — the NDA/meta device */
 .mono-note{display:flex;gap:var(--space-2xs);max-width:var(--prose);
-  font:var(--text-data-value);color:var(--text-muted);margin:var(--space-md) 0 0}
+  font:var(--text-data-value);color:var(--text-muted);margin:var(--space-md) 0 0;text-wrap:pretty}
 .mono-note::before{content:'//';color:var(--text-faint);flex-shrink:0}
 
 /* ==================================================================
@@ -321,8 +328,9 @@ body{margin:0;background:var(--surface-page);color:var(--text-body);
    ================================================================== */
 a{color:var(--text-primary);text-decoration:underline;text-decoration-thickness:1px;
   text-underline-offset:3px;text-decoration-color:var(--border-default);
-  transition:color var(--dur-fast) linear}
-a:hover{color:var(--accent);text-decoration-color:var(--accent)}
+  transition:text-decoration-color var(--dur-fast) linear}
+/* Hover confirms the hit area without spending a semantic colour. */
+a:hover{text-decoration-color:var(--text-primary)}
 a.plain,a.arrow{text-decoration:none}
 
 /* term = dotted, carries a definition */
@@ -330,8 +338,9 @@ a.plain,a.arrow{text-decoration:none}
   text-decoration:underline;text-decoration-style:dotted;text-decoration-thickness:1px;
   text-decoration-color:var(--text-faint);text-underline-offset:4px;cursor:help;
   transition:text-decoration-color var(--dur-fast) linear,background var(--dur-fast) linear}
-.term:hover,.term[aria-expanded="true"]{text-decoration-color:var(--accent);
-  background:rgba(11,63,255,.06)}
+.term:hover{text-decoration-color:var(--text-primary);background:var(--surface-card-25)}
+.term[aria-expanded="true"]{text-decoration-color:var(--accent);
+  background:rgba(var(--accent-rgb),.06)}
 .term:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .term::after{content:'';display:inline-block;width:3px;height:3px;background:var(--accent);
   vertical-align:super;margin-left:2px;opacity:.6}
@@ -567,9 +576,8 @@ section[id],main[id],.live[id],.sec[id]{
    silently inflate to container width. The configurator preview was the
    proof: a 4/3 box at container width computed to 763px tall and drew an
    empty rectangle the size of a window. */
-/* .stage2 is deliberately NOT here. A circle of seven labelled satellites
-   is repeated cells, not one object — more width spreads the labels apart
-   instead of inflating a picture. It fills the band. */
+/* Influence maps are network diagrams rather than single artifacts. They use
+   the full reading band so the orbit can keep its labels clear. */
 .cfg .prev,.chat,.slot{max-width:var(--object)}
 .live > .pair{padding:var(--space-lg) 0}
 .cs-body > main .pair,.cs-head > .pair{margin-top:var(--space-lg)}
@@ -660,7 +668,7 @@ section[id],main[id],.live[id],.sec[id]{
   flex-wrap:wrap;padding:var(--band-block) 0;
   border-bottom:var(--border-hair);margin-bottom:0}
 .live-mk{display:inline-flex;align-items:center;gap:7px;flex:none;
-  background:var(--accent);color:var(--text-inverse);
+  background:var(--state-operator);color:var(--state-operator-on);
   padding:4px 9px;font:var(--mono-label);font-weight:500;
   letter-spacing:var(--track-label);text-transform:uppercase}
 .live-mk::before{content:"";width:6px;height:6px;background:currentColor;
@@ -703,7 +711,7 @@ section[id],main[id],.live[id],.sec[id]{
 .hero-live{display:flex;align-items:center;gap:var(--space-md);flex-wrap:wrap;
   background:var(--surface-inverse);color:var(--text-inverse);
   padding:var(--space-xs) var(--space-md);margin:var(--space-xl) 0 0}
-.hero-live .live-mk{background:var(--accent);color:var(--text-inverse)}
+.hero-live .live-mk{background:var(--state-operator);color:var(--state-operator-on)}
 .hero-live .t{font-family:var(--font-sans);font-weight:500;font-size:15px;
   line-height:1.35;color:var(--text-inverse);flex:1 1 auto;min-width:16ch}
 .hero-live .t b{font-weight:700}
@@ -754,13 +762,14 @@ section[id],main[id],.live[id],.sec[id]{
 .top nav{display:flex;gap:var(--space-xl)}
 .top nav a{font:var(--text-nav);letter-spacing:0.04em;text-transform:uppercase;
   color:var(--text-muted);text-decoration:none}
-.top nav a:hover{color:var(--accent)}
+.top nav a:hover{color:var(--text-primary)}
+.top nav a:focus-visible{color:var(--text-primary);outline:2px solid var(--accent);outline-offset:4px}
 .top nav a[aria-current]{color:var(--text-primary)}
 
 /* ---- arrow link ---- */
 .arrow{display:inline-flex;align-items:center;gap:9px;font:var(--text-data-value);
   letter-spacing:0.04em;text-transform:uppercase;color:var(--text-primary)}
-.arrow:hover{color:var(--accent)}
+.arrow:hover{color:var(--text-primary)}
 .arrow .g{transition:transform var(--dur-fast) var(--ease-snap)}
 .arrow:hover .g{transform:translateX(3px)}
 .arrow:hover .ph-arrow-left{transform:translateX(-3px)}
@@ -804,7 +813,7 @@ section[id],main[id],.live[id],.sec[id]{
    Above ~150ms the two stop reading as one event. */
 .df.cellflash{animation:df-flash var(--dur-flash) linear}
 @keyframes df-flash{
-  0%{background:rgba(11,63,255,var(--alpha-flash))}
+  0%{background:rgba(var(--state-operator-rgb),var(--alpha-flash))}
   100%{background:var(--surface-card-30)}
 }
 
@@ -826,7 +835,7 @@ section[id],main[id],.live[id],.sec[id]{
 .legend .k.null i{background:var(--data-null)}
 .legend .k.dash i{background:var(--text-faint)}
 .legend .k.ok   i{background:var(--data-ok)}
-.legend .k.warm i{background:var(--accent-warm)}
+.legend .k.warm i{background:var(--state-operator)}
 
 /* ==================================================================
    DEMO SHELL (before / after)
@@ -896,69 +905,68 @@ section[id],main[id],.live[id],.sec[id]{
   color:var(--text-primary);text-align:right;white-space:nowrap}
 
 /* ==================================================================
-   ROLE CHIPS + INFLUENCE MAP
-   ================================================================== */
-.coi{display:grid;grid-template-columns:250px 1fr;gap:var(--space-lg);
-  background:var(--surface-card-25);border:var(--border-hair);padding:var(--space-lg)}
-.coi .list{display:flex;flex-direction:column;gap:6px}
-.chip{width:100%;text-align:left;border:0.667px solid var(--border-default);
-  background:transparent;display:flex;flex-direction:column;justify-content:center;
-  padding:11px 13px;cursor:pointer;font:inherit;
-  transition:border-color var(--dur-fast) linear,background var(--dur-fast) linear}
-.chip:hover,.chip.active{border-color:var(--accent);background:var(--surface-card-25)}
-.chip b{font-family:var(--font-sans);font-weight:700;font-size:15px;line-height:18.85px;
-  color:var(--text-primary)}
-.chip small{font:var(--text-label);letter-spacing:0.04em;text-transform:uppercase;
-  color:var(--text-muted);margin-top:3px}
-/* ------------------------------------------------------------------
-   THE STAGE, LEGIBLE AT REST.
-   Audited in-browser: at rest this drew a blue box, seven unlabelled 9px
-   dots, and nothing joining them — because every edge was held at full
-   stroke-dashoffset until hovered. So an instrument occupying 420px of
-   height communicated nothing until the reader guessed there was
-   something to hover, and then showed one relationship at a time.
+   SHARED INFLUENCE MAP
+   360px stage · 80% node spread · 34% edge curvature.
 
-   The whole claim of the section is "seven roles, one rule." That is a
-   SHAPE, and a shape has to be visible before it can be explored. Edges
-   now sit drawn and faint at rest, satellites carry their role name, and
-   hovering promotes one edge rather than revealing the first.
-   ------------------------------------------------------------------ */
-.stage2{position:relative;min-height:360px;border:var(--border-hair);
-  background:var(--surface-card-16)}
-.stage2 svg.edges{position:absolute;inset:0;width:100%;height:100%}
-.edge{fill:none;stroke:var(--border-default);stroke-width:1;
-  transition:stroke var(--dur-fast) linear,stroke-width var(--dur-fast) linear}
-/* drawn at rest so the shape reads before anyone interacts */
-.edge{stroke-dashoffset:0}
-/* Seven roles aligning is the story of that case, so the edge draws from
-   the centre outward — alignment happening, not a diagram highlighted. */
-.edge.lit{stroke:var(--accent);stroke-width:1.6;
-  animation:coi-draw var(--dur-draw) var(--ease-out) forwards}
-@keyframes coi-draw{to{stroke-dashoffset:0}}
-.sat{position:absolute;transform:translate(-50%,-50%);
-  display:flex;align-items:center;gap:6px;white-space:nowrap;
-  font:var(--mono-caption);letter-spacing:var(--track-caption);
-  text-transform:uppercase;color:var(--text-muted);
-  transition:color var(--dur-fast) linear}
-.sat::before{content:"";width:9px;height:9px;flex:none;background:var(--text-faint);
-  transition:all var(--dur-fast) linear}
-.sat.lit{color:var(--text-primary)}
-.sat.lit::before{background:var(--accent);width:12px;height:12px;
-  animation:coi-pop var(--dur-draw) var(--ease-snap)}
-/* the pop lives on the dot now, not the .sat box — the box carries the
-   -50%,-50% centring and re-declaring it here would fight the label */
-@keyframes coi-pop{
-  0%{transform:scale(1)} 55%{transform:scale(var(--pop-sat))} 100%{transform:scale(1)}
+   The artifact owns the centre. Djoaniel's role is named beneath it,
+   and the orbit can contain people, standards, constraints or evidence,
+   so the same shape stays truthful in collaborative and solo studies.
+   The explanation is a stable panel below the map, never an overlay.
+   ================================================================== */
+.influence-map{margin-top:var(--space-lg)}
+.influence-stage{position:relative;min-height:0;border:var(--border-hair);
+  background:var(--surface-card-16);padding:var(--space-lg)}
+.influence-edges{display:none;position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none}
+.influence-edge{fill:none;stroke:var(--border-default);stroke-width:1;
+  transition:stroke var(--dur-fast) linear,stroke-width var(--dur-fast) linear,
+    stroke-dashoffset var(--dur-draw) var(--ease-out)}
+.influence-edge.is-active{stroke:var(--accent);stroke-width:1.6}
+.influence-hub{display:grid;gap:4px;background:var(--white);border:var(--border-hair);
+  padding:14px 18px;text-align:center;color:var(--text-primary)}
+.influence-hub .k,.influence-hub small{font:var(--mono-caption);
+  letter-spacing:var(--track-caption);text-transform:uppercase;color:var(--text-muted)}
+.influence-hub strong{font-family:var(--font-sans);font-size:17px;line-height:1.25;
+  font-weight:700}
+.influence-nodes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--space-2xs);margin-top:var(--space-sm)}
+.influence-node{min-height:44px;border:0.667px solid var(--border-default);
+  background:var(--surface-page);color:var(--text-primary);padding:9px 12px;
+  font-family:var(--font-sans);font-size:13.5px;line-height:1.25;font-weight:600;
+  text-align:center;cursor:pointer;
+  transition:border-color var(--dur-fast) linear,background var(--dur-fast) linear,
+    color var(--dur-fast) linear,transform var(--dur-med) var(--ease-out)}
+.influence-node:hover{border-color:var(--ink-700);background:var(--white)}
+.influence-node[aria-pressed="true"]{
+  border-color:var(--accent);background:var(--accent);color:var(--text-inverse)}
+.influence-node:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.influence-detail{display:grid;grid-template-columns:minmax(180px,0.34fr) minmax(0,1fr);
+  gap:var(--space-lg);align-items:start;border:var(--border-hair);border-top:0;
+  background:var(--surface-card-25);padding:var(--space-md)}
+.influence-detail-key{display:grid;gap:5px}
+.influence-kind{font:var(--text-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--accent)}
+.influence-title{font-family:var(--font-sans);font-size:15px;line-height:1.35;
+  color:var(--text-primary)}
+.influence-copy{font-family:var(--font-sans);font-size:14px;line-height:1.55;
+  color:var(--text-body);margin:0}
+
+/* Enhanced orbit. Without JS the same markup remains a readable grid. */
+.influence-map.is-ready:not(.is-compact) .influence-stage{height:360px;padding:0}
+.influence-map.is-ready:not(.is-compact) .influence-edges{display:block}
+.influence-map.is-ready:not(.is-compact) .influence-hub{position:absolute;left:50%;top:50%;
+  z-index:2;width:220px;transform:translate(-50%,-50%)}
+.influence-map.is-ready:not(.is-compact) .influence-nodes{position:absolute;inset:0;
+  display:block;margin:0}
+.influence-map.is-ready:not(.is-compact) .influence-node{position:absolute;z-index:3;
+  max-width:190px;white-space:nowrap;transform:translate(-50%,-50%)}
+
+@media(max-width:680px){
+  .influence-detail{grid-template-columns:1fr;gap:var(--space-sm)}
 }
-.hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  background:var(--accent);color:var(--text-inverse);font:var(--text-data-value);
-  font-weight:600;letter-spacing:0.02em;padding:12px 15px;text-align:center;z-index:2}
-.hub small{display:block;font-size:12.5px;font-weight:500;opacity:.9;letter-spacing:.04em;margin-top:3px}
-.desc{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);
-  background:var(--surface-inverse);color:var(--text-inverse);font-family:var(--font-sans);
-  font-size:13px;line-height:1.5;padding:10px 14px;max-width:80%;text-align:center;
-  opacity:0;transition:opacity var(--dur-med) linear}
-.desc.show{opacity:1}
+@media(max-width:600px){
+  .influence-nodes{grid-template-columns:1fr}
+}
 
 /* ==================================================================
    STAT BLOCK · PULL QUOTE
@@ -985,6 +993,10 @@ section[id],main[id],.live[id],.sec[id]{
 
 /* ==================================================================
    BUTTON — offset slab + spark burst. Primary actions only.
+
+   A button is an affordance, not an operator state: its resting face stays
+   ink and its primary-action slab stays blue. Orange appears only while the
+   control truthfully reports aria-busy="true".
    ================================================================== */
 .btn{position:relative;display:inline-block}
 .btn .slab{position:absolute;inset:0;transform:translate(4px,4px);
@@ -996,6 +1008,10 @@ section[id],main[id],.live[id],.sec[id]{
   transition:transform var(--dur-fast) var(--ease-snap)}
 .btn button:hover,.btn a:hover{transform:translate(1px,1px)}
 .btn button:active,.btn a:active{transform:translate(4px,4px)}
+.btn:has([aria-busy="true"]) .slab{background:var(--surface-inverse)}
+.btn button[aria-busy="true"],.btn a[aria-busy="true"]{
+  background:var(--state-operator);color:var(--state-operator-on);
+  border-color:var(--state-operator)}
 .spark{position:absolute;background:var(--accent);pointer-events:none;
   animation:ds-spark var(--dur-spark) var(--ease-out) forwards}
 
@@ -1063,7 +1079,7 @@ section[id],main[id],.live[id],.sec[id]{
 .wrow:hover{background:var(--white);text-decoration:none}
 .wrow .n{font-family:var(--font-mono);font-weight:600;font-size:15px;line-height:1;
   letter-spacing:-.025em;color:var(--text-faint);padding-top:6px}
-.wrow:hover .n{color:var(--accent)}
+.wrow:hover .n{color:var(--text-primary)}
 .wrow .t{font-family:var(--font-display);font-weight:400;
   font-size:clamp(26px,3vw,34px);line-height:1.08;letter-spacing:-.03em;
   text-transform:uppercase;color:var(--text-primary);margin:0}
@@ -1074,7 +1090,7 @@ section[id],main[id],.live[id],.sec[id]{
   color:var(--text-body);margin:0;padding-top:4px}
 .wrow .g{font:var(--text-data-value);color:var(--text-faint);text-align:right;
   padding-top:6px;transition:transform var(--dur-fast) var(--ease-snap),color var(--dur-fast) linear}
-.wrow:hover .g{color:var(--accent);transform:translateX(4px)}
+.wrow:hover .g{color:var(--text-primary);transform:translateX(4px)}
 .wrow.locked{cursor:default}
 .wrow.locked:hover{background:transparent}
 .wrow.locked:hover .n{color:var(--text-faint)}
@@ -1216,8 +1232,6 @@ section[id],main[id],.live[id],.sec[id]{
 @media(max-width:860px){
   :root{--gut:24px}
   .states{grid-template-columns:repeat(2,1fr)}
-  .coi{grid-template-columns:1fr}
-  .stage2{min-height:340px}
 }
 @media(max-width:600px){
   :root{--gut:18px}
@@ -1258,6 +1272,10 @@ section[id],main[id],.live[id],.sec[id]{
 /* ACTION-LEVEL icons run roughly 2x the label so the action reads before
    the words do. A 1em icon disappears against a 10–13px mono label. */
 .arrow .ph,.btn .ph,.pn .ph,.ph.icon-action{font-size:var(--icon-action-size)}
+/* Header disclosure is the deliberate exception to the 26px action scale:
+   compact enough to preserve the chrome, but blue and optically heavier so
+   it still reads as an obvious control. */
+.ph.icon-header{font-size:16px;color:var(--accent);-webkit-text-stroke:.5px currentColor}
 a:hover .ph-arrow-square-out{transform:translate(2px,-2px)}
 a:hover .ph-envelope-simple{transform:translateY(-2px)}
 button:hover .ph-arrow-right,a:hover .ph-arrow-right{transform:translateX(3px)}

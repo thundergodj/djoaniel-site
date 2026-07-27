@@ -1,6 +1,6 @@
 /* EISHIKI v3 — behaviour
    tooltips · section nav scrollspy · four-state explorer · before/after
-   with rule attribution · circle of influence · button spark */
+   with rule attribution · system-of-influence maps · button spark */
 (function () {
   'use strict';
 
@@ -214,6 +214,15 @@
       var isAfter = false;
       var goIcon = go.querySelector('.ph');
       var goLabel = go.querySelector('[data-live-label]');
+      var busyTimer = 0;
+      var rowCount = demo.querySelectorAll('.df').length;
+      var workDuration = REDUCED ? 0
+        : Math.max(ms('--dur-flash', 220), Math.max(0, rowCount - 1) * STAGGER + GAP + ms('--dur-flash', 220));
+      function markWorking() {
+        clearTimeout(busyTimer);
+        go.setAttribute('aria-busy', 'true');
+        busyTimer = setTimeout(function () { go.removeAttribute('aria-busy'); }, workDuration);
+      }
       function syncGo(afterState) {
         if (goIcon) goIcon.className = afterState
           ? 'ph ph-arrow-left icon-action'
@@ -221,6 +230,7 @@
         if (goLabel) goLabel.textContent = afterState ? 'Back to before' : 'Apply the rule';
       }
       go.addEventListener('click', function () {
+        markWorking();
         isAfter = !isAfter;
         render(isAfter);
         syncGo(isAfter);
@@ -237,71 +247,103 @@
   });
 
   /* ================================================================
-     CIRCLE OF INFLUENCE
+     SHARED INFLUENCE MAP
+     Committed geometry: 360px stage · 80% spread · 34% curvature.
      ================================================================ */
-  document.querySelectorAll('[data-coi]').forEach(function (coi) {
-    var stage = coi.querySelector('.stage2');
-    var edges = coi.querySelector('svg.edges');
-    var desc = coi.querySelector('.desc');
-    var btns = Array.prototype.slice.call(coi.querySelectorAll('.chip'));
+  document.querySelectorAll('[data-influence]').forEach(function (map) {
+    var stage = map.querySelector('.influence-stage');
+    var edges = map.querySelector('.influence-edges');
+    var nodes = Array.prototype.slice.call(map.querySelectorAll('.influence-node'));
+    var kind = map.querySelector('.influence-kind');
+    var title = map.querySelector('.influence-title');
+    var copy = map.querySelector('.influence-copy');
     var NS = 'http://www.w3.org/2000/svg';
-    if (!stage || !edges) return;
+    var SPREAD = 0.80, CURVE = 0.34;
+    var selected = Math.max(0, nodes.findIndex(function (node) {
+      return node.getAttribute('aria-pressed') === 'true';
+    }));
+    if (!stage || !edges || !nodes.length) return;
 
-    function layout() {
+    function updateDetail(node) {
+      if (kind) kind.textContent = node.dataset.kind || 'Influence';
+      if (title) title.textContent = node.textContent.trim() + ' · ' + (node.dataset.facet || 'Contribution');
+      if (copy) copy.textContent = node.dataset.copy || '';
+    }
+
+    function edgePath(cx, cy, x, y) {
+      var dx = x - cx, dy = y - cy;
+      var c1x = cx + dx * (0.28 + CURVE * 0.16);
+      var c1y = cy + dy * (0.06 + CURVE * 0.08);
+      var c2x = x - dx * (0.12 + CURVE * 0.18);
+      var c2y = y - dy * (0.28 + CURVE * 0.12);
+      return 'M' + cx + ',' + cy + ' C' + c1x + ',' + c1y + ' ' + c2x + ',' + c2y + ' ' + x + ',' + y;
+    }
+
+    function layout(animateSelected) {
+      map.classList.add('is-ready');
+      var compact = stage.clientWidth < 680;
+      map.classList.toggle('is-compact', compact);
       edges.innerHTML = '';
-      stage.querySelectorAll('.sat').forEach(function (s) { s.remove(); });
-      var w = stage.clientWidth, h = stage.clientHeight, cx = w / 2, cy = h / 2, n = btns.length;
-      btns.forEach(function (b, i) {
-        var ang = (-Math.PI / 2) + (i / n) * Math.PI * 2;
-        var x = cx + Math.cos(ang) * w * 0.40, y = cy + Math.sin(ang) * h * 0.34;
-        var p = document.createElementNS(NS, 'path');
-        p.setAttribute('d', 'M' + cx + ',' + cy + ' C' + ((cx + x) / 2) + ',' + cy + ' ' + ((cx + x) / 2) + ',' + y + ' ' + x + ',' + y);
-        p.setAttribute('class', 'edge'); p.id = coi.id + '-e' + i;
-        edges.appendChild(p);
-        /* the draw-on needs a dash length, and getTotalLength only works
-           once the path is in the document */
-        var len = p.getTotalLength();
-        p.style.strokeDasharray = len;
-        /* Drawn at rest, not hidden. Holding every edge at full offset
-           meant the diagram showed seven unconnected dots until someone
-           guessed there was something to hover — and the claim being made
-           is a shape, which has to be legible before it is explorable. */
-        p.style.strokeDashoffset = 0;
-        var s = document.createElement('div');
-        s.className = 'sat'; s.id = coi.id + '-s' + i;
-        s.style.left = x + 'px'; s.style.top = y + 'px';
-        /* the role's own name, so a satellite says what it is */
-        s.textContent = (b.querySelector('b') || {}).textContent || '';
-        /* keep labels inside the stage: past the centre, sit them left */
-        if (x > cx) { s.style.transform = 'translate(-100%,-50%)'; s.style.flexDirection = 'row-reverse'; }
-        stage.appendChild(s);
+
+      if (compact) {
+        nodes.forEach(function (node) {
+          node.style.left = '';
+          node.style.top = '';
+        });
+        return;
+      }
+
+      var w = stage.clientWidth, h = stage.clientHeight;
+      var cx = w / 2, cy = h / 2, n = nodes.length;
+      var rx = Math.max(96, (w / 2 - 112) * SPREAD);
+      var ry = Math.max(76, (h / 2 - 48) * SPREAD);
+
+      nodes.forEach(function (node, index) {
+        var angle = (-Math.PI / 2) + (index / n) * Math.PI * 2;
+        var x = cx + Math.cos(angle) * rx;
+        var y = cy + Math.sin(angle) * ry;
+        node.style.left = x + 'px';
+        node.style.top = y + 'px';
+
+        var path = document.createElementNS(NS, 'path');
+        path.setAttribute('class', 'influence-edge' + (index === selected ? ' is-active' : ''));
+        path.setAttribute('d', edgePath(cx, cy, x, y));
+        edges.appendChild(path);
+
+        if (index === selected && animateSelected && !REDUCED) {
+          var length = path.getTotalLength();
+          path.style.strokeDasharray = length;
+          path.style.strokeDashoffset = length;
+          requestAnimationFrame(function () { path.style.strokeDashoffset = 0; });
+        }
       });
     }
-    function activate(b, i) {
-      btns.forEach(function (x) { x.classList.remove('active'); });
-      b.classList.add('active');
-      coi.querySelectorAll('.edge,.sat').forEach(function (x) { x.classList.remove('lit'); });
-      var e = document.getElementById(coi.id + '-e' + i), s = document.getElementById(coi.id + '-s' + i);
-      /* re-run the draw on the one being promoted: reset the offset, force
-         a reflow, then light it. The others stay drawn and faint. */
-      if (e) {
-        if (!REDUCED) { e.style.strokeDashoffset = e.style.strokeDasharray; void e.getBoundingClientRect(); }
-        e.classList.add('lit');
-      }
-      if (s) s.classList.add('lit');
-      if (desc) { desc.textContent = b.dataset.d; desc.classList.add('show'); }
+
+    function activate(index, animate) {
+      if (index < 0 || index >= nodes.length) return;
+      selected = index;
+      nodes.forEach(function (node, nodeIndex) {
+        node.setAttribute('aria-pressed', nodeIndex === selected ? 'true' : 'false');
+      });
+      updateDetail(nodes[selected]);
+      layout(animate);
     }
-    btns.forEach(function (b, i) {
-      b.addEventListener('mouseenter', function () { activate(b, i); });
-      b.addEventListener('focus', function () { activate(b, i); });
-      b.addEventListener('click', function () { activate(b, i); });
+
+    nodes.forEach(function (node, index) {
+      node.setAttribute('aria-label', node.textContent.trim() + ': ' + (node.dataset.facet || 'Contribution'));
+      node.addEventListener('mouseenter', function () { if (selected !== index) activate(index, true); });
+      node.addEventListener('focus', function () { if (selected !== index) activate(index, true); });
+      node.addEventListener('click', function () { activate(index, true); });
     });
-    stage.addEventListener('mouseleave', function () { if (desc) desc.classList.remove('show'); });
-    /* was setTimeout(layout, 220) — a race with the font loader that put
-       the satellites in the wrong place on a cold load */
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
-    else setTimeout(layout, 220);
-    window.addEventListener('resize', layout);
+
+    updateDetail(nodes[selected]);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layout(false); });
+    else layout(false);
+
+    if ('ResizeObserver' in window) {
+      var observer = new ResizeObserver(function () { layout(false); });
+      observer.observe(stage);
+    } else window.addEventListener('resize', function () { layout(false); });
   });
 
   /* ================================================================

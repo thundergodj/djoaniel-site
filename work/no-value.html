@@ -14,7 +14,7 @@
   gtag('config', 'G-8897FSV2XF');
 </script>
 
-<meta name="description" content="How one null-value rule replaced five interpretations across a private-wealth platform—and the seven roles required to ship it.">
+<meta name="description" content="How one null-value rule replaced five interpretations across a private-wealth platform — and the seven roles required to ship it.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -183,6 +183,9 @@
 <meta name="twitter:description" content="Setting the null-value display standard at Avaloq, the Swiss private-wealth platform. One everywhere-problem resolved into one deterministic rule — and the seven roles it took to ship it.">
 <meta name="twitter:image" content="https://www.djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
+<!-- Localhost-only accent comparison -->
+<link rel="stylesheet" href="../assets/local-debug.css">
+<script defer src="../assets/local-debug.js"></script>
 </head>
 <body>
 
@@ -194,13 +197,13 @@
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
     <div class="crumb">
       <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
-        <span class="n">01 / 06</span><span class="t">Why it cost</span><i class="ph ph-caret-down icon-action cv" aria-hidden="true"></i>
+        <span class="n">01 / 06</span><span class="t">Why it cost</span><i class="ph ph-caret-down icon-header cv" aria-hidden="true"></i>
       </button>
       <ul class="crumb-l" id="crumb-l" hidden>
         <li><a href="#e01" data-t="Why it cost"><span class="n">01</span><span>Why it cost</span></a></li>
         <li><a href="#e02" data-t="The four states"><span class="n">02</span><span>The four states</span></a></li>
         <li><a href="#e03" data-t="The rule set in full"><span class="n">03</span><span>The rule set in full</span></a></li>
-        <li><a href="#e04" data-t="Circle of influence"><span class="n">04</span><span>Circle of influence</span></a></li>
+        <li><a href="#e04" data-t="System of influence"><span class="n">04</span><span>System of influence</span></a></li>
         <li><a href="#e05" data-t="The shipped spec"><span class="n">05</span><span>The shipped spec</span></a></li>
         <li><a href="#e06" data-t="Reflection"><span class="n">06</span><span>Reflection</span></a></li>
       </ul>
@@ -263,7 +266,7 @@
     <span class="eb">01 · The situation</span><span class="ln"></span><span class="sq"></span>
   </div>
   <p class="claim">One empty value. Five different answers.</p>
-  <p class="prose">Across the CRM, an empty field was rendered however each screen's author felt that day. Same underlying state — no data — read five different ways by the advisor looking at it. In wealth management that ambiguity isn't cosmetic: a field reading <b>0.00</b> where it should read <b>no data</b> misrepresents a client's position.</p>
+  <p class="prose">Across the CRM, each screen handled the same underlying state — no data — according to its own local convention. The advisor looking at it saw five different renderings. In wealth management, that ambiguity isn't cosmetic: a field reading <b>0.00</b> where it should read <b>no data</b> misrepresents a client's position.</p>
 
   <div class="demo" style="margin-top:var(--space-lg)">
     <div class="bar"><span class="t">CRM · Investment Proposal · as-found</span></div>
@@ -285,7 +288,7 @@
   <p class="claim">"Empty" isn't one state. It's four — so one blanket rule, and three exceptions.</p>
   <p class="prose">The rule set is
     <button type="button" class="term" data-tip-label="Deterministic" data-tip="Given the same input, the rule always produces the same output — with no room for interpretation. That's what makes it buildable as logic rather than enforceable as a guideline.">deterministic</button>:
-    a developer never makes a judgment call, an advisor never wonders.</p>
+    a developer never makes a judgement call, an advisor never wonders.</p>
 
   <div class="ruleset">
     <div class="r blanket">
@@ -365,7 +368,7 @@
     <span class="eb">04 · The result</span><span class="ln"></span><span class="sq"></span>
   </div>
   <p class="claim">One everywhere-problem became one rule.</p>
-  <p class="prose">The rule set became the <b>single source of truth for null-value display</b> — written as deterministic logic the delivery org builds against, instead of a dozen judgment calls made at render time. Specifics are under NDA, but the win is simpler than a number: the guesswork left the screen.</p>
+  <p class="prose">The rule set became the <b>single source of truth for null-value display</b> — written as deterministic logic the delivery teams build against, instead of a dozen judgement calls made at render time. Specifics are under NDA, but the result is simpler than a number: the guesswork left the screen.</p>
 
   <div class="stats" style="margin-top:var(--space-xl)">
     <div class="stat"><span class="v">7</span><div class="r"></div><span class="l">Roles aligned</span></div>
@@ -413,7 +416,7 @@
       </blockquote>
       <p class="prose" style="margin-top:var(--space-xl)">So the goal was never a prettier placeholder. It was to make "empty" <b>legible and predictable</b> — so a
         <button type="button" class="term" data-tip-label="Developer" data-tip="Whoever renders the field. Under the old system they had to decide what an empty value looked like — a design decision made a hundred times, inconsistently, at build time.">developer</button>
-        never has to make a judgment call.</p>
+        never has to make a judgement call.</p>
     </section>
 
     <!-- ===================== E02 ===================== -->
@@ -482,35 +485,42 @@
 
     <!-- ===================== E04 ===================== -->
     <section class="sec" id="e04">
-      <div class="srule"><span class="eb">04 · Circle of influence</span><span class="ln"></span>
+      <div class="srule"><span class="eb">04 · System of influence</span><span class="ln"></span>
         <span class="tag">Live · try it</span><span class="sq"></span></div>
       <h2 class="d-lg">The logic was the easy part. <span class="mark">Alignment</span> was the work.</h2>
-      <p class="prose">A display rule only becomes a standard when the whole delivery org agrees to build against it. Turning "just show a dash" and "just show 0.00" into one deterministic rule meant winning — and being sharpened by — seven roles. Hover or tab through each one.</p>
+      <p class="prose">A display rule only becomes a standard when the whole delivery team agrees to build against it. Turning "just show a dash" and "just show 0.00" into one deterministic rule meant winning — and being sharpened by — seven roles. Hover or tab through each one.</p>
 
-      <div class="coi" data-coi id="coi1" style="margin-top:var(--space-lg)">
-        <div class="list">
-          <button class="chip" data-d="Translated the display rules into acceptance criteria and pressure-tested every edge case against real data scenarios."><b>Business Analyst</b><small>Acceptance criteria</small></button>
-          <button class="chip" data-d="The end-user's voice — validated that '0.00' versus '—' matched how advisors actually read a client's position."><b>Relationship Manager</b><small>End-user reality</small></button>
-          <button class="chip" data-d="Design governance and sign-off — ensured the rule fit the wider design-system language and standards."><b>Design Director</b><small>Governance</small></button>
-          <button class="chip" data-d="Prioritised the work, arbitrated scope, and carried the rule into the backlog as deterministic logic."><b>Product Owner</b><small>Backlog &amp; scope</small></button>
-          <button class="chip" data-d="Aligned the rule to product strategy and roadmap, and secured buy-in above the team."><b>Product Director</b><small>Strategy buy-in</small></button>
-          <button class="chip" data-d="Turned the rule set into an implementation spec engineers could build against — no judgment calls left on the table."><b>Tech Lead</b><small>Implementation spec</small></button>
-          <button class="chip" data-d="Confirmed how null versus zero flows from the underlying services, so the display always matches the source of truth."><b>Infrastructure Lead</b><small>Source of truth</small></button>
+      <div class="influence-map" data-influence aria-label="How seven roles shaped the null-state rule">
+        <div class="influence-stage">
+          <svg class="influence-edges" aria-hidden="true"></svg>
+          <div class="influence-hub">
+            <span class="k">Shared artifact</span>
+            <strong>Null-state rule</strong>
+            <small>My role · Alignment lead</small>
+          </div>
+          <div class="influence-nodes">
+            <button type="button" class="influence-node" aria-pressed="true" data-kind="Evidence" data-facet="Acceptance criteria" data-copy="Translated the display rules into acceptance criteria and pressure-tested every edge case against real data scenarios.">Business Analyst</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Evidence" data-facet="End-user reality" data-copy="Validated that zero, no data and not applicable matched how advisors actually read a client position.">Relationship Manager</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Authority" data-facet="Governance" data-copy="Checked the rule against the wider design-system language and carried design sign-off.">Design Director</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Delivery" data-facet="Backlog and scope" data-copy="Arbitrated scope and converted the decision into deterministic backlog logic.">Product Owner</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Authority" data-facet="Strategy buy-in" data-copy="Connected the standard to product strategy and secured support beyond the immediate team.">Product Director</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Delivery" data-facet="Implementation spec" data-copy="Turned the rule set into a buildable specification with no judgement calls left at implementation time.">Tech Lead</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="System" data-facet="Source of truth" data-copy="Confirmed how null and zero flow from underlying services so the interface remains faithful to the data.">Infrastructure Lead</button>
+          </div>
         </div>
-        <div class="stage2">
-          <svg class="edges" aria-hidden="true"></svg>
-          <div class="hub">DJ<small>RULE OWNER</small></div>
-          <div class="desc" aria-live="polite"></div>
+        <div class="influence-detail" aria-live="polite">
+          <div class="influence-detail-key"><span class="influence-kind">Evidence</span><strong class="influence-title">Business Analyst · Acceptance criteria</strong></div>
+          <p class="influence-copy">Translated the display rules into acceptance criteria and pressure-tested every edge case against real data scenarios.</p>
         </div>
       </div>
-      <p class="mono-note">Seven roles, one rule. This is what "systems thinking" looks like as a team sport.</p>
+      <p class="mono-note">Seven roles, one shared artifact. This is what systems thinking looks like as a team sport.</p>
     </section>
 
     <!-- ===================== E05 ===================== -->
     <section class="sec" id="e05">
       <div class="srule"><span class="eb">05 · The shipped spec</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">Written as logic, not as guidance.</h2>
-      <p class="prose">Guidance gets interpreted. Logic gets built. The rule set shipped as an implementation spec with no judgment calls left in it — which is the only reason it survived contact with seven teams.</p>
+      <p class="prose">Guidance gets interpreted. Logic gets built. The rule set shipped as an implementation spec with no judgement calls left in it — which is the only reason it survived contact with seven teams.</p>
 
       <div class="slot" data-ratio="4/3" style="margin-top:var(--space-xl);max-width:520px">
         <span class="idx">01</span>

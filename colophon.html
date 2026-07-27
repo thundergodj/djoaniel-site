@@ -36,7 +36,7 @@
 /* Wordmark override deleted — the lockup is defined once in eishiki-v3.css. */
 
 .pw{padding:var(--space-5xl) 0 0}
-.pt{font:var(--text-display-lg);letter-spacing:-.02em;margin:0 0 var(--space-md);color:var(--text-primary)}
+.pt{font:var(--text-display-lg);letter-spacing:-.02em;margin:0 0 var(--space-md);color:var(--text-primary);text-wrap:balance}
 .pk{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
   color:var(--text-muted);margin:0 0 var(--space-lg)}
 .sect{margin:var(--space-5xl) 0 0}
@@ -92,7 +92,7 @@
 .floor .stp{width:32px;height:32px;flex:none;border:var(--border-solid);background:var(--white);
   font-family:var(--font-mono);font-size:15px;font-weight:600;cursor:pointer;padding:0;
   color:var(--text-primary)}
-.floor .stp:hover{border-color:var(--accent);color:var(--accent)}
+.floor .stp:hover{border-color:var(--ink-700);color:var(--text-primary)}
 .floor .pane{display:grid;grid-template-columns:repeat(2,1fr)}
 @media(max-width:760px){.floor .pane{grid-template-columns:1fr}}
 .floor .half{padding:var(--space-lg) 16px;border-right:var(--border-hair);min-height:172px}
@@ -126,6 +126,9 @@
 <meta name="twitter:description" content="The type lock, the palette bound to a legend, and the no-framework build behind djoaniel.com. The site is the work sample.">
 <meta name="twitter:image" content="https://www.djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
+<!-- Localhost-only accent comparison -->
+<link rel="stylesheet" href="assets/local-debug.css">
+<script defer src="assets/local-debug.js"></script>
 </head>
 <body>
 
@@ -136,7 +139,7 @@
     <a class="logo" href="index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
     <div class="crumb">
       <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
-        <span class="n">01 / 05</span><span class="t">Type</span><i class="ph ph-caret-down icon-action cv" aria-hidden="true"></i>
+        <span class="n">01 / 05</span><span class="t">Type</span><i class="ph ph-caret-down icon-header cv" aria-hidden="true"></i>
       </button>
       <ul class="crumb-l" id="crumb-l" hidden>
         <li><a href="#s01" data-t="Type"><span class="n">01</span><span>Type</span></a></li>
@@ -163,7 +166,7 @@
     <div class="pw">
       <p class="pk">Colophon · How this site is built</p>
       <h1 class="pt">The site is the work sample.</h1>
-      <p class="prose lead">Before you open a single case study, you are already reading the strongest one. This page is hand-written HTML — no framework, no page builder, no template bought and reskinned. Every rule below is a decision, and every decision is legible in the source.</p>
+      <p class="prose lead">Before you open a case study, the site has already made its first argument. This page is handwritten HTML — no framework, no page builder, no template bought and reskinned. Every rule below is a decision, and every decision is legible in the source.</p>
     </div>
   </div>
 
@@ -205,12 +208,14 @@
 
     <section class="sect" id="s02">
       <div class="srule"><span class="eb">02 · Colour</span><span class="ln"></span><span class="sq"></span></div>
-      <p class="prose">Colour is bound to a legend, never used for decoration. Blue means one thing across the whole site — <b>read this</b>. It is not a hover accent and not a brand flourish. Red marks an ambiguous or null value; sage marks a resolved one. That discipline is the difference between a heads-up display and a skin.</p>
+      <p class="prose">Colour is bound to a legend, never used for decoration. Paper is the airframe; ink is structure. Blue marks what is selected, current, or deliberately called out: <b>read this</b>. Orange marks the operator's intervention — live, working, armed, or attention required. A button does not become orange merely because it can be clicked; it earns orange only while it holds that state. Red marks an ambiguous or null value; sage marks a resolved one.</p>
       <div class="swz">
-        <div class="sw"><div class="chip" style="background:rgb(247,246,242)"></div><div class="n">Paper</div><div class="m">The ground. A HUD rendered on paper, not on black.</div></div>
-        <div class="sw"><div class="chip" style="background:rgb(9,9,9)"></div><div class="n">Ink</div><div class="m">Text and hairlines, at 0.667px.</div></div>
-        <div class="sw"><div class="chip" style="background:rgb(11,63,255)"></div><div class="n">Blue</div><div class="m">Bound to one meaning: read this.</div></div>
-        <div class="sw"><div class="chip" style="background:rgb(169,46,38)"></div><div class="n">Data red</div><div class="m">An ambiguous or missing value.</div></div>
+        <div class="sw"><div class="chip" style="background:var(--paper)"></div><div class="n">Paper</div><div class="m">The airframe. The quiet ground every signal sits on.</div></div>
+        <div class="sw"><div class="chip" style="background:var(--ink-900)"></div><div class="n">Ink</div><div class="m">Structure: text, rules, frames, and resting controls.</div></div>
+        <div class="sw"><div class="chip" style="background:var(--accent)"></div><div class="n">Signal blue</div><div class="m">Selected, current, or deliberately marked: read this.</div></div>
+        <div class="sw"><div class="chip" style="background:var(--state-operator)"></div><div class="n">Operator orange</div><div class="m">Live, working, armed, or attention required. Never merely clickable.</div></div>
+        <div class="sw"><div class="chip" style="background:var(--data-null)"></div><div class="n">Data red</div><div class="m">An ambiguous, missing, or failed value.</div></div>
+        <div class="sw"><div class="chip" style="background:var(--data-ok)"></div><div class="n">Resolved sage</div><div class="m">A system state that has been resolved.</div></div>
       </div>
     </section>
 
@@ -222,7 +227,7 @@
 
     <section class="sect" id="s04">
       <div class="srule"><span class="eb">04 · Access</span><span class="ln"></span><span class="sq"></span></div>
-      <p class="prose">It passes its own audit. Every interactive control has a visible focus ring, every destination icon is paired with screen-reader text, motion respects <span style="font-family:var(--font-mono);font-size:.85em;letter-spacing:.04em">prefers-reduced-motion</span>, and a skip link leads the keyboard straight to the content. Accessibility is treated as part of the craft, not a compliance pass bolted on at the end.</p>
+      <p class="prose">It is held to its own audit. Every interactive control has a visible focus ring, every destination icon is paired with screen-reader text, motion respects <span style="font-family:var(--font-mono);font-size:.85em;letter-spacing:.04em">prefers-reduced-motion</span>, and a skip link leads the keyboard straight to the content. Accessibility is treated as part of the craft, not a compliance pass bolted on at the end.</p>
     </section>
 
     <section class="sect" id="s05">

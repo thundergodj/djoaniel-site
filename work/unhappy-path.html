@@ -14,7 +14,7 @@
   gtag('config', 'G-8897FSV2XF');
 </script>
 
-<meta name="description" content="How six retail page templates exposed the need for a component-and-state library—shown through three live recreations.">
+<meta name="description" content="How six retail page templates exposed the need for a component-and-state library — shown through three live recreations.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -249,7 +249,7 @@
 .stp{width:30px;height:30px;flex:none;border:var(--border-solid);background:var(--white);
   font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--text-primary);
   cursor:pointer;line-height:1;padding:0}
-.stp:hover{border-color:var(--accent);color:var(--accent)}
+.stp:hover{border-color:var(--ink-700);color:var(--text-primary)}
 /* Ticks name the two counts worth knowing: a plausible session and max
    load. The chip order is built so the first seven ARE the plausible
    session, which is why one slider can replace three preset buttons.
@@ -288,7 +288,7 @@ button.tg::before{content:'OFF';position:absolute;top:0;right:0;width:30px;heigh
 button.tg::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;
   background:var(--ink-700);transition:transform var(--dur-fast) var(--ease-snap),
   background var(--dur-fast) linear}
-button.tg[aria-pressed="true"]{border-color:var(--accent);background:rgba(11,63,255,.06)}
+button.tg[aria-pressed="true"]{border-color:var(--accent);background:rgba(var(--accent-rgb),.06)}
 button.tg[aria-pressed="true"]::before{content:'ON';left:0;right:auto;color:var(--accent)}
 button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(--accent)}
 
@@ -411,16 +411,19 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 <meta property="og:site_name" content="Djoaniel Hernandez">
 <meta property="og:url" content="https://www.djoaniel.com/work/unhappy-path">
 <meta property="og:title" content="The Unhappy Path — the component and state library behind the comps">
-<meta property="og:description" content="A US activewear retailer briefed six page templates. The states those pages could reach became the design system underneath them. Interactive recreations — drive the add-to-bag bar into failure yourself.">
+<meta property="og:description" content="A US activewear retailer commissioned six page templates. The states those pages could reach became the design system underneath them. Interactive recreations — drive the add-to-bag bar into failure yourself.">
 <meta property="og:image" content="https://www.djoaniel.com/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Djoaniel Hernandez — enterprise HUD design">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Unhappy Path — the component and state library behind the comps">
-<meta name="twitter:description" content="A US activewear retailer briefed six page templates. The states those pages could reach became the design system underneath them. Interactive recreations — drive the add-to-bag bar into failure yourself.">
+<meta name="twitter:description" content="A US activewear retailer commissioned six page templates. The states those pages could reach became the design system underneath them. Interactive recreations — drive the add-to-bag bar into failure yourself.">
 <meta name="twitter:image" content="https://www.djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
+<!-- Localhost-only accent comparison -->
+<link rel="stylesheet" href="../assets/local-debug.css">
+<script defer src="../assets/local-debug.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -431,13 +434,13 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
     <div class="crumb">
       <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
-        <span class="n">01 / 06</span><span class="t">The brief was pages</span><i class="ph ph-caret-down icon-action cv" aria-hidden="true"></i>
+        <span class="n">01 / 06</span><span class="t">The brief was pages</span><i class="ph ph-caret-down icon-header cv" aria-hidden="true"></i>
       </button>
       <ul class="crumb-l" id="crumb-l" hidden>
         <li><a href="#s01" data-t="The brief was pages"><span class="n">01</span><span>The brief was pages</span></a></li>
         <li><a href="#s02" data-t="The unhappy path"><span class="n">02</span><span>The unhappy path</span></a></li>
         <li><a href="#s03" data-t="The worst case"><span class="n">03</span><span>The worst case</span></a></li>
-        <li><a href="#s04" data-t="The gray homepage"><span class="n">04</span><span>The gray homepage</span></a></li>
+        <li><a href="#s04" data-t="The grey homepage"><span class="n">04</span><span>The grey homepage</span></a></li>
         <li><a href="#s05" data-t="Every colour has a job"><span class="n">05</span><span>Every colour has a job</span></a></li>
         <li><a href="#s06" data-t="What I cannot show you"><span class="n">06</span><span>What I cannot show you</span></a></li>
       </ul>
@@ -455,9 +458,9 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
   <a class="arrow plain" href="../index.html"><i class="ph ph-arrow-left icon-action g" aria-hidden="true"></i> All work</a>
   <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 05 &middot; Retail commerce &middot; Design system</p>
   <h1 class="d-hero" style="view-transition-name:vt-unhappy">The unhappy<br><span class="mark">path</span></h1>
-  <p class="prose lead">A US activewear retailer briefed six page templates. What the pages kept running into was not layout &mdash; it was
+  <p class="prose lead">A US activewear retailer commissioned six page templates. What broke was not layout but
     <button type="button" class="term" data-tip-label="State" data-tip="A state is what a component looks like once reality gets to it: nothing selected, everything selected, sold out, loading, empty, too long, too many. The happy path is one state out of a dozen.">state</button>:
-    the size nobody picked, the filter row with every chip in it, the hero image the merchandising team had not shipped yet. So the deliverable stopped being screens and became the component and state library the screens were assembled from. Below, the four artifacts that made the argument &mdash; rebuilt in code, and yours to break.</p>
+    no size selected, every filter active, the hero image still missing. The deliverable became the component-and-state library underneath the pages. The four live artifacts below make that case.</p>
 
   <div class="hero-live">
     <span class="live-mk">Live</span>
@@ -478,7 +481,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
     <div class="stat"><span class="v">27</span><div class="r"></div><span class="l">Filter chips at max load</span><span class="n">(the row the grid had to survive)</span></div>
     <div class="stat"><span class="v">5</span><div class="r"></div><span class="l">Sister brands in one header</span></div>
   </div>
-  <p class="mono-note">No performance metrics appear on this page. I do not have them, and I will not estimate them.</p>
+  <p class="mono-note">No performance metrics appear here: I do not have them, so I will not estimate them.</p>
 </div>
 
 <!-- ============================== BODY ============================== -->
@@ -658,10 +661,10 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 
     <!-- ===================== 04 ===================== -->
     <section class="sec brand" id="s04">
-      <div class="srule"><span class="eb">04 &middot; The gray homepage</span><span class="ln"></span><span class="sq"></span></div>
+      <div class="srule"><span class="eb">04 &middot; The grey homepage</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">The version nobody frames is <span class="mark">the real deliverable.</span></h2>
 
-      <p class="prose">The homepage went out twice: once dressed in campaign imagery, and once as gray boxes. The second one is the one I actually designed.</p>
+      <p class="prose">The homepage went out twice: once dressed in campaign imagery, and once as grey boxes. The second one is the one I actually designed.</p>
 
       <p class="prose">Because the person who touches this page every week is not the shopper. It is a
         <button type="button" class="term" data-tip-label="Merchandiser" data-tip="The internal user who swaps hero imagery, promo copy, banner dates and product rails on a weekly or campaign cadence — usually through a CMS, usually without a designer in the room, usually on a Friday.">merchandiser</button>
@@ -672,7 +675,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
           <span class="live-mk">Live</span>
           <span class="live-im">Take the photography away. See whether the layout still holds.</span>
           <span class="ln"></span>
-          <span class="live-note">The gray version is the deliverable</span>
+          <span class="live-note">The grey version is the deliverable</span>
         </div>
       <div class="pair pair-wide">
       <div class="spec">
@@ -709,7 +712,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
       </div>
         <div class="aside">
           <span class="k">What to watch</span>
-          <p><b>The gray state is the deliverable, not the failure state.</b> Toggle it off and you have what the merchandising team actually receives on a Friday &mdash; every slot still declaring a ratio, a safe area and a character budget. The page has to hold on a week when the assets are late, because most weeks they are.</p>
+          <p><b>The grey state is the deliverable, not the failure state.</b> Toggle it off and you have what the merchandising team actually receives on a Friday &mdash; every slot still declaring a ratio, a safe area and a character budget. The page has to hold on a week when the assets are late, because most weeks they are.</p>
           <p><b>Each slot is a contract, not a canvas.</b> A hero, three promo tiles, a five-product rail, a give-back banner &mdash; the shapes are fixed before anyone chooses an image. A merchandiser cannot break this page by picking a weak photograph, only by leaving one out.</p>
           <p><b>Nothing here is two designs.</b> The fields re-dress in place rather than swapping pictures, and the readout changes with them &mdash; because the claim is that one layout survives both conditions, not that there is a pretty version and a plain one.</p>
           <p class="note">Campaign photography belongs to the client and is not reproduced. In the populated state the palette itself stands in for the imagery &mdash; which is, conveniently, the point being made.</p>
@@ -772,6 +775,38 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
           <div class="inp dis">&nbsp;</div></div>
       </div>
       <p class="mono-note">Buttons carried the same treatment &mdash; four hierarchies, desktop and mobile, redlined to a 47px target.</p>
+    </section>
+
+    <!-- ===================== SYSTEM OF INFLUENCE ===================== -->
+    <section class="sec influence-sec" aria-labelledby="influence-unhappy-title">
+      <div class="srule"><span class="eb">System of influence</span><span class="ln"></span><span class="tag">Interactive</span><span class="sq"></span></div>
+      <h2 class="d-lg" id="influence-unhappy-title">The system sat between <span class="mark">brand, commerce and failure.</span></h2>
+      <p class="prose">The component library was shaped by more than the polished templates. Brand rules, commercial surfaces, missing imagery and the states shoppers push into were all inputs to the same system.</p>
+
+      <div class="influence-map" data-influence aria-label="What shaped the retail design system">
+        <div class="influence-stage">
+          <svg class="influence-edges" aria-hidden="true"></svg>
+          <div class="influence-hub">
+            <span class="k">Shared artifact</span>
+            <strong>Retail design system</strong>
+            <small>My role · System designer</small>
+          </div>
+          <div class="influence-nodes">
+            <button type="button" class="influence-node" aria-pressed="true" data-kind="People" data-facet="Business context" data-copy="Set the activewear proposition and the commercial surface the system had to serve.">Retail Client</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Organisation" data-facet="System boundary" data-copy="Made reuse and differentiation simultaneous requirements rather than separate phases.">Five-brand House</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="System" data-facet="Surface scope" data-copy="Forced the same component logic to hold across product, listing and campaign contexts.">PDP · PLP · Home</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Rule" data-facet="Interaction logic" data-copy="Made disabled, loading, unavailable and actionable behavior part of the deliverable.">Component States</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Evidence" data-facet="Edge-case test" data-copy="Exposed where the listing template failed when every control and value was present.">Filter Pressure</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Constraint" data-facet="Content dependency" data-copy="Tested whether the visual system still carried identity when campaign imagery disappeared.">Brand Photography</button>
+            <button type="button" class="influence-node" aria-pressed="false" data-kind="Constraint" data-facet="Evidence boundary" data-copy="Kept the system inspectable without reproducing client logos, photography or proprietary screens.">NDA-safe Recreation</button>
+          </div>
+        </div>
+        <div class="influence-detail" aria-live="polite">
+          <div class="influence-detail-key"><span class="influence-kind">People</span><strong class="influence-title">Retail Client · Business context</strong></div>
+          <p class="influence-copy">Set the activewear proposition and the commercial surface the system had to serve.</p>
+        </div>
+      </div>
+      <p class="mono-note">Seven forces, one system. Edge cases belong in the orbit, not outside the frame.</p>
     </section>
 
     <!-- ===================== 06 ===================== -->
@@ -946,7 +981,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
      colour, two sizes, a sleeve length, a third colour nobody meant to
      leave on. The first seven ARE the plausible session, which is what
      lets one slider do the job three preset buttons were doing. */
-  /* ---------- 04 · the gray homepage, wiped not swapped ----------
+  /* ---------- 04 · the grey homepage, wiped not swapped ----------
      A swap says "here are two images." A wipe says "this is one page in
      two conditions," which is the argument the section is making. */
   (function () {

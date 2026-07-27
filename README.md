@@ -29,7 +29,7 @@ type-lock.html                the Instrument Serif floor test and full scale
   Canada 700 — the serif's hairlines fall under one device pixel and grey into mush.
 - **The page never scrolls.** It's a console, not a document: content changes inside
   panes, the frame stays at `100dvh`. Pane-internal scroll is fine.
-- **Blue means one thing: *read this.*** Colour is bound to a legend, never decoration.
+- **Colour behaves like livery.** Paper is the airframe; ink is structure; blue means *read this* or *current*; orange means the operator is live, working, or armed; red is an exception; sage is resolved. A button is not orange merely because it is clickable.
 
 More on all of it — including the type lock and the accessibility pass — on the
 [colophon](https://www.djoaniel.com/colophon.html).

@@ -29,7 +29,7 @@
      sage  (--data-ok)     = passed
      red   (--data-null)   = failed
      blue  (--accent)      = inherited, and control state
-     ochre (--accent-warm) = the platform pass
+     orange (--state-operator) = operator / platform attention
 
    ---- 1.4.3 ON THIS PAGE'S OWN CHROME -------------------------------
    --text-faint is ink-400, rgb(150,149,143). Measured against this
@@ -53,10 +53,8 @@
    clothes — see the #spec block for why that matters. */
 :root{--ui-sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,
   "Helvetica Neue",Arial,sans-serif;
-  /* Raw --accent-warm measures 2.58:1 on the tab strip. Ochre is a fill
-     and a rule colour in this system, never small text; where it has to
-     be read it darkens to this. Same treatment the verdict pills get. */
-  --ochre-ink:rgb(140,96,22);
+  /* Raw operator orange is a fill and rule colour, never small text.
+     Readable orange on paper uses the shared --state-operator-ink token. */
   /* Verdict inks, darkened past the raw sage/red tokens so the badges clear
      4.5:1 in their own tint. An accessibility artifact that fails its own
      contrast check is not an artifact. Ratios in the header block above. */
@@ -92,7 +90,7 @@
   letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted)}
 .surf[disabled]{cursor:default;opacity:1;background:transparent}
 .surf[disabled] .t{color:var(--text-primary)}
-.surf.platform .s{color:var(--ochre-ink)}
+.surf.platform .s{color:var(--state-operator-ink)}
 @media(max-width:980px){
   .surfaces{grid-template-columns:repeat(2,1fr)}
   .surf{border-bottom:var(--border-hair)}
@@ -290,7 +288,7 @@
 .ctl .sc{font:var(--mono-label);letter-spacing:var(--track-label);
   text-transform:uppercase;color:var(--text-muted)}
 .ctl .sc b{font-weight:500;color:var(--text-primary)}
-.ctl .pr{color:var(--ochre-ink);font-weight:600}
+.ctl .pr{color:var(--state-operator-ink);font-weight:600}
 .ctl .nm{display:block;font-family:var(--font-sans);font-weight:700;font-size:13.5px;
   line-height:1.3;color:var(--text-primary);margin:5px 0 3px}
 .ctl .hp{font-family:var(--font-sans);font-size:12px;line-height:1.45;
@@ -305,7 +303,7 @@
 .stp{width:30px;height:30px;flex:none;border:var(--border-solid);background:var(--white);
   font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--text-primary);
   cursor:pointer;line-height:1;padding:0}
-.stp:hover{border-color:var(--accent);color:var(--accent)}
+.stp:hover{border-color:var(--ink-700);color:var(--text-primary)}
 /* The readout has to survive a 300px column without wrapping — a measured
    ratio that breaks across two lines stops reading as one number. */
 .ro{display:flex;align-items:center;gap:7px;margin-top:7px;font-family:var(--font-mono)}
@@ -338,7 +336,7 @@ button.tg::before{content:'OFF';position:absolute;top:0;right:0;width:30px;heigh
 button.tg::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;
   background:var(--ink-700);transition:transform var(--dur-fast) var(--ease-snap),
   background var(--dur-fast) linear}
-button.tg[aria-pressed="true"]{border-color:var(--accent);background:rgba(11,63,255,.06)}
+button.tg[aria-pressed="true"]{border-color:var(--accent);background:rgba(var(--accent-rgb),.06)}
 button.tg[aria-pressed="true"]::before{content:'ON';left:0;right:auto;color:var(--accent)}
 button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(--accent)}
 
@@ -354,7 +352,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
   padding:5px 0;text-align:center}
 .st-ok{background:rgba(86,128,102,.14);color:var(--ok-ink)}
 .st-no{background:rgba(169,46,38,.10);color:var(--no-ink)}
-.st-in{background:rgba(11,63,255,.08);color:var(--accent)}
+.st-in{background:rgba(var(--accent-rgb),.08);color:var(--accent)}
 /* the overall pill sits on the inverse header — light inks, not the light-surface set */
 .audit .hd .ovl.b-ok{background:rgba(150,200,168,.16);color:rgb(154,214,178)}
 .audit .hd .ovl.b-no{background:rgba(232,132,124,.16);color:rgb(240,150,142)}
@@ -365,7 +363,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 .ar.no .cn{color:var(--data-null)}
 .ar .cd{font-family:var(--font-sans);font-size:12px;line-height:1.45;
   color:var(--text-muted);margin:3px 0 0}
-.ar.inh{background:rgba(11,63,255,.022)}
+.ar.inh{background:rgba(var(--accent-rgb),.022)}
 
 /* ------------------------------------------------------------------
    The inherited block is collapsed by default, and that is an argument
@@ -381,12 +379,12 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 .inhhd{display:flex;align-items:center;gap:9px;padding:9px 14px;
   border-bottom:var(--border-hair);cursor:pointer;list-style:none;
   font:var(--text-label);letter-spacing:0.04em;text-transform:uppercase;color:var(--accent);
-  background:rgba(11,63,255,.045);transition:background var(--dur-fast) linear}
+  background:rgba(var(--accent-rgb),.045);transition:background var(--dur-fast) linear}
 .inhhd::-webkit-details-marker{display:none}
-.inhhd:hover{background:rgba(11,63,255,.085)}
+.inhhd:hover{background:rgba(var(--accent-rgb),.085)}
 .inhgrp[open] .inhhd{border-bottom:var(--border-hair)}
 .inhhd .ct{font-family:var(--font-mono);font-weight:600;font-size:12px;
-  background:rgba(11,63,255,.10);padding:2px 6px;flex:none}
+  background:rgba(var(--accent-rgb),.10);padding:2px 6px;flex:none}
 .inhhd .cv{margin-left:auto;flex:none;font-size:var(--icon-action-size);
   letter-spacing:0.04em;transition:transform var(--dur-fast) var(--ease-snap)}
 .inhgrp[open] .inhhd .cv{transform:rotate(90deg)}
@@ -466,7 +464,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
   font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;padding:4px 8px}
 .ch i{width:8px;height:8px;flex:none;display:block;font-style:normal}
 .ch.ok{background:rgba(86,128,102,.13);color:var(--ok-ink)}     .ch.ok i{background:var(--data-ok)}
-.ch.wa{background:rgba(196,138,42,.14);color:var(--ochre-ink)}  .ch.wa i{background:var(--accent-warm)}
+.ch.wa{background:rgba(var(--state-operator-rgb),.14);color:var(--state-operator-ink)}  .ch.wa i{background:var(--state-operator)}
 .ch.cl{background:rgba(9,9,9,.05);color:var(--text-muted)}      .ch.cl i{background:var(--text-muted)}
 
 /* form specimen */
@@ -524,7 +522,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 .srs{flex:none;background:var(--surface-inverse);color:var(--text-inverse);
   padding:11px 13px;margin:var(--space-sm) 14px var(--space-sm);min-height:58px}
 .srs .k{display:block;font:var(--text-label);letter-spacing:0.04em;text-transform:uppercase;
-  color:var(--accent-warm);margin-bottom:7px}
+  color:var(--state-operator);margin-bottom:7px}
 .srs output{display:block;font-family:var(--font-mono);font-size:12.5px;line-height:1.6;
   color:var(--white)}
 .srs .hint{color:var(--ink-400);font-style:italic}
@@ -558,6 +556,9 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 <meta name="twitter:description" content="Five surfaces, ten criteria, one platform pass. The WCAG 2.2 AA inspection sheet I made for Avaloq's design team to audit with — wired to live controls so you can fail it on purpose.">
 <meta name="twitter:image" content="https://www.djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
+<!-- Localhost-only accent comparison -->
+<link rel="stylesheet" href="../assets/local-debug.css">
+<script defer src="../assets/local-debug.js"></script>
 </head>
 <body>
 <a class="skip" href="#lab">Skip to the audit lab</a>
@@ -567,7 +568,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
     <div class="crumb">
       <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
-        <span class="n">01 / 04</span><span class="t">The audit, live</span><i class="ph ph-caret-down icon-action cv" aria-hidden="true"></i>
+        <span class="n">01 / 04</span><span class="t">The audit, live</span><i class="ph ph-caret-down icon-header cv" aria-hidden="true"></i>
       </button>
       <ul class="crumb-l" id="crumb-l" hidden>
         <li><a href="#s01" data-t="The audit, live"><span class="n">01</span><span>The audit, live</span></a></li>
@@ -608,11 +609,10 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
        taxonomy — with the audit itself attributed to the team. Claiming
        the instrument is the larger credential and the safer one.
        ================================================================== -->
-  <p class="prose lead">An EU directive sets a date and a standard. It does not supply a method — no regulation does.</p>
-  <p class="prose lead">Avaloq's design team ran the accessibility work. I made the instrument they audit with: an <button type="button" class="term" data-tip-label="Inspection sheet" data-tip="The eighteen-point check a garage runs on a car. Fixed list, same order every time, one verdict per line &mdash; so the result doesn't depend on which mechanic looked at it. An accessibility audit has the same problem and takes the same fix.">inspection sheet</button> that checks <b>surfaces</b> rather than features, and a status taxonomy carrying a third value — <i>inherited</i> — so a criterion resolved once at the platform is never re-litigated on the forty-first form.</p>
+  <p class="prose lead">An EU directive sets the standard, not the method. Avaloq's design team ran the accessibility work; I built the <button type="button" class="term" data-tip-label="Inspection sheet" data-tip="The eighteen-point check a garage runs on a car. Fixed list, same order every time, one verdict per line &mdash; so the result doesn't depend on which mechanic looked at it. An accessibility audit has the same problem and takes the same fix.">inspection sheet</button> they audit with.</p>
+  <p class="prose lead">It checks <b>surfaces</b> rather than features and adds a third status — <i>inherited</i> — so a criterion resolved once at platform level is never re-litigated on the forty-first form.</p>
 
-  <p class="mono-note">I made the instrument. The readings are Avaloq's — adoption, what the audit found, what it cost to fix. That data isn't mine to publish. What I can show you is the instrument, running.</p>
-  <p class="mono-note">The audit was the team's. The method, the surface taxonomy and the inherited status are mine — which is why I still have the sheet.</p>
+  <p class="mono-note">I built the method and the sheet. Avaloq owns the audit findings, adoption data and cost of remediation.</p>
 
   <div class="hero-live">
     <span class="live-mk">Live</span>
@@ -856,14 +856,14 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
   </div><!-- /bench -->
   </div><!-- /live -->
 
-  <p class="mono-note">Specimens and inspection sheet are reconstructed in this site's own system. Instruments are real companies; identifiers and positions are illustrative.</p>
+  <p class="mono-note">The specimens and inspection sheet are reconstructed in this site's own system. Companies shown are real; identifiers and positions are illustrative.</p>
 </section>
 
 <!-- ============================== INHERITED ============================== -->
 <section class="sec" id="s02">
   <div class="srule"><span class="eb">02 · Inherited</span><span class="ln"></span><span class="sq"></span></div>
   <h2 class="d-lg">Audited once. <span class="mark">Carried forever.</span></h2>
-  <p class="prose">The first version of this template made every feature test all ten criteria. It was correct and it was unusable — nobody was going to re-measure the focus ring on the forty-first form.</p>
+  <p class="prose">The first version of the sheet made every feature test all ten criteria. It was correct and it was unusable — nobody was going to re-measure the focus ring on the forty-first form.</p>
   <p class="prose">So the taxonomy grew a third status. <b>Inherited</b> means the criterion is satisfied by a governed platform component, was audited once against <b>Web apps &amp; web services</b>, and is carried by every feature that consumes it. A feature audit only tests what the feature itself introduces.</p>
 
   <div class="inhbox" style="margin-top:var(--space-lg)">
@@ -883,8 +883,39 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 <section class="sec" id="s03">
   <div class="srule"><span class="eb">03 · This page</span><span class="ln"></span><span class="sq"></span></div>
   <h2 class="d-lg">It passes its <span class="mark">own audit.</span></h2>
-  <p class="prose">Every control here is reachable and operable from the keyboard alone. Each slider is duplicated by a −/+ button, so no part of this page depends on a dragging movement — the same criterion the artifact marks inherited. The verdict panel is a live region, so it is announced rather than merely shown. Contrast ratios are computed with the WCAG relative-luminance formula, not estimated.</p>
+  <p class="prose">Every control here is reachable and operable from the keyboard alone. Each slider is duplicated by paired −/+ buttons, so no part of this page depends on a dragging movement — the same criterion the artifact marks inherited. The verdict panel is a live region, so it is announced rather than merely shown. Contrast ratios are computed with the WCAG relative-luminance formula, not estimated.</p>
   <p class="mono-note">Claiming accessibility work without shipping an accessible artifact would be the tell.</p>
+</section>
+
+<!-- ============================== SYSTEM OF INFLUENCE ============================== -->
+<section class="sec influence-sec" aria-labelledby="influence-access-title">
+  <div class="srule"><span class="eb">System of influence</span><span class="ln"></span><span class="tag">Interactive</span><span class="sq"></span></div>
+  <h2 class="d-lg" id="influence-access-title">The sheet made <span class="mark">governance portable.</span></h2>
+  <p class="prose">The inspection sheet sat between a public standard, the team running the audit, recurring product surfaces and decisions already settled at platform level. The artifact worked because those forces were made explicit instead of being left in meeting notes.</p>
+
+  <div class="influence-map" data-influence aria-label="What shaped the accessibility inspection sheet">
+    <div class="influence-stage">
+      <svg class="influence-edges" aria-hidden="true"></svg>
+      <div class="influence-hub">
+        <span class="k">Shared artifact</span>
+        <strong>Inspection sheet</strong>
+        <small>My role · Process owner</small>
+      </div>
+      <div class="influence-nodes">
+        <button type="button" class="influence-node" aria-pressed="true" data-kind="People" data-facet="Audit operators" data-copy="The design team ran the audit across the recurring product surfaces.">Avaloq Design</button>
+        <button type="button" class="influence-node" aria-pressed="false" data-kind="Standard" data-facet="Conformance boundary" data-copy="The standard defined what passing meant; the method made those checks repeatable.">WCAG 2.2 AA</button>
+        <button type="button" class="influence-node" aria-pressed="false" data-kind="System" data-facet="Scope model" data-copy="Changed the unit of audit from individual features to constructs reused across the platform.">Surface Taxonomy</button>
+        <button type="button" class="influence-node" aria-pressed="false" data-kind="Rule" data-facet="Governance memory" data-copy="Preserved platform-level decisions so the same criterion was not re-litigated on every screen.">Inherited Status</button>
+        <button type="button" class="influence-node" aria-pressed="false" data-kind="Method" data-facet="Repeatable pass" data-copy="Kept the inspection sequence fixed so results did not depend on who performed the review.">Ten Criteria</button>
+        <button type="button" class="influence-node" aria-pressed="false" data-kind="Evidence" data-facet="Inspectable proof" data-copy="Made the method itself testable without disclosing the client’s audit outcomes.">Live Specimen</button>
+      </div>
+    </div>
+    <div class="influence-detail" aria-live="polite">
+      <div class="influence-detail-key"><span class="influence-kind">People</span><strong class="influence-title">Avaloq Design · Audit operators</strong></div>
+      <p class="influence-copy">The design team ran the audit across the recurring product surfaces.</p>
+    </div>
+  </div>
+  <p class="mono-note">One method, six forces. The artifact is where the alignment survives.</p>
 </section>
 
 <!-- ==============================================================
@@ -897,9 +928,9 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
   <div class="srule"><span class="eb">04 · What I cannot show you</span><span class="ln"></span><span class="sq"></span></div>
   <h2 class="d-lg">The instrument is mine. <span class="mark">The readings are not.</span></h2>
 
-  <p class="prose">How many defects the sheet surfaced, how fast they closed, how the platform scores today, what any of it cost — that is Avaloq's data. It is not mine to publish, and a portfolio that published it would be telling you something about my judgement rather than my work.</p>
+  <p class="prose">Defect counts, closure rates, current platform scores and remediation costs are Avaloq's data. They are not mine to publish.</p>
 
-  <p class="prose">So the evidence here is the instrument itself, rebuilt and running. You can operate every control, break every criterion, and read the verdict it produces. If the method holds up under that, the numbers it produced elsewhere are a formality — and if it doesn't, no number I quoted would have saved it.</p>
+  <p class="prose">The evidence I can publish is the instrument itself, rebuilt and running. You can operate every control, break every criterion and judge whether the method holds. No quoted outcome could rescue a method that does not.</p>
 
   <p class="mono-note">The same rule governs every case on this site: the artifact is the evidence, the client keeps the outcome.</p>
 
