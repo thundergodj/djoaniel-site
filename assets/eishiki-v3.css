@@ -301,7 +301,7 @@ body{margin:0;background:var(--surface-page);color:var(--text-body);
 
 /* mono "//" aside — the NDA/meta device */
 .mono-note{display:flex;gap:var(--space-2xs);max-width:var(--prose);
-  font:var(--text-data-value);color:var(--text-muted);margin-top:var(--space-md)}
+  font:var(--text-data-value);color:var(--text-muted);margin:var(--space-md) 0 0}
 .mono-note::before{content:'//';color:var(--text-faint);flex-shrink:0}
 
 /* ==================================================================
@@ -366,6 +366,7 @@ a.plain,a.arrow{text-decoration:none}
    section's opening space is the previous one's closing space. */
 .sec{padding:var(--space-5xl) 0 0}
 .sec:last-child{padding-bottom:var(--space-5xl)}
+.cs-body main > .sec:first-child{padding-top:0}
 /* Every jump target clears the sticky top bar. The .crumb links land on
    sections, the hero status bar lands on a .live band, and the skip link
    lands on main — without this all three arrive underneath the chrome.
@@ -1217,7 +1218,8 @@ section[id],main[id],.live[id],.sec[id]{
 }
 @media(max-width:600px){
   :root{--gut:18px}
-  .sec{padding:var(--space-3xl) 0}
+  .sec{padding:var(--space-3xl) 0 0}
+  .sec:last-child{padding-bottom:var(--space-3xl)}
   .demo .grid{grid-template-columns:1fr}
   .rule{grid-template-columns:1fr;gap:9px}
   .rule .tok{text-align:left}
