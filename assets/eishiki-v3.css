@@ -39,6 +39,7 @@
   --data-red:rgb(169,46,38);
   --ochre:oklch(0.74 0.115 74);
   --sage:oklch(0.56 0.05 155);
+  --icon-action-size:26px;
 
   /* semantic aliases */
   --surface-page:var(--paper);
@@ -443,7 +444,7 @@ section[id],main[id],.live[id],.sec[id]{
 .crumb-t .n{flex:none;color:var(--accent);font-variant-numeric:tabular-nums}
 .crumb-t .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   color:var(--text-primary)}
-.crumb-t .cv{flex:none;font-size:9px;transform:translateY(-1px);
+.crumb-t .cv{flex:none;transform:translateY(-1px);
   transition:transform var(--dur-fast) var(--ease-snap)}
 .crumb-t[aria-expanded="true"] .cv{transform:translateY(-1px) rotate(180deg)}
 
@@ -762,6 +763,7 @@ section[id],main[id],.live[id],.sec[id]{
 .arrow:hover{color:var(--accent)}
 .arrow .g{transition:transform var(--dur-fast) var(--ease-snap)}
 .arrow:hover .g{transform:translateX(3px)}
+.arrow:hover .ph-arrow-left{transform:translateX(-3px)}
 .arrow.lg{font-size:15px}
 
 /* ==================================================================
@@ -1006,8 +1008,9 @@ section[id],main[id],.live[id],.sec[id]{
   border-right:var(--border-hair);transition:background var(--dur-fast) linear}
 .pn:hover{background:var(--white);text-decoration:none}
 .pn.next{border-right:0;text-align:right}
-.pn .k{font:var(--text-label);letter-spacing:0.04em;text-transform:uppercase;
-  color:var(--text-muted);margin-bottom:10px}
+.pn .k{display:flex;align-items:center;gap:9px;font:var(--text-label);
+  letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}
+.pn.next .k{justify-content:flex-end}
 .pn .t{font-family:var(--font-display);font-weight:400;font-size:28px;line-height:1.1;
   letter-spacing:-.03em;text-transform:uppercase;color:var(--text-primary)}
 
@@ -1227,6 +1230,7 @@ section[id],main[id],.live[id],.sec[id]{
   .state-out{grid-template-columns:1fr}
   .prevnext{grid-template-columns:1fr}
   .pn{border-right:0;border-bottom:var(--border-hair);text-align:left!important}
+  .pn.next .k{justify-content:flex-start}
   .srule .eb{font-size:14px;white-space:normal}
   .top nav{gap:var(--space-md)}
 }
@@ -1244,24 +1248,25 @@ section[id],main[id],.live[id],.sec[id]{
 }
 
 /* ==================================================================
-   DESTINATION ICONS — Phosphor (regular).
-   The rule: an icon means the control LEAVES this page context.
-     ph-envelope-simple   hands off to the visitor's mail client
-     ph-arrow-square-out  leaves this site, in a new tab
-   Internal navigation keeps the bare -> <- arrows and takes NO icon,
-   so the presence of an icon is never ambiguous.
-   Every icon is aria-hidden and paired with a .sr-only phrase, so the
-   signal reaches screen readers as words rather than as decoration.
+   ACTION ICONS — Phosphor (regular).
+   Every icon used by an action or control comes from one family and
+   shares the deliberately oversized 26px scale established by email
+   CTAs. Inline prose and footer icons stay compact for line-height.
    ================================================================== */
 .ph{flex:none;line-height:1;font-size:1.4em;
   transition:transform var(--dur-fast) var(--ease-snap)}
-/* ACTION-LEVEL icons run 2x the label so the destination reads before
-   the words do. The label is 10-13px mono caps; a 1em icon disappears
-   against it, which is exactly the failure this pass exists to fix. */
-.arrow .ph{font-size:26px}
-.btn .ph{font-size:20px}
+/* ACTION-LEVEL icons run roughly 2x the label so the action reads before
+   the words do. A 1em icon disappears against a 10–13px mono label. */
+.arrow .ph,.btn .ph,.pn .ph,.ph.icon-action{font-size:var(--icon-action-size)}
 a:hover .ph-arrow-square-out{transform:translate(2px,-2px)}
 a:hover .ph-envelope-simple{transform:translateY(-2px)}
+button:hover .ph-arrow-right,a:hover .ph-arrow-right{transform:translateX(3px)}
+button:hover .ph-arrow-left,a:hover .ph-arrow-left{transform:translateX(-3px)}
+button:hover .ph-arrow-clockwise{transform:rotate(24deg)}
+button:hover .ph-download-simple{transform:translateY(2px)}
+button:hover .ph-play{transform:translateX(2px) scale(1.06)}
+button:hover .ph-plus,button:hover .ph-minus,button:hover .ph-x{
+  transform:scale(1.12)}
 /* TEXT-LEVEL icons sit inside a running line (nav, footer credit) and are
    capped so they cannot blow out the line box. Signal, not shout. */
 .ph.inl{margin-right:.42em;vertical-align:-.14em;font-size:1.35em}

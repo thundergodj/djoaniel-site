@@ -37,6 +37,7 @@
   --accent:rgb(11,63,255);
   --data-null:rgb(169,46,38);
   --data-ok:oklch(0.56 0.05 155);
+  --icon-action-size:26px;
 
   --text-primary:var(--ink-900);
   --text-body:var(--ink-700);
@@ -350,22 +351,16 @@ a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* ==================================================================
-   DESTINATION ICONS — Phosphor (regular).
-   The rule: an icon means the control LEAVES this page context.
-     ph-envelope-simple   hands off to the visitor's mail client
-     ph-arrow-square-out  leaves this site, in a new tab
-   Internal navigation keeps the bare -> <- arrows and takes NO icon,
-   so the presence of an icon is never ambiguous.
-   Every icon is aria-hidden and paired with a .sr-only phrase, so the
-   signal reaches screen readers as words rather than as decoration.
+   ACTION ICONS — Phosphor (regular).
+   Every icon used by an action or control comes from one family and
+   shares the deliberately oversized 26px scale established by email
+   CTAs. Inline prose and footer icons stay compact for line-height.
    ================================================================== */
 .ph{flex:none;line-height:1;font-size:1.4em;
   transition:transform var(--dur-fast) var(--ease-snap)}
-/* ACTION-LEVEL icons run 2x the label so the destination reads before
-   the words do. The label is 10-13px mono caps; a 1em icon disappears
-   against it, which is exactly the failure this pass exists to fix. */
-.arrow .ph{font-size:26px}
-.btn .ph{font-size:20px}
+/* ACTION-LEVEL icons run roughly 2x the label so the action reads before
+   the words do. A 1em icon disappears against a 10–13px mono label. */
+.arrow .ph,.btn .ph,.pn .ph,.ph.icon-action{font-size:var(--icon-action-size)}
 a:hover .ph-arrow-square-out{transform:translate(2px,-2px)}
 a:hover .ph-envelope-simple{transform:translateY(-2px)}
 /* TEXT-LEVEL icons sit inside a running line (nav, footer credit) and are

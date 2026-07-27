@@ -181,7 +181,7 @@
   background:var(--white);font-size:12px;font-weight:500;color:var(--b-dusk);cursor:pointer;
   line-height:1.4}
 .fchip:hover{border-color:var(--b-dusk)}
-.fchip .x{color:#9A9892;font-size:11px}
+.fchip .ph{color:#9A9892;font-size:var(--icon-action-size)}
 .fchip.clear{border-color:var(--b-dusk);font-weight:600}
 /* Four across, always. This used to drop to two under a 700px VIEWPORT
    query, which stopped meaning anything the moment .plp became a fixed
@@ -431,7 +431,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
     <div class="crumb">
       <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
-        <span class="n">01 / 06</span><span class="t">The brief was pages</span><span class="cv" aria-hidden="true">&#9662;</span>
+        <span class="n">01 / 06</span><span class="t">The brief was pages</span><i class="ph ph-caret-down icon-action cv" aria-hidden="true"></i>
       </button>
       <ul class="crumb-l" id="crumb-l" hidden>
         <li><a href="#s01" data-t="The brief was pages"><span class="n">01</span><span>The brief was pages</span></a></li>
@@ -452,7 +452,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 
 <!-- ============================== HERO ============================== -->
 <div class="cs-head" style="padding-top:var(--space-4xl)">
-  <a class="arrow plain" href="../index.html"><span class="g">&larr;</span> All work</a>
+  <a class="arrow plain" href="../index.html"><i class="ph ph-arrow-left icon-action g" aria-hidden="true"></i> All work</a>
   <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 05 &middot; Retail commerce &middot; Design system</p>
   <h1 class="d-hero" style="view-transition-name:vt-unhappy">The unhappy<br><span class="mark">path</span></h1>
   <p class="prose lead">A US activewear retailer briefed six page templates. What the pages kept running into was not layout &mdash; it was
@@ -463,7 +463,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
     <span class="live-mk">Live</span>
     <span class="t"><b>Three instruments on this page, all of them running.</b> A four-state button, a filter row you can push past breaking, and a homepage with the photography taken away.</span>
     <span class="btn"><span class="slab" aria-hidden="true"></span>
-      <a href="#atb-live">Break the first one <span aria-hidden="true">&rarr;</span></a></span>
+      <a href="#atb-live">Break the first one <i class="ph ph-arrow-right icon-action" aria-hidden="true"></i></a></span>
   </div>
 
   <div class="facts" style="margin-top:var(--space-2xl)">
@@ -601,9 +601,9 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
             <label class="nm" for="fCount">Filters applied</label>
             <p class="hp">Drag, step or arrow-key from an empty row to every filter in the facet set. Everything below the slider is measured from the live DOM, not asserted.</p>
             <div class="sl">
-              <button class="stp" type="button" id="fDec" aria-label="One fewer filter">&minus;</button>
+              <button class="stp" type="button" id="fDec" aria-label="One fewer filter"><i class="ph ph-minus icon-action" aria-hidden="true"></i></button>
               <input type="range" id="fCount" min="0" max="31" step="1" value="0" aria-describedby="fRead">
-              <button class="stp" type="button" id="fInc" aria-label="One more filter">+</button>
+              <button class="stp" type="button" id="fInc" aria-label="One more filter"><i class="ph ph-plus icon-action" aria-hidden="true"></i></button>
             </div>
             <p class="ticks" id="fTicks"><span class="t0">0 &middot; clean</span><span class="tm"><b>7</b> &middot; a plausible session</span><span class="tx"><b>31</b> &middot; max load</span></p>
           </div>
@@ -792,15 +792,15 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
       <div class="actions" style="margin-top:var(--space-xl)">
         <div class="btn">
           <span class="slab" aria-hidden="true"></span>
-          <a href="../index.html">See all work <span aria-hidden="true">&rarr;</span></a>
+          <a href="../index.html">See all work <i class="ph ph-arrow-right icon-action" aria-hidden="true"></i></a>
         </div>
         <a class="arrow plain" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20The%20unhappy%20path">Talk to me about system work<span class="sr-only"> (opens your email app)</span> <i class="ph ph-envelope-simple" aria-hidden="true"></i></a>
       </div>
     </section>
 
     <nav class="prevnext" aria-label="Case study pagination">
-      <a class="pn plain" href="sarisari-snaps.html"><div class="k">&larr; Previous case</div><div class="t">SariSari Snaps</div></a>
-      <a class="pn next plain" href="no-value.html"><div class="k">Next case &rarr;</div><div class="t">The Art of Nothing</div></a>
+      <a class="pn plain" href="sarisari-snaps.html"><div class="k"><i class="ph ph-arrow-left icon-action" aria-hidden="true"></i> Previous case</div><div class="t">SariSari Snaps</div></a>
+      <a class="pn next plain" href="no-value.html"><div class="k">Next case <i class="ph ph-arrow-right icon-action" aria-hidden="true"></i></div><div class="t">The Art of Nothing</div></a>
     </nav>
 
   </main>
@@ -1026,9 +1026,9 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
       var n = Math.max(0, Math.min(ALL.length, +slider.value));
       var html = '';
       if (n) {
-        html += '<button class="fchip clear" type="button" data-clear>Clear all filters <span class="x">&times;</span></button>';
+        html += '<button class="fchip clear" type="button" data-clear>Clear all filters <i class="ph ph-x icon-action" aria-hidden="true"></i></button>';
         ALL.slice(0, n).forEach(function (v) {
-          html += '<button class="fchip" type="button" data-v="' + v + '">' + v + ' <span class="x">&times;</span></button>';
+          html += '<button class="fchip" type="button" data-v="' + v + '">' + v + ' <i class="ph ph-x icon-action" aria-hidden="true"></i></button>';
         });
       } else {
         html += '<span class="fchip" style="border-style:dashed;color:#6E6E68;cursor:default">No filters applied</span>';

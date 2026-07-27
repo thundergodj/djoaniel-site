@@ -212,17 +212,25 @@
     var go = band && band.querySelector('[data-live-go]');
     if (go) {
       var isAfter = false;
+      var goIcon = go.querySelector('.ph');
+      var goLabel = go.querySelector('[data-live-label]');
+      function syncGo(afterState) {
+        if (goIcon) goIcon.className = afterState
+          ? 'ph ph-arrow-left icon-action'
+          : 'ph ph-arrow-right icon-action';
+        if (goLabel) goLabel.textContent = afterState ? 'Back to before' : 'Apply the rule';
+      }
       go.addEventListener('click', function () {
         isAfter = !isAfter;
         render(isAfter);
-        go.textContent = isAfter ? 'Back to before ←' : 'Apply the rule →';
+        syncGo(isAfter);
       });
       /* keep the band control honest when the inline toggle is used */
       if (before) before.addEventListener('click', function () {
-        isAfter = false; go.textContent = 'Apply the rule →';
+        isAfter = false; syncGo(false);
       });
       if (after) after.addEventListener('click', function () {
-        isAfter = true; go.textContent = 'Back to before ←';
+        isAfter = true; syncGo(true);
       });
     }
     render(false);

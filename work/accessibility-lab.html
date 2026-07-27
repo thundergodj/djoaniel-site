@@ -387,7 +387,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 .inhgrp[open] .inhhd{border-bottom:var(--border-hair)}
 .inhhd .ct{font-family:var(--font-mono);font-weight:600;font-size:12px;
   background:rgba(11,63,255,.10);padding:2px 6px;flex:none}
-.inhhd .cv{margin-left:auto;flex:none;font-family:var(--font-mono);font-size:12px;
+.inhhd .cv{margin-left:auto;flex:none;font-size:var(--icon-action-size);
   letter-spacing:0.04em;transition:transform var(--dur-fast) var(--ease-snap)}
 .inhgrp[open] .inhhd .cv{transform:rotate(90deg)}
 .auf{flex:none;display:flex;justify-content:space-between;gap:var(--space-md);padding:10px 14px;
@@ -444,8 +444,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 .ib{width:30px;height:30px;flex:none;border:var(--border-solid);background:var(--white);
   display:grid;place-items:center;cursor:pointer;color:var(--ui);padding:0}
 .ib:hover{border-color:var(--ui)}
-.ib svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;
-  stroke-linecap:round;stroke-linejoin:round}
+
 .ab{font-family:var(--ui-sans);font-size:13px;font-weight:600;letter-spacing:0;
   text-transform:none;padding:8px 14px;border:0.667px solid var(--ui);
   background:var(--white);color:var(--ui);cursor:pointer}
@@ -568,7 +567,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
     <div class="crumb">
       <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
-        <span class="n">01 / 04</span><span class="t">The audit, live</span><span class="cv" aria-hidden="true">&#9662;</span>
+        <span class="n">01 / 04</span><span class="t">The audit, live</span><i class="ph ph-caret-down icon-action cv" aria-hidden="true"></i>
       </button>
       <ul class="crumb-l" id="crumb-l" hidden>
         <li><a href="#s01" data-t="The audit, live"><span class="n">01</span><span>The audit, live</span></a></li>
@@ -593,7 +592,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
      tracks --csmax like everything else.
      ================================================================== -->
 <div class="cs-head" style="padding-top:var(--space-4xl)">
-  <a class="arrow plain" href="../index.html"><span class="g">←</span> All work</a>
+  <a class="arrow plain" href="../index.html"><i class="ph ph-arrow-left icon-action g" aria-hidden="true"></i> All work</a>
   <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 02 · Accessibility governance · Avaloq</p>
   <h1 class="d-hero" style="view-transition-name:vt-access">Break It<br>Yourself</h1>
 
@@ -619,7 +618,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
     <span class="live-mk">Live</span>
     <span class="t"><b>The inspection sheet on this page is running.</b> Ten WCAG criteria, five surfaces, computed against the specimen in your browser — not a screenshot of a spreadsheet.</span>
     <span class="btn"><span class="slab" aria-hidden="true"></span>
-      <a href="#lab">Open the sheet <span aria-hidden="true">&rarr;</span></a></span>
+      <a href="#lab">Open the sheet <i class="ph ph-arrow-right icon-action" aria-hidden="true"></i></a></span>
   </div>
 
   <div class="facts" style="margin-top:var(--space-2xl)">
@@ -700,7 +699,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
       <span class="ln"></span>
       <span class="live-note">Nothing here is a screenshot</span>
       <span class="btn"><span class="slab" aria-hidden="true"></span>
-        <button type="button" id="failfirst"><i class="ph ph-arrow-u-up-left" aria-hidden="true"></i><span data-label>Put it back</span></button></span>
+        <button type="button" id="failfirst"><i class="ph ph-arrow-u-up-left icon-action" aria-hidden="true"></i><span data-label>Put it back</span></button></span>
     </div>
 
   <div class="bench">
@@ -739,9 +738,9 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
         <div id="spec" class="rigid">
           <div class="bar">
             <span class="bm">Yourbank</span><span class="sp"></span>
-            <button class="ib" type="button" data-nm="Refresh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg></button>
-            <button class="ib" type="button" data-nm="Export savings plans"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></svg></button>
-            <button class="ib" type="button" data-nm="Account menu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M4.6 20a7.4 7.4 0 0 1 14.8 0"/></svg></button>
+            <button class="ib" type="button" data-nm="Refresh"><i class="ph ph-arrow-clockwise icon-action" aria-hidden="true"></i></button>
+            <button class="ib" type="button" data-nm="Export savings plans"><i class="ph ph-download-simple icon-action" aria-hidden="true"></i></button>
+            <button class="ib" type="button" data-nm="Account menu"><i class="ph ph-user-circle icon-action" aria-hidden="true"></i></button>
           </div>
 
           <div class="bd2">
@@ -905,8 +904,8 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
   <p class="mono-note">The same rule governs every case on this site: the artifact is the evidence, the client keeps the outcome.</p>
 
   <nav class="prevnext" aria-label="Case study pagination">
-    <a class="pn plain" href="no-value.html"><div class="k">← Previous case</div><div class="t">The Art of Nothing</div></a>
-    <a class="pn next plain" href="tessa.html"><div class="k">Next case →</div><div class="t">TESSA</div></a>
+    <a class="pn plain" href="no-value.html"><div class="k"><i class="ph ph-arrow-left icon-action" aria-hidden="true"></i> Previous case</div><div class="t">The Art of Nothing</div></a>
+    <a class="pn next plain" href="tessa.html"><div class="k">Next case <i class="ph ph-arrow-right icon-action" aria-hidden="true"></i></div><div class="t">TESSA</div></a>
   </nav>
 </section>
   </main>
@@ -1126,9 +1125,9 @@ function renderControls(){
 }
 function slider(id,need){
   return '<div class="sl">'+
-    '<button class="stp" type="button" data-s="'+id+'" data-d="-1" aria-label="Decrease">−</button>'+
+    '<button class="stp" type="button" data-s="'+id+'" data-d="-1" aria-label="Decrease"><i class="ph ph-minus icon-action" aria-hidden="true"></i></button>'+
     '<input type="range" id="'+id+'" min="8" max="100" step="2" value="'+S[id]+'" aria-describedby="'+id+'-o">'+
-    '<button class="stp" type="button" data-s="'+id+'" data-d="1" aria-label="Increase">+</button></div>'+
+    '<button class="stp" type="button" data-s="'+id+'" data-d="1" aria-label="Increase"><i class="ph ph-plus icon-action" aria-hidden="true"></i></button></div>'+
     '<p class="ro" id="'+id+'-o"><span class="sw" id="'+id+'-w"></span>'+
     '<span class="v" id="'+id+'-v">—</span><span class="q">:1 · needs '+need+':1</span>'+
     '<span class="b b-ok" id="'+id+'-b">Pass</span></p>';
@@ -1191,7 +1190,7 @@ function render(){
      outside the DOM or it would snap shut mid-read. */
   h+='<details class="inhgrp"'+(inhOpen?' open':'')+'>'+
      '<summary class="inhhd"><span class="ct">'+INHERITED.length+'</span>'+
-     '<span>Inherited from the platform pass</span><span class="cv">›</span></summary>';
+     '<span>Inherited from the platform pass</span><i class="ph ph-caret-right icon-action cv" aria-hidden="true"></i></summary>';
   INHERITED.forEach(function(c){
     h+='<div class="ar inh"><span class="st st-in">Inherit</span>'+
        '<span><span class="cn">'+c.n+'<i>'+c.sc+'</i></span><p class="cd">'+c.d+'</p></span></div>';
@@ -1282,7 +1281,7 @@ if(ff) ff.addEventListener('click',function(){
   tg.click();
   var on=tg.getAttribute('aria-pressed')==='true';
   var icon=ff.querySelector('.ph'), label=ff.querySelector('[data-label]');
-  if(icon) icon.className=on?'ph ph-arrow-u-up-left':'ph ph-arrow-right';
+  if(icon) icon.className=on?'ph ph-arrow-u-up-left icon-action':'ph ph-arrow-right icon-action';
   if(label) label.textContent=on?'Put it back':'Fail one for me';
   var hit=rows.querySelector('.is-no,.b-no,[data-st="no"]');
   if(hit&&hit.scrollIntoView) hit.scrollIntoView({block:'nearest',behavior:'smooth'});
