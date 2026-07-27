@@ -106,6 +106,20 @@
 <header class="top">
   <div class="in">
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <div class="crumb">
+      <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
+        <span class="n">01 / 07</span><span class="t">The situation</span><span class="cv" aria-hidden="true">&#9662;</span>
+      </button>
+      <ul class="crumb-l" id="crumb-l" hidden>
+        <li><a href="#s01" data-t="The situation"><span class="n">01</span><span>The situation</span></a></li>
+        <li><a href="#s02" data-t="The insight"><span class="n">02</span><span>The insight</span></a></li>
+        <li><a href="#s03" data-t="The principles"><span class="n">03</span><span>The principles</span></a></li>
+        <li><a href="#s04" data-t="The flow"><span class="n">04</span><span>The flow</span></a></li>
+        <li><a href="#s05" data-t="Inside the system"><span class="n">05</span><span>Inside the system</span></a></li>
+        <li><a href="#s06" data-t="The outcome"><span class="n">06</span><span>The outcome</span></a></li>
+        <li><a href="#s07" data-t="Reflection"><span class="n">07</span><span>Reflection</span></a></li>
+      </ul>
+    </div>
     <nav>
       <a href="../index.html" aria-current="page">Work</a>
       <a href="../about.html">About</a>
@@ -121,6 +135,13 @@
   <h1 class="d-hero" style="view-transition-name:vt-sarisari">Turning DMs into<br>a <span class="mark">self-serve ritual</span></h1>
   <p class="prose lead">SariSari Snaps sells custom magnetic photo frames out of a home studio in the Philippines. Orders lived in Messenger threads — names misspelled, prices re-explained fifty times a week. I designed a four-step configurator and the design system behind it, so a customer could build, personalize, and confirm a keepsake in under two minutes, on their own.</p>
 
+  <div class="hero-live">
+    <span class="live-mk">Live</span>
+    <span class="t"><b>The configurator on this page is running.</b> Pick a frame, choose a colour, engrave it — the same four steps a customer completes in under two minutes.</span>
+    <span class="btn"><span class="slab" aria-hidden="true"></span>
+      <a href="#cfg-live">Build one <span aria-hidden="true">&rarr;</span></a></span>
+  </div>
+
   <div class="facts" style="margin-top:var(--space-2xl)">
     <div class="f"><div class="k">My role</div><div class="v">UX + Visual + Front-end<small>End-to-end, solo</small></div></div>
     <div class="f"><div class="k">Scope</div><div class="v">Configurator flow<small>+ the "Lucy" design system</small></div></div>
@@ -130,17 +151,8 @@
 </div>
 
 <!-- ============================== BODY ============================== -->
-<div class="cs-grid" style="margin-top:var(--space-5xl)">
+<div class="cs-body" style="margin-top:var(--space-5xl)">
 
-  <nav class="snav" aria-label="Case study sections">
-    <a href="#s01"><span class="n">01</span><span>The situation</span></a>
-    <a href="#s02"><span class="n">02</span><span>The insight</span></a>
-    <a href="#s03"><span class="n">03</span><span>The principles</span></a>
-    <a href="#s04"><span class="n">04</span><span>The flow</span></a>
-    <a href="#s05"><span class="n">05</span><span>Inside the system</span></a>
-    <a href="#s06"><span class="n">06</span><span>The outcome</span></a>
-    <a href="#s07"><span class="n">07</span><span>Reflection</span></a>
-  </nav>
 
   <main>
 
@@ -222,6 +234,13 @@
         <button type="button" class="step" role="tab" data-step="3" aria-selected="false" data-done="0"><div class="n">4</div><div class="t">Review order</div><div class="d">One clear summary, then GCash. The owner receives a complete, correct order instead of a puzzle to assemble.</div></button>
       </div>
 
+      <div class="live" id="cfg-live">
+        <div class="live-hd">
+          <span class="live-mk">Live</span>
+          <span class="live-im">Build one. Engrave it. The preview updates as you type.</span>
+          <span class="ln"></span>
+          <span class="live-note">Four steps &middot; no dead ends</span>
+        </div>
       <div class="cfg" id="cfg">
         <p class="hd">Configurator · recreation <span class="r" id="cfgStep">Step 1 of 4</span></p>
         <div class="bd">
@@ -232,6 +251,7 @@
         </div>
         <p class="rd" id="cfgRead"></p>
       </div>
+      </div><!-- /live -->
       <p class="mono-note">A recreation, rebuilt in this site's own type and palette. The live storefront is the real thing; this is the flow it runs.</p>
     </section>
 

@@ -125,24 +125,26 @@
    scrolls inside its own frame. Nothing below the fold at any point.
    ================================================================== */
 /* ------------------------------------------------------------------
-   ONE LEFT MARGIN.
-   The bench needs more width than --inner to hold three columns without
-   starving the specimen. The first pass widened only the bench, which
-   left the section label, the headline, the body copy and the footnote
-   hanging off one edge and everything structural off another — two
-   layouts stacked, with nothing on the page accounting for the step.
-   So the whole section breaks out and the prose is held to its measure
-   by max-width instead, which keeps a single flush left edge from the
-   section rule down to the footnote.
+   ONE LEFT MARGIN — solved at the system level now, so .breakout is gone.
+   The problem it fixed was real: the bench needs more width than the text
+   column to hold three panes without starving the specimen. But the fix
+   was local, and it was solving the symptom of a bigger break — this page
+   was the only one running a 1060px shell.
+
+   The page now sits on the shared case-study template at --csmax, and the
+   bench wears .live, which steps out to the H1's left edge on every case
+   study rather than only on this one. Same width, one rule, five pages.
    ------------------------------------------------------------------ */
-.breakout{--bw:min(calc(var(--outer) - var(--gut)*2), calc(100vw - var(--gut)*2 - 10px));
-  width:var(--bw);margin-inline:calc(50% - var(--bw)/2)}
 
 /* Intro: copy at a real measure, and the status legend in the column the
    copy leaves behind. The vocabulary is worth meeting before the sheet
    rather than four sections after it, and it resolves the right-hand void
    with the one thing that makes the panel readable. */
-.intro{display:grid;grid-template-columns:minmax(0,1fr) 288px;
+/* Was minmax(0,1fr) 288px, which parked the legend on the far right
+   while the prose stopped at its 64ch measure — leaving ~340px of
+   nothing between two things that are meant to be read together.
+   Sizing the first track to the measure closes the hole to one gap. */
+.intro{display:grid;grid-template-columns:minmax(0,var(--prose)) minmax(0,1fr);
   gap:var(--space-xl) var(--space-3xl);align-items:start;margin-top:var(--space-lg)}
 @media(max-width:980px){.intro{grid-template-columns:1fr;gap:var(--space-lg)}}
 .intro .prose{max-width:64ch;margin-bottom:var(--space-sm)}
@@ -170,8 +172,19 @@
 .lab > *{min-height:0;min-width:0}
 .a-ctl{grid-area:ctl} .a-stg{grid-area:stg} .a-aud{grid-area:aud}
 
+/* ------------------------------------------------------------------
+   CONTAINER QUERIES, not viewport queries.
+   These used to key off the window. But the lab does not live in the
+   window — it lives in the .live band, whose width is the content band
+   plus a right bleed, and that is a different number at every viewport.
+   A window query meant the three-pane layout survived to 1180px of
+   WINDOW while the band it was actually sitting in had already dropped
+   to ~840px, so the specimen got starved long before the layout agreed
+   to fold. Keyed to the band, the fold happens when the panes actually
+   run out of room. The band declares container-type in eishiki-v3.css.
+   ------------------------------------------------------------------ */
 /* two-up: the bench keeps its pairing, the sheet runs full width beneath */
-@media(max-width:1180px){
+@container live (max-width:1180px){
   .lab{grid-template-columns:282px minmax(0,1fr);
     grid-template-areas:"ctl stg" "aud aud";
     grid-template-rows:minmax(0,1fr) auto;
@@ -179,10 +192,25 @@
   .a-ctl{max-height:640px}
   .a-aud{max-height:520px}
 }
-@media(max-width:860px){
+@container live (max-width:860px){
   .lab{grid-template-columns:1fr;grid-template-areas:"stg" "ctl" "aud";
     grid-template-rows:auto auto auto;gap:var(--space-2xs)}
   .a-ctl,.a-aud{max-height:440px}
+}
+/* Fallback for engines without container queries: fold on the window at
+   the width where the band is guaranteed to be too narrow either way. */
+@supports not (container-type:inline-size){
+  @media(max-width:1180px){
+    .lab{grid-template-columns:282px minmax(0,1fr);
+      grid-template-areas:"ctl stg" "aud aud";
+      grid-template-rows:minmax(0,1fr) auto;height:auto;max-height:none}
+    .a-ctl{max-height:640px} .a-aud{max-height:520px}
+  }
+  @media(max-width:860px){
+    .lab{grid-template-columns:1fr;grid-template-areas:"stg" "ctl" "aud";
+      grid-template-rows:auto auto auto;gap:var(--space-2xs)}
+    .a-ctl,.a-aud{max-height:440px}
+  }
 }
 
 .box{border:var(--border-hair);background:var(--surface-card-30);
@@ -508,6 +536,17 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 <header class="top">
   <div class="in">
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <div class="crumb">
+      <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
+        <span class="n">01 / 04</span><span class="t">The audit, live</span><span class="cv" aria-hidden="true">&#9662;</span>
+      </button>
+      <ul class="crumb-l" id="crumb-l" hidden>
+        <li><a href="#s01" data-t="The audit, live"><span class="n">01</span><span>The audit, live</span></a></li>
+        <li><a href="#s02" data-t="Inherited"><span class="n">02</span><span>Inherited</span></a></li>
+        <li><a href="#s03" data-t="This page"><span class="n">03</span><span>This page</span></a></li>
+        <li><a href="#s04" data-t="What I cannot show you"><span class="n">04</span><span>What I cannot show you</span></a></li>
+      </ul>
+    </div>
     <nav>
       <a href="../index.html" aria-current="page">Work</a>
       <a href="../about.html">About</a>
@@ -516,8 +555,14 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
   </div>
 </header>
 
-<!-- ============================== HERO ============================== -->
-<div class="inner" style="padding-top:var(--space-4xl)">
+<!-- ============================== HERO ==============================
+     Container is .cs-head, not .inner. This page used to render its hero
+     inside a 1060px shell while the other four ran at 1376px, which put
+     its H1 158px inboard of every other case study on the site — the one
+     visible break in the left edge across the whole portfolio. It now
+     tracks --csmax like everything else.
+     ================================================================== -->
+<div class="cs-head" style="padding-top:var(--space-4xl)">
   <a class="arrow plain" href="../index.html"><span class="g">←</span> All work</a>
   <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 02 · Accessibility governance · Avaloq</p>
   <h1 class="d-hero" style="view-transition-name:vt-access">Break It<br>Yourself</h1>
@@ -536,10 +581,16 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
        ================================================================== -->
   <p class="prose lead">An EU directive sets a date and a standard. It does not supply a method — no regulation does.</p>
   <p class="prose lead">Avaloq's design team ran the accessibility work. I made the instrument they audit with: an <button type="button" class="term" data-tip-label="Inspection sheet" data-tip="The eighteen-point check a garage runs on a car. Fixed list, same order every time, one verdict per line &mdash; so the result doesn't depend on which mechanic looked at it. An accessibility audit has the same problem and takes the same fix.">inspection sheet</button> that checks <b>surfaces</b> rather than features, and a status taxonomy carrying a third value — <i>inherited</i> — so a criterion resolved once at the platform is never re-litigated on the forty-first form.</p>
-  <p class="prose lead">Below, that sheet is live. Change a value; watch the verdict turn.</p>
 
   <p class="mono-note">I made the instrument. The readings are Avaloq's — adoption, what the audit found, what it cost to fix. That data isn't mine to publish. What I can show you is the instrument, running.</p>
   <p class="mono-note">The audit was the team's. The method, the surface taxonomy and the inherited status are mine — which is why I still have the sheet.</p>
+
+  <div class="hero-live">
+    <span class="live-mk">Live</span>
+    <span class="t"><b>The inspection sheet on this page is running.</b> Ten WCAG criteria, five surfaces, computed against the specimen in your browser — not a screenshot of a spreadsheet.</span>
+    <span class="btn"><span class="slab" aria-hidden="true"></span>
+      <a href="#lab">Open the sheet <span aria-hidden="true">&rarr;</span></a></span>
+  </div>
 
   <div class="facts" style="margin-top:var(--space-2xl)">
     <div class="f"><div class="k">My role</div><div class="v">Process owner<small>The inspection sheet and its taxonomy</small></div></div>
@@ -570,8 +621,17 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
      that panel. The strip is a control, not an exhibit; it belongs on
      the instrument. One section, one heading, one eyeful.
      ================================================================== -->
-<div class="inner sec" id="lab">
- <div class="breakout">
+<!-- .cs-body, not .cs-grid — see the condition in eishiki-v3.css. This page
+     is one instrument with four short notes around it, not a prose spine.
+     A sticky rail here would be navigating four sections while charging the
+     bench 272px, and the bench is the reason anyone opened the page: below
+     ~1180px of band the three panes fold and you can no longer change a
+     value and watch the verdict turn in the same eyeful. The container is
+     still --csmax, so the left edge matches every other page on the site —
+     which was the actual defect. The rail was never the thing holding it. -->
+<div class="cs-body" style="margin-top:var(--space-5xl)">
+  <main>
+<section class="sec" id="s01" style="padding-top:0">
   <div class="srule"><span class="eb">01 · The audit, live</span><span class="ln"></span><span class="sq"></span></div>
   <h2 class="d-lg">Not screens. <span class="mark">Surfaces.</span></h2>
 
@@ -597,6 +657,21 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
       <dd>Resolved once at the platform. Carried, not re-tested.</dd>
     </dl>
   </div>
+
+  <!-- THE LIVE BAND. The instrument steps out of the content column to the
+       H1's left edge — on this site that step is the affordance. The
+       imperative that used to sit in the third lead paragraph, in body
+       type, at body weight, now sits on the instrument in the one place a
+       reader who skipped the prose will still meet it. -->
+  <div class="live" id="lab">
+    <div class="live-hd">
+      <span class="live-mk">Live</span>
+      <span class="live-im">Break a criterion. Watch the verdict turn.</span>
+      <span class="ln"></span>
+      <span class="live-note">Nothing here is a screenshot</span>
+      <span class="btn"><span class="slab" aria-hidden="true"></span>
+        <button type="button" id="failfirst">Fail one for me →</button></span>
+    </div>
 
   <div class="bench">
     <p class="benchhd"><span class="bt">Ten criteria · yours to fail</span><span class="ln"></span><span class="bs">Pick a surface</span></p>
@@ -748,13 +823,13 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
     </section>
     </div><!-- /lab -->
   </div><!-- /bench -->
+  </div><!-- /live -->
 
   <p class="mono-note">Specimens and inspection sheet are reconstructed in this site's own system. Instruments are real companies; identifiers and positions are illustrative.</p>
- </div><!-- /breakout -->
-</div>
+</section>
 
 <!-- ============================== INHERITED ============================== -->
-<div class="inner sec" style="padding-top:0">
+<section class="sec" id="s02" style="padding-top:0">
   <div class="srule"><span class="eb">02 · Inherited</span><span class="ln"></span><span class="sq"></span></div>
   <h2 class="d-lg">Audited once. <span class="mark">Carried forever.</span></h2>
   <p class="prose">The first version of this template made every feature test all ten criteria. It was correct and it was unusable — nobody was going to re-measure the focus ring on the forty-first form.</p>
@@ -771,15 +846,15 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
   <!-- The status legend used to repeat here. It now sits beside the intro
        in section 01, where it decodes the sheet before the reader hits it
        rather than four sections after. -->
-</div>
+</section>
 
 <!-- ============================== SELF-AUDIT ============================== -->
-<div class="inner sec" style="padding-top:0">
+<section class="sec" id="s03" style="padding-top:0">
   <div class="srule"><span class="eb">03 · This page</span><span class="ln"></span><span class="sq"></span></div>
   <h2 class="d-lg">It passes its <span class="mark">own audit.</span></h2>
   <p class="prose">Every control here is reachable and operable from the keyboard alone. Each slider is duplicated by a −/+ button, so no part of this page depends on a dragging movement — the same criterion the artifact marks inherited. The verdict panel is a live region, so it is announced rather than merely shown. Contrast ratios are computed with the WCAG relative-luminance formula, not estimated.</p>
   <p class="mono-note">Claiming accessibility work without shipping an accessible artifact would be the tell.</p>
-</div>
+</section>
 
 <!-- ==============================================================
      04 — mirrors the section of the same name on The Unhappy Path.
@@ -787,7 +862,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
      The constraint is a recurring, deliberate feature of this site,
      which is a different thing from an apology for missing metrics.
      ============================================================== -->
-<div class="inner sec">
+<section class="sec" id="s04">
   <div class="srule"><span class="eb">04 · What I cannot show you</span><span class="ln"></span><span class="sq"></span></div>
   <h2 class="d-lg">The instrument is mine. <span class="mark">The readings are not.</span></h2>
 
@@ -801,7 +876,9 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
     <a class="pn plain" href="no-value.html"><div class="k">← Previous case</div><div class="t">The Art of Nothing</div></a>
     <a class="pn next plain" href="tessa.html"><div class="k">Next case →</div><div class="t">TESSA</div></a>
   </nav>
-</div>
+</section>
+  </main>
+</div><!-- /cs-body -->
 
 <footer class="foot">
   <div class="in">
@@ -1157,6 +1234,25 @@ document.addEventListener('click',function(e){
   tw.innerHTML='<div class="toast"><i></i><span>Savings plan paused. It will resume on 3 Sep 2026.</span></div>';
   if(S.live) srOut.textContent='Savings plan paused. It will resume on 3 Sep 2026.';
   else srOut.innerHTML='<span class="hint">— silence. The confirmation rendered on screen only; nothing was announced.</span>';
+});
+
+/* ================= the live band's primary control =================
+   One click that proves the sheet is computing rather than displaying.
+   It trips the first toggle on the current surface, scrolls the audit
+   pane to the row that just turned, and announces the change — the same
+   path a visitor takes manually, run once for them so the "it's live"
+   claim is demonstrated before it is read. Idempotent: a second press
+   restores the passing state, so the control is a demo, not a trap. */
+var ff=document.getElementById('failfirst');
+if(ff) ff.addEventListener('click',function(){
+  var tg=ctrls.querySelector('.tg');
+  if(!tg){ return; }
+  tg.click();
+  var on=tg.getAttribute('aria-pressed')==='true';
+  ff.textContent=on?'Put it back ←':'Fail one for me →';
+  var hit=rows.querySelector('.is-no,.b-no,[data-st="no"]');
+  if(hit&&hit.scrollIntoView) hit.scrollIntoView({block:'nearest',behavior:'smooth'});
+  tg.focus({preventScroll:true});
 });
 
 /* ================= boot ================= */

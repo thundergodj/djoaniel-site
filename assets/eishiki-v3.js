@@ -62,20 +62,71 @@
   window.addEventListener('resize', hideTip);
 
   /* ================================================================
-     SECTION NAV — scrollspy
+     SCROLLBAR WIDTH — published as --sbw for the bleed maths.
+     100vw includes the classic scrollbar on Windows, so anything that
+     bleeds to "the viewport edge" using it overshoots by ~15px, and
+     html{overflow-x:clip} then eats whatever was in those pixels —
+     silently, which is the worst kind. Measured here instead.
      ================================================================ */
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.snav a'));
-  var targets = navLinks.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
-  if (targets.length && 'IntersectionObserver' in window) {
-    var spy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        navLinks.forEach(function (a) {
-          a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id);
+  var setSBW = function () {
+    var w = window.innerWidth - document.documentElement.clientWidth;
+    document.documentElement.style.setProperty('--sbw', (w > 0 ? w : 0) + 'px');
+  };
+  setSBW();
+  window.addEventListener('resize', setSBW, { passive: true });
+
+  /* ================================================================
+     THE CRUMB — position readout in the chrome.
+     Replaces the sticky left rail and the evidence bookmark. It reports
+     where the reader is, how long the document is, and opens to a jump
+     list. Everything it needs is read off the markup, so a page adds a
+     section by adding a section — nothing here is a second list to
+     maintain alongside the first.
+     ================================================================ */
+  var crumb = document.querySelector('.crumb');
+  if (crumb) {
+    var trig = crumb.querySelector('.crumb-t');
+    var list = crumb.querySelector('.crumb-l');
+    var links = Array.prototype.slice.call(crumb.querySelectorAll('.crumb-l a'));
+    var slotN = crumb.querySelector('.crumb-t .n');
+    var slotT = crumb.querySelector('.crumb-t .t');
+    var total = links.length;
+
+    function mark(i) {
+      links.forEach(function (a, k) { a.classList.toggle('on', k === i); });
+      if (slotN) slotN.textContent = String(i + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
+      if (slotT) slotT.textContent = links[i].dataset.t || links[i].textContent.trim();
+    }
+
+    function open(yes) {
+      if (!list || !trig) return;
+      list.hidden = !yes;
+      trig.setAttribute('aria-expanded', String(yes));
+    }
+    if (trig) trig.addEventListener('click', function () {
+      open(list.hidden);
+    });
+    /* close on escape, on choosing, and on anything outside */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && list && !list.hidden) { open(false); trig.focus(); }
+    });
+    document.addEventListener('click', function (e) {
+      if (list && !list.hidden && !crumb.contains(e.target)) open(false);
+    });
+    links.forEach(function (a) { a.addEventListener('click', function () { open(false); }); });
+
+    var secs = links.map(function (a) { return document.querySelector(a.getAttribute('href')); });
+    if (total && 'IntersectionObserver' in window) {
+      mark(0);
+      var spy = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          var i = secs.indexOf(en.target);
+          if (i > -1) mark(i);
         });
-      });
-    }, { rootMargin: '-25% 0px -65% 0px' });
-    targets.forEach(function (t) { spy.observe(t); });
+      }, { rootMargin: '-25% 0px -65% 0px' });
+      secs.forEach(function (t) { if (t) spy.observe(t); });
+    }
   }
 
   /* ================================================================
@@ -151,6 +202,29 @@
     }
     if (before) before.addEventListener('click', function () { render(false); });
     if (after) after.addEventListener('click', function () { render(true); });
+
+    /* The live band's primary control. It sits outside .demo — on the band
+       header, where a reader who skipped the prose still meets it — so it is
+       bound here rather than found by the scoped query above. It drives the
+       same render() as the inline toggle and relabels itself, so the two
+       controls can never disagree about which state the specimen is in. */
+    var band = demo.closest('.live');
+    var go = band && band.querySelector('[data-live-go]');
+    if (go) {
+      var isAfter = false;
+      go.addEventListener('click', function () {
+        isAfter = !isAfter;
+        render(isAfter);
+        go.textContent = isAfter ? 'Back to before ←' : 'Apply the rule →';
+      });
+      /* keep the band control honest when the inline toggle is used */
+      if (before) before.addEventListener('click', function () {
+        isAfter = false; go.textContent = 'Apply the rule →';
+      });
+      if (after) after.addEventListener('click', function () {
+        isAfter = true; go.textContent = 'Back to before ←';
+      });
+    }
     render(false);
   });
 

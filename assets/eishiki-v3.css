@@ -161,14 +161,32 @@
      binds instead of being silently overridden by a narrower column. */
   --rail:220px;
   --railgap:var(--space-3xl);
-  --csmax:var(--outer);  /* case-study container; drops to --inner once the rail is gone */
+  /* THE PAGE CONTAINER — 1200, not --outer's 1376.
+     With the rail gone the body inherited the full 1376 and nothing was
+     laid out for it: instruments filled 92-98% of the container while
+     prose and stats filled 50-56%. Half of every text screen was air.
+
+     1200 (=1096 of content) is the number where a 714px measure reads as
+     a deliberate column rather than as a stranded one, and it still
+     leaves every instrument more than the 1180 the audit lab needs once
+     the right bleed is added — 1188 at a 1280 window, 1268 at 1440.
+
+     The chrome tracks this, not --outer, or the logo and the H1 would
+     sit on different left edges: the exact defect this whole pass began
+     by fixing. --outer survives for the homepage grid only. */
+  --csmax:1200px;
+
+  /* height of the sticky top bar. Global, because the top bar is global:
+     anything that sticks below it (the evidence bookmark, the live band's
+     own header) offsets by this and must not re-measure it locally. */
+  --chrome-h:57px;
 }
 @keyframes ds-spark{0%{opacity:1;transform:translate(0,0) scale(1)}70%{opacity:.9}
   100%{opacity:0;transform:translate(var(--tx),var(--ty)) scale(.35)}}
 
 *{box-sizing:border-box}
 /* overflow-x:clip, not hidden — clip does not create a scroll container, so
-   the sticky topbar and sticky .snav keep working. Guards .bleed against the
+   the sticky topbar and the .crumb dropdown keep working. Guards .bleed against the
    classic-scrollbar gap on Windows, where 100vw > the visible viewport. */
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
 body{margin:0;background:var(--surface-page);color:var(--text-body);
@@ -282,58 +300,282 @@ a.plain,a.arrow{text-decoration:none}
 .wide{max-width:var(--outer);margin:0 auto;padding:0 var(--gut)}
 .inner{max-width:var(--inner);margin:0 auto;padding:0 var(--gut)}
 .sec{padding:var(--space-5xl) 0}
+/* Every jump target clears the sticky top bar. The .crumb links land on
+   sections, the hero status bar lands on a .live band, and the skip link
+   lands on main — without this all three arrive underneath the chrome.
+   Scoped to the things actually linked to rather than [id] globally. */
+section[id],main[id],.live[id],.sec[id]{
+  scroll-margin-top:calc(var(--chrome-h) + var(--space-md))}
 
-/* case-study masthead: same container as .cs-grid, so the H1's left edge and
-   the rail's left edge sit on one line. Tracks --csmax through breakpoints. */
+/* case-study masthead: same container as .cs-body, so the H1 and every
+   section below it sit on one left edge. Tracks --csmax through breakpoints. */
 .cs-head{max-width:var(--csmax);margin:0 auto;padding:0 var(--gut)}
 
-/* case-study body: sticky index rail + content band.
-   Container is --outer, matching .top .in and the case-study hero, so the
-   rail's left edge sits on the same optical line as the logo and the H1.
-   minmax(0,1fr) not 1fr: stops wide children (tables, code, overflow
-   scrollers) from blowing the track out past the container. */
-.cs-grid{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);
-  gap:var(--railgap);
-  max-width:var(--csmax);margin:0 auto;padding:0 var(--gut)}
+/* ------------------------------------------------------------------
+   ONE CASE-STUDY BODY. There used to be two — .cs-grid (sticky rail +
+   980px band) and .cs-body (full column) — and a written condition
+   deciding which page got which. Both are gone, because the rail is
+   gone: the position readout it existed to hold now lives in the chrome
+   as .crumb, where it cannot be clipped and costs no column.
 
-/* Everything in the band is full-band by default; only prose is measured.
-   That inversion is the whole point — a paragraph wants 714px, a four-up
-   product grid does not, and the old layout gave them both 684px. */
-.cs-grid > :not(.snav){min-width:0}
+   What that returns: every page gets the same 1272px content width, and
+   every instrument gets 272px it was previously paying to a nav that was
+   six links tall inside a column two thousand pixels long.
+
+   Prose is still measured — .prose holds --prose (714px) inside this —
+   so widening the body widens the instruments, not the paragraphs. That
+   inversion is the point: a paragraph wants 714px, a four-up product
+   grid does not.
+   ------------------------------------------------------------------ */
+.cs-body{max-width:var(--csmax);margin:0 auto;padding:0 var(--gut)}
+.cs-body > *{min-width:0}
 
 /* ---- escape hatch: right-bleed to the viewport edge ----
-   Bleeds right only. The sticky rail occupies the left margin, so a
-   symmetric full-bleed would slide under it; bleeding right reads as the
-   specimen running off the page, which is the gesture we want anyway.
+   Bleeds right only. Not because of the old sticky rail (gone) but because
+   a left bleed would break the one left edge the whole site is aligned to,
+   and that edge is doing more work than a symmetric gesture would buy.
    max() clamps to 0 below --outer, where it degrades to eating the gutter. */
-.bleed{margin-right:calc(-1 * (var(--gut) + max(0px,(100vw - var(--csmax))/2)))}
+.bleed{margin-right:calc(-1 * (var(--gut) + max(0px,(100vw - var(--sbw,0px) - var(--csmax))/2)))}
 .bleed-fade{-webkit-mask-image:linear-gradient(to right,#000 88%,transparent);
   mask-image:linear-gradient(to right,#000 88%,transparent)}
 
-/* ---- sticky numbered section nav ---- */
-.snav{position:sticky;top:var(--space-xl);display:flex;flex-direction:column;gap:2px;
-  align-self:start;height:max-content}
-/* Two locked rules, both broken here, on every case study's section nav.
-   (1) --text-caption resolves to weight 400, and uppercase mono is 500 —
-   400 is the tabular/sentence-case register, not the label register.
-   (2) --text-faint is ink-400, 2.78:1 on paper. That fails AA for text,
-   and this is navigation: the one thing on the page whose whole job is to
-   be read at a glance from the corner of the eye. It moves to --text-muted
-   at 4.92:1, which still sits well below .on (--text-primary), so the
-   selected/unselected distinction the rail depends on is untouched. */
-.snav a{display:flex;gap:11px;align-items:baseline;padding:7px 0;
-  border-top:0.667px solid var(--border-default);font:var(--mono-label);
-  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-muted);
-  text-decoration:none;transition:color var(--dur-fast) linear}
-.snav a:hover{color:var(--accent);text-decoration:none}
-.snav a .n{color:inherit}
-.snav a.on{color:var(--text-primary)}
-.snav a.on .n{color:var(--accent)}
+/* ==================================================================
+   THE CRUMB — one position readout, folded into the chrome.
+   ------------------------------------------------------------------
+   This replaces BOTH the sticky left rail (.snav) and the sticky
+   evidence bookmark (.rail). They were two components answering one
+   question — "where am I in this document" — in two registers, on
+   different pages, and between them they cost a 220px column and a
+   second sticky row.
+
+   What the rail was actually buying: six links and a sense of length.
+   What it was costing: 272px of every instrument on every page, an
+   empty column running the full height of a 3,000px document, and a
+   sticky element that collided with anything trying to use that space.
+   It also pinned at top:--space-xl (34px) while the header it sits
+   under is 57px tall, so its first item was permanently clipped —
+   every case study was showing a section list that started at 02.
+
+   Compacted here it keeps the whole job: current position, total
+   length, and one click to any section. It cannot be clipped, because
+   it is inside the thing that was clipping it.
+   ================================================================== */
+/* margin-right:auto pins the crumb to the wordmark. .top .in is
+   space-between, so with three children the crumb was landing dead
+   centre, floating free of the thing it belongs to. It is a readout
+   ABOUT this document, so it reads as part of the mark, not as a
+   third peer competing with the nav. */
+.crumb{position:relative;flex:0 1 auto;min-width:0;margin-right:auto;
+  padding-left:var(--space-lg)}
+.crumb-t{display:flex;align-items:baseline;gap:9px;padding:5px 9px 5px 0;
+  background:none;border:0;cursor:pointer;font:var(--mono-label);
+  letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-muted);max-width:100%}
+.crumb-t:hover{color:var(--text-primary)}
+.crumb-t .n{flex:none;color:var(--accent);font-variant-numeric:tabular-nums}
+.crumb-t .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  color:var(--text-primary)}
+.crumb-t .cv{flex:none;font-size:9px;transform:translateY(-1px);
+  transition:transform var(--dur-fast) var(--ease-snap)}
+.crumb-t[aria-expanded="true"] .cv{transform:translateY(-1px) rotate(180deg)}
+
+/* the jump list. Absolute, so opening it never reflows the header. */
+.crumb-l{position:absolute;top:calc(100% + 8px);left:0;z-index:60;
+  min-width:264px;margin:0;padding:0;list-style:none;
+  background:var(--paper);border:0.667px solid var(--text-primary)}
+.crumb-l[hidden]{display:none}
+.crumb-l a{display:flex;gap:11px;align-items:baseline;padding:9px 14px;
+  border-bottom:0.667px solid var(--border-default);font:var(--mono-label);
+  letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-muted);text-decoration:none;white-space:nowrap}
+.crumb-l li:last-child a{border-bottom:0}
+.crumb-l a:hover{background:var(--surface-inverse);color:var(--text-inverse);
+  text-decoration:none}
+.crumb-l a:hover .n{color:var(--text-inverse)}
+.crumb-l a .n{color:var(--text-faint);font-variant-numeric:tabular-nums}
+.crumb-l a.on{color:var(--text-primary)}
+.crumb-l a.on .n{color:var(--accent)}
+
+/* Phones: the section title goes, the counter stays. "03 / 06" is the
+   half of this that survives being 40px wide. */
+@media(max-width:760px){.crumb-t .t{display:none}}
+
+/* ==================================================================
+   THE LIVE BAND — the one element allowed to leave the text column.
+   ------------------------------------------------------------------
+   The rule this component exists to enforce: on this site, breaking the
+   grid means "this is running." Nothing else steps outside the content
+   band, so the step itself is the affordance — a reader does not need to
+   be told the artifact is interactive, the layout says it before the
+   copy does. Every instrument on every case study wears this, which is
+   what turns five bespoke control idioms into one language.
+
+   Direction: RIGHT, to the viewport edge. Never left — the left edge is
+   the one line the entire site is aligned to (logo, H1, every section
+   rule), and an instrument breaking it reads as a mistake rather than as
+   emphasis. Running off the RIGHT reads as a specimen too big for the
+   document, which is the argument being made.
+   ================================================================== */
+/* No horizontal padding on the band itself: the instrument gets the full
+   1272px, which is exactly what the widest one (the audit lab, three panes
+   at 300 + stage + 336) was already sized against. The header carries its
+   own padding and a hairline, so it reads as the bench's label plate and
+   the instrument sits on the bench rather than floating inside a box. */
+.live{background:var(--white);
+  /* NO side borders, and no side padding. The band is a top rule, a header,
+     the instrument, and a bottom rule — not a box. Two reasons.
+     One: a bordered band inside a bordered spec inside a bordered pane was
+     three frames deep before you reached any actual content.
+     Two: with a left border the instrument sat ~1px off it, so the band's
+     contents no longer began on the page's left edge — and one left edge is
+     the thing this entire pass exists to hold. Now the instrument starts
+     exactly where the H1 starts. */
+  border:0;
+  border-top:2px solid var(--ink-900);
+  border-bottom:0.667px solid var(--border-default);
+  margin:var(--space-xl) 0;
+  scroll-margin-top:calc(var(--chrome-h) + var(--space-lg));
+  container-type:inline-size;container-name:live}
+/* --sbw is the classic-scrollbar width, measured once in JS and 0 by
+   default. Without it this used 100vw, which on Windows INCLUDES the
+   scrollbar — so the band bled ~15px past the visible edge and html's
+   overflow-x:clip silently ate the last characters of every right-aligned
+   label in the band header. */
+.cs-body .live{
+  margin-right:calc(-1 * (var(--gut) + max(0px,(100vw - var(--sbw,0px) - var(--csmax))/2)))}
+
+/* A PAIRED BAND DOES NOT BLEED. The bleed exists for instruments that
+   need more width than the page column — the audit lab, the listing
+   page. A pair, by definition, holds a MEASURED instrument, so bleeding
+   it just moves the empty space further right and makes the aside column
+   wider than the text it holds. Stopping at the container keeps the
+   specimen, its reading, and the prose above all on one right edge. */
+.cs-body .live:has(.pair){margin-right:0}
+/* anything in the band that is prose rather than instrument gets the inset */
+.live > .legend,.live > p{padding:0 0 var(--space-md)}
+/* The instrument is mounted on the bench, so it drops its own outer frame
+   and top margin — otherwise every band renders a double hairline and a
+   gap where the header's rule already did that job. Inner borders stay. */
+.live > .spec,.live > .cfg,.live > .demo,.live > .chat,.live > .bench{
+  border-width:0;margin-top:0}
+/* ------------------------------------------------------------------
+   .pair — a MEASURED instrument beside its reading.
+   Used inside a .live band and on the open page, because the problem is
+   the same in both places: some specimens have a correct width that is
+   nowhere near the container's. A Messenger column is 520px. Dropped
+   into a 1096px page it leaves ~570px of white doing nothing, which is
+   worse than the shy caption it replaced — a large empty area draws the
+   eye and then pays nothing for it.
+
+   So a measured instrument gets a companion column rather than a
+   stretch: the specimen at its own width, and the reading of it beside,
+   where a reader meets both in one movement instead of scrolling past
+   the artifact and finding its explanation afterwards in grey mono.
+
+   Wide instruments (the audit lab, the listing page, the homepage) do
+   not use this. They already fill the width honestly.
+   ------------------------------------------------------------------ */
+.pair{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);
+  gap:var(--space-3xl);align-items:start}
+.live > .pair{padding:var(--space-lg) 0}
+.cs-body > main .pair,.cs-head > .pair{margin-top:var(--space-lg)}
+
+.aside{display:flex;flex-direction:column;gap:var(--space-md);
+  border-left:0.667px solid var(--border-default);padding-left:var(--space-lg)}
+.aside .k{font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--accent);margin-bottom:-6px}
+.aside p{margin:0;font-family:var(--font-sans);font-size:14px;line-height:1.55;
+  color:var(--text-body);max-width:52ch}
+.aside p b{color:var(--text-primary)}
+.aside .note{font:var(--mono-caption);letter-spacing:var(--track-caption);
+  color:var(--text-muted);line-height:1.5}
+
+@media(max-width:980px){
+  .pair{grid-template-columns:1fr;gap:var(--space-lg)}
+  .live > .pair{padding:var(--space-md) 0}
+  .aside{border-left:0;border-top:0.667px solid var(--border-default);
+    padding-left:0;padding-top:var(--space-md)}
+}
+/* a paired instrument keeps its own frame — the band is not boxing it */
+.pair > .chat,.pair > .demo,.pair > .spec,.pair > .cfg{
+  border-width:0.667px;margin:0}
+
+/* header: the marker, the imperative, the rule, the aside. One row. */
+/* 5px of right padding, not 0: the primary control's offset slab sits
+   4px right of the button, and on a bleeding band the band's right edge
+   IS the clipped viewport edge — so a flush header sheared the shadow
+   off the one button the band exists to point at. */
+.live-hd{display:flex;align-items:baseline;gap:var(--space-sm);
+  flex-wrap:wrap;padding:var(--space-md) 5px var(--space-md) 0;
+  border-bottom:var(--border-hair);margin-bottom:0}
+.live-mk{display:inline-flex;align-items:center;gap:7px;flex:none;
+  background:var(--accent);color:var(--text-inverse);
+  padding:4px 9px;font:var(--mono-label);font-weight:500;
+  letter-spacing:var(--track-label);text-transform:uppercase}
+.live-mk::before{content:"";width:6px;height:6px;background:currentColor;
+  border-radius:50%;animation:live-pulse 1.9s var(--ease-out) infinite}
+@keyframes live-pulse{0%,100%{opacity:1}50%{opacity:.25}}
+@media(prefers-reduced-motion:reduce){.live-mk::before{animation:none}}
+
+/* the imperative. Sans, not serif: this is an instruction, not a claim,
+   and it has to out-shout body prose without pretending to be a headline.
+   Weight and ink do that work — size only steps one rung. */
+.live-im{font-family:var(--font-sans);font-weight:600;
+  font-size:clamp(16px,1.5vw,19px);line-height:1.3;
+  color:var(--text-primary);flex:1 1 28ch;min-width:20ch}
+.live-hd .ln{height:1px;background:var(--border-default);flex:1 1 40px}
+.live-note{font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-muted);flex:none}
+
+/* The one primary control per band, carrying the slab.
+   margin-left:auto matters more than it looks: when the header runs out of
+   room the button wraps to a second row, and without this it lands flush
+   left under the LIVE chip, reading as an orphan rather than as a control.
+   Pushed right, a wrapped header still looks like a header. */
+.live-hd .btn{flex:none;align-self:center;margin-left:auto}
+
+/* ==================================================================
+   HERO STATUS BAR — the promise, above the fold.
+   ------------------------------------------------------------------
+   Every case study opened the same way: serif headline, three
+   paragraphs, a four-cell facts table. Five pages, one silhouette. A
+   reader skimming tabs saw the same page five times and never reached
+   the instruments, which sit 1,800–2,400px down and are the only reason
+   any of this is different from a PDF.
+
+   This is the one row in the hero that says something is running. It is
+   the only inverse surface above the fold, so it cannot be skimmed past,
+   and it carries the jump — a reader can be inside the instrument in one
+   click instead of six screens of scrolling. The count is written per
+   page, never generated, so it cannot drift from what is actually there.
+   ================================================================== */
+.hero-live{display:flex;align-items:center;gap:var(--space-md);flex-wrap:wrap;
+  background:var(--surface-inverse);color:var(--text-inverse);
+  padding:var(--space-xs) var(--space-md);margin:var(--space-xl) 0 0}
+.hero-live .live-mk{background:var(--accent);color:var(--text-inverse)}
+.hero-live .t{font-family:var(--font-sans);font-weight:500;font-size:15px;
+  line-height:1.35;color:var(--text-inverse);flex:1 1 auto;min-width:16ch}
+.hero-live .t b{font-weight:700}
+/* the jump. Inverted against the bar: the slab stays accent, the face
+   goes paper so it reads as a control on a dark ground rather than a
+   black button dissolving into a black bar. */
+.hero-live .btn{flex:none}
+.hero-live .btn a{background:var(--paper);color:var(--text-primary);
+  border-color:var(--paper)}
+@media(max-width:600px){
+  .hero-live{align-items:flex-start;flex-direction:column;gap:var(--space-2xs);
+    padding:var(--space-sm) var(--space-md)}
+}
+@media(max-width:860px){
+  .live-hd{padding:var(--space-sm) 5px var(--space-sm) 0}
+  .live > .legend,.live > p{padding:0 0 var(--space-sm)}
+  .live-hd .ln{display:none}
+}
 
 /* ---- top bar ---- */
 .top{border-bottom:var(--border-hair);position:sticky;top:0;z-index:40;
   background:var(--paper)}
-.top .in{max-width:var(--outer);margin:0 auto;padding:var(--space-md) var(--gut);
+.top .in{max-width:var(--csmax);margin:0 auto;padding:var(--space-md) var(--gut);
   display:flex;align-items:center;justify-content:space-between}
 /* ---- THE LOCKUP — one definition, every page ----------------------
    This was set two ways. The stylesheet said Radio Canada 600 at -.045em
@@ -540,8 +782,12 @@ a.plain,a.arrow{text-decoration:none}
 /* ==================================================================
    STAT BLOCK · PULL QUOTE
    ================================================================== */
+/* The stats strip was three items shrink-wrapped to their own content,
+   huddled in the first half of the container with the rule under each
+   one stopping short. flex:1 gives each an equal share, so the three
+   rules read as one measured row across the page, not three stubs. */
 .stats{display:flex;flex-wrap:wrap;gap:var(--space-3xl)}
-.stat{display:flex;flex-direction:column;gap:10px;min-width:180px}
+.stat{display:flex;flex-direction:column;gap:10px;min-width:180px;flex:1 1 0}
 .stat .v{font-size:46px;line-height:52px;letter-spacing:-.03em}
 .stat .r{height:1px;background:var(--text-primary)}
 .stat .l{font:var(--text-label);text-transform:uppercase;color:var(--text-muted);
@@ -587,7 +833,7 @@ a.plain,a.arrow{text-decoration:none}
   letter-spacing:-.03em;text-transform:uppercase;color:var(--text-primary)}
 
 .foot{border-top:var(--border-hair);margin-top:var(--space-5xl)}
-.foot .in{max-width:var(--outer);margin:0 auto;padding:var(--space-lg) var(--gut);
+.foot .in{max-width:var(--csmax);margin:0 auto;padding:var(--space-lg) var(--gut);
   display:flex;align-items:center;justify-content:space-between;gap:var(--space-lg)}
 .foot .z{font:var(--text-caption);letter-spacing:0.02em;color:var(--text-muted)}
 /* 意識 — Instrument Serif has no CJK. Pinned to a Mincho stack. */
@@ -783,8 +1029,6 @@ a.plain,a.arrow{text-decoration:none}
   /* rail gone: reclaim its width, but clamp the railless body to --inner so
      the single column doesn't sprawl to full-viewport on a large tablet */
   :root{--csmax:var(--inner)}
-  .cs-grid{grid-template-columns:minmax(0,1fr);gap:0}
-  .snav{display:none}
   .demo .grid{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:860px){

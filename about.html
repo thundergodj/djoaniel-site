@@ -39,6 +39,8 @@
   color:var(--text-muted);margin:0 0 var(--space-lg)}
 .pt{font:var(--text-display-lg);letter-spacing:-.02em;margin:0 0 var(--space-md);color:var(--text-primary);max-width:20ch}
 .sect{margin:var(--space-5xl) 0 0}
+/* the grid already supplies the step down from the masthead */
+.sect:first-of-type{margin-top:0}
 .sect .srule{margin-bottom:var(--space-lg)}
 .split{display:grid;grid-template-columns:1fr 320px;gap:var(--space-4xl);align-items:start}
 @media (max-width:820px){.split{grid-template-columns:1fr;gap:var(--space-xl)}}
@@ -68,6 +70,17 @@
 <header class="top">
   <div class="in">
     <a class="logo" href="index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <div class="crumb">
+      <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
+        <span class="n">01 / 04</span><span class="t">What I do now</span><span class="cv" aria-hidden="true">&#9662;</span>
+      </button>
+      <ul class="crumb-l" id="crumb-l" hidden>
+        <li><a href="#s01" data-t="What I do now"><span class="n">01</span><span>What I do now</span></a></li>
+        <li><a href="#s02" data-t="The through-line"><span class="n">02</span><span>The through-line</span></a></li>
+        <li><a href="#s03" data-t="Track record"><span class="n">03</span><span>Track record</span></a></li>
+        <li><a href="#s04" data-t="Talk to me"><span class="n">04</span><span>Talk to me</span></a></li>
+      </ul>
+    </div>
     <nav aria-label="Primary">
       <a href="index.html">Work</a>
       <a href="colophon.html">Colophon</a>
@@ -78,28 +91,36 @@
   </div>
 </header>
 
+<!-- Container is .cs-head / .cs-grid, matching every case study. This page
+     used to render inside .inner at 1060px while its own top bar ran at
+     1376px — the logo and the H1 sat 158px apart on the same page. The
+     numbered sections it already had now drive a sticky rail, which is
+     also what fills the left margin that widening the container opens up. -->
 <main id="main">
-  <div class="inner">
-
+  <div class="cs-head">
     <div class="pw">
       <p class="pk">About</p>
       <h1 class="pt" style="view-transition-name:vt-about">I make dense systems readable at a glance.</h1>
       <p class="prose lead">A heads-up display is the craft of rendering live, high-stakes state so it can be read in a moment, under pressure. That is what I have been doing for sixteen years — in private-wealth platforms, a nuclear-maintenance console, a chatbot holding a decision tree inside a message bubble. Industries that never called it a HUD, but that is what it was.</p>
     </div>
+  </div>
 
-    <section class="sect">
+  <div class="cs-body" style="margin-top:var(--space-3xl)">
+    <div>
+
+    <section class="sect" id="s01">
       <div class="srule"><span class="eb">01 · What I do now</span><span class="ln"></span><span class="sq"></span></div>
       <p class="prose">I'm a senior product designer at <b>Avaloq</b>, working on the interfaces private bankers and wealth managers use to run other people's money — the kind of system where a mislabelled field is not a papercut but a liability. Before that, five and a half years at <b>Accenture's Liquid Studio</b>, designing enterprise products for regulated clients.</p>
       <p class="prose">I also build things end to end. <b>SariSari Snaps</b> is a direct-to-consumer product I designed, specified, and shipped solo — the physical product, the functional spec, and a deployed web app now selling across <b>three marketplaces</b>. I drove the code with AI agents, which is worth saying plainly: the leverage was the specification. Agents will build precisely what you can define, and defining it — the states, the rules, the edge cases — is the design work. That is the same skill this whole site is about, pointed at my own product instead of a client's.</p>
     </section>
 
-    <section class="sect">
+    <section class="sect" id="s02">
       <div class="srule"><span class="eb">02 · The through-line</span><span class="ln"></span><span class="sq"></span></div>
       <p class="prose">The video-game-UI instinct and the enterprise career are not two people. Both are about the same problem: dense information, live state, real consequence, and a reader who has one second to understand it. A holdings table rendering a null value and a HUD reporting fuel state are the same design problem wearing different clothes.</p>
       <p class="prose">So I lead with the work, not the résumé. The years and the titles are evidence of scale and consequence — they belong inside the case studies, where you can see what they actually bought. Up front, the only question worth answering is whether I can make it. Look around; that's the argument.</p>
     </section>
 
-    <section class="sect">
+    <section class="sect" id="s03">
       <div class="srule"><span class="eb">03 · Track record</span><span class="ln"></span><span class="sq"></span></div>
       <div class="split">
         <div>
@@ -116,12 +137,13 @@
       </div>
     </section>
 
-    <section class="sect">
+    <section class="sect" id="s04">
       <div class="srule"><span class="eb">04 · Talk to me</span><span class="ln"></span><span class="sq"></span></div>
       <p class="prose">If you're hiring for design-and-build, product, retail, or senior UX work — or you just want to know how one of these was made — <a href="mailto:djoaniel@gmail.com?subject=Your%20portfolio"><i class="ph ph-envelope-simple inl" aria-hidden="true"></i> djoaniel@gmail.com<span class="sr-only"> (opens your email app)</span></a> reaches me directly. How this site itself is built is on the <a href="colophon.html">colophon</a>.</p>
     </section>
 
-  </div>
+    </div>
+  </div><!-- /cs-body -->
 </main>
 
 <footer class="foot">
@@ -130,6 +152,11 @@
     <div class="mk">意識</div>
   </div>
 </footer>
+
+<!-- Loaded here for the first time: this page now carries a .snav, and the
+     scroll-spy that lights it lives in the shared behaviour file. Without
+     this the rail would render but never track. -->
+<script src="assets/eishiki-v3.js"></script>
 
 </body>
 </html>

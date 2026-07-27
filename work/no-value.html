@@ -39,14 +39,11 @@
    square is how a section says it starts — withholding it on one page
    didn't make the page quieter, it made it foreign.
 
-   What survives as local: .hardbreak, .sysname, and the sticky rail.
-   All three carry the brief/evidence argument, which no other page
-   makes. Local because it is load-bearing, not because it is new.
+   What survives as local: .hardbreak and .sysname. Both carry the
+   brief/evidence argument, which no other page makes. Local because it
+   is load-bearing, not because it is new. (The sticky rail used to be
+   the third; it is now .crumb, in the chrome, on every page.)
    ================================================================== */
-:root{
-  --chrome-h:57px;
-  --rail-h:36px;
-}
 /* MONO LOCK. This file used to declare its own --mono at 11px/1.1 and set it
    uppercase at .12–.14em, weight 400 — under the 12.5px floor, over the .05em
    ceiling, under the 500 weight. Three violations, and the only three on the
@@ -64,18 +61,11 @@
    baseline — is now defined once in eishiki-v3.css. */
 
 /* ---------- position readout ----------
-   Kept — it is the one HUD behaviour on the page that earns its row, because
-   this document is split and a skimmer needs to know which half they are in.
-   Now set in the same register as the primary nav directly above it, so the
-   two sticky rows read as one chrome block instead of two typefaces. */
-.rail{position:sticky;top:var(--chrome-h);z-index:35;background:var(--paper);
-  border-bottom:0.667px solid var(--border-default)}
-.rail .in{max-width:var(--outer);margin:0 auto;padding:9px var(--gut);
-  display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-md);
-  font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
-  color:var(--text-muted)}
-.rail .now{color:var(--text-primary)}
-.rail .of{white-space:nowrap}
+   Gone from this page entirely, and from the site. It was one of two
+   components answering "where am I" — the other being the sticky left
+   rail on the other five pages — and both are now .crumb, in the chrome.
+   The brief/evidence split this page argues is still marked by .hardbreak,
+   which is a statement about attention rather than a navigation aid. */
 
 /* ---------- separators ----------
    The bespoke .sep is gone. The site's section landmark is .srule — eyebrow,
@@ -160,8 +150,10 @@
 }
 
 /* ---------- inherited defects, fixed ---------- */
-.sec,[id]{scroll-margin-top:calc(var(--chrome-h) + var(--rail-h) + 24px)}
-.snav{top:calc(var(--chrome-h) + var(--rail-h) + 20px)}
+/* The two scroll-margin overrides that lived here budgeted for a second
+   sticky row (--rail-h) that no longer exists, and offset a .snav that no
+   longer exists. eishiki-v3.css now sets scroll-margin against --chrome-h
+   alone, which is the only sticky thing left. */
 :focus-visible{outline:2px solid var(--text-primary);outline-offset:2px}
 /* --text-faint is 2.78:1 and fails AA — nothing new in this file uses it */
 .mono-note,.slot .lbl,.slot .idx{color:var(--text-muted)}
@@ -200,6 +192,19 @@
 <header class="top">
   <div class="in">
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <div class="crumb">
+      <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
+        <span class="n">01 / 06</span><span class="t">Why it cost</span><span class="cv" aria-hidden="true">&#9662;</span>
+      </button>
+      <ul class="crumb-l" id="crumb-l" hidden>
+        <li><a href="#e01" data-t="Why it cost"><span class="n">01</span><span>Why it cost</span></a></li>
+        <li><a href="#e02" data-t="The four states"><span class="n">02</span><span>The four states</span></a></li>
+        <li><a href="#e03" data-t="The rule set in full"><span class="n">03</span><span>The rule set in full</span></a></li>
+        <li><a href="#e04" data-t="Circle of influence"><span class="n">04</span><span>Circle of influence</span></a></li>
+        <li><a href="#e05" data-t="The shipped spec"><span class="n">05</span><span>The shipped spec</span></a></li>
+        <li><a href="#e06" data-t="Reflection"><span class="n">06</span><span>Reflection</span></a></li>
+      </ul>
+    </div>
     <!-- Matches the other four case studies exactly: three links, Work carrying
          aria-current. The fourth email link this page used to carry made the
          top-left corner — the first thing read — announce a different site.
@@ -212,21 +217,13 @@
   </div>
 </header>
 
-<!-- position readout — tells a skimmer the shape of the page -->
-<div class="rail" aria-hidden="true">
-  <div class="in">
-    <span class="now" data-readout>The brief</span>
-    <span class="of">Case study 01 · The Art of Nothing</span>
-  </div>
-</div>
-
 <main id="main">
 
 <!-- ==================================================================
      THE BRIEF — the whole argument. If someone reads only this, they
      have everything they need to decide whether to talk to me.
      ================================================================== -->
-<div class="cs-head brief" data-pos="The brief">
+<div class="cs-head brief">
   <a class="arrow plain" href="../index.html"><span class="g">←</span> All work</a>
   <p class="kick">// Case study 01 · Design systems · Avaloq</p>
   <!-- The transition name moved off .sysname and onto the h1, because the
@@ -247,6 +244,13 @@
        platform standard carried through seven roles. Avaloq is named because
        it is an employer, not a third-party client — same disclosure tier the
        accessibility lab uses. The bank's own data stays out. -->
+  <div class="hero-live">
+    <span class="live-mk">Live</span>
+    <span class="t"><b>The rule is running on this page.</b> Six real null values, four rules, one switch — throw it and every field names the rule that fired.</span>
+    <span class="btn"><span class="slab" aria-hidden="true"></span>
+      <a href="#rule-live">Throw the switch <span aria-hidden="true">&rarr;</span></a></span>
+  </div>
+
   <div class="facts" style="margin-top:var(--space-2xl)">
     <div class="f"><div class="k">My role</div><div class="v">Rule owner<small>Authored the rule set and drove sign-off</small></div></div>
     <div class="f"><div class="k">Employer</div><div class="v">Avaloq<small>Swiss private-wealth platform</small></div></div>
@@ -314,7 +318,17 @@
   <p class="claim">The same screen, before and after the rule.</p>
   <p class="prose">Each field shows <b>which rule fired</b> once the standard is applied. It resolves on its own as you reach it — toggle back and forth as much as you like.</p>
 
-  <div class="demo" data-demo style="margin-top:var(--space-lg)">
+  <div class="live" id="rule-live">
+    <div class="live-hd">
+      <span class="live-mk">Live</span>
+      <span class="live-im">Throw the switch. Every field names the rule that fired.</span>
+      <span class="ln"></span>
+      <span class="live-note">Six fields · four rules</span>
+      <span class="btn"><span class="slab" aria-hidden="true"></span>
+        <button type="button" data-live-go>Apply the rule →</button></span>
+    </div>
+
+  <div class="demo" data-demo>
     <div class="bar">
       <span class="t">CRM · Investment Proposal</span>
       <div class="toggle" role="group" aria-label="Before or after the rule">
@@ -343,6 +357,7 @@
     <span class="k dash"><i></i> Correctly absent — emdash</span>
     <span class="k ok"><i></i> Resolved to a real value</span>
   </div>
+  </div><!-- /live -->
   <p class="mono-note">The address row is the one people miss: a concatenated field punctuating gaps that were never there.</p>
 
   <!-- the result -->
@@ -379,21 +394,13 @@
 <!-- ==================================================================
      THE EVIDENCE — depth, explicitly optional
      ================================================================== -->
-<div class="cs-grid" style="margin-top:var(--space-4xl)">
+<div class="cs-body" style="margin-top:var(--space-4xl)">
 
-  <nav class="snav" aria-label="Evidence sections">
-    <a href="#e01"><span class="n">01</span><span>Why it cost</span></a>
-    <a href="#e02"><span class="n">02</span><span>The four states</span></a>
-    <a href="#e03"><span class="n">03</span><span>The rule set in full</span></a>
-    <a href="#e04"><span class="n">04</span><span>Circle of influence</span></a>
-    <a href="#e05"><span class="n">05</span><span>The shipped spec</span></a>
-    <a href="#e06"><span class="n">06</span><span>Reflection</span></a>
-  </nav>
 
   <div>
 
     <!-- ===================== E01 ===================== -->
-    <section class="sec" id="e01" style="padding-top:0" data-pos="Evidence 01 / 06">
+    <section class="sec" id="e01" style="padding-top:0">
       <div class="srule"><span class="eb">01 · Why it cost</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">A blank is a question <span class="mark">the advisor can't afford</span> to guess.</h2>
       <p class="d-md">Is this data <em>missing</em>, or is the value <em>actually zero</em>?</p>
@@ -410,7 +417,7 @@
     </section>
 
     <!-- ===================== E02 ===================== -->
-    <section class="sec" id="e02" data-pos="Evidence 02 / 06">
+    <section class="sec" id="e02">
       <div class="srule"><span class="eb">02 · The four states</span><span class="ln"></span>
         <span class="tag">Live · try it</span><span class="sq"></span></div>
       <h2 class="d-lg">"Empty" isn't one state. It's <span class="mark">four</span>.</h2>
@@ -444,7 +451,7 @@
     </section>
 
     <!-- ===================== E03 ===================== -->
-    <section class="sec" id="e03" data-pos="Evidence 03 / 06">
+    <section class="sec" id="e03">
       <div class="srule"><span class="eb">03 · The rule set in full</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">One blanket rule. Three exceptions.</h2>
       <p class="prose">The same rule set as the brief, with the reasoning that earned each exception a place. It starts with a single default, then handles the three cases where that default would lie.</p>
@@ -474,7 +481,7 @@
     </section>
 
     <!-- ===================== E04 ===================== -->
-    <section class="sec" id="e04" data-pos="Evidence 04 / 06">
+    <section class="sec" id="e04">
       <div class="srule"><span class="eb">04 · Circle of influence</span><span class="ln"></span>
         <span class="tag">Live · try it</span><span class="sq"></span></div>
       <h2 class="d-lg">The logic was the easy part. <span class="mark">Alignment</span> was the work.</h2>
@@ -500,7 +507,7 @@
     </section>
 
     <!-- ===================== E05 ===================== -->
-    <section class="sec" id="e05" data-pos="Evidence 05 / 06">
+    <section class="sec" id="e05">
       <div class="srule"><span class="eb">05 · The shipped spec</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">Written as logic, not as guidance.</h2>
       <p class="prose">Guidance gets interpreted. Logic gets built. The rule set shipped as an implementation spec with no judgment calls left in it — which is the only reason it survived contact with seven teams.</p>
@@ -512,7 +519,7 @@
     </section>
 
     <!-- ===================== E06 ===================== -->
-    <section class="sec" id="e06" data-pos="Evidence 06 / 06">
+    <section class="sec" id="e06">
       <div class="srule"><span class="eb">06 · Reflection</span><span class="ln"></span><span class="sq"></span></div>
       <blockquote class="pq">
         <q>The work I'm proudest of is invisible. Nobody notices null-handling done right — they just trust the screen. That's the job.</q>
@@ -575,17 +582,6 @@
     }
   }
 
-  /* Position readout — makes the document's shape visible while skimming. */
-  var out = document.querySelector('[data-readout]');
-  var marks = Array.prototype.slice.call(document.querySelectorAll('[data-pos]'));
-  if (out && marks.length && 'IntersectionObserver' in window) {
-    var spy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) out.textContent = en.target.getAttribute('data-pos');
-      });
-    }, { rootMargin: '-30% 0px -60% 0px' });
-    marks.forEach(function (m) { spy.observe(m); });
-  }
 })();
 </script>
 </body>

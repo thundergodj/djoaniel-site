@@ -14,7 +14,7 @@
   gtag('config', 'G-8897FSV2XF');
 </script>
 
-<meta name="description" content="TESSA — a Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. Conversation design case study by Djoaniel Hernandez.">
+<meta name="description" content="TESSA — a Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. The questionnaire never asks &quot;what are your skills.&quot; Conversation design case study by Djoaniel Hernandez.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -27,15 +27,15 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Djoaniel Hernandez">
 <meta property="og:url" content="https://djoaniel.com/work/tessa">
-<meta property="og:title" content="TESSA — a career coach that lives where the jobseekers already are">
-<meta property="og:description" content="TESSA — a Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. Conversation design case study by Djoaniel Hernandez.">
+<meta property="og:title" content="TESSA — they had the skills. Nobody had given them the words.">
+<meta property="og:description" content="A Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. The questionnaire never asks &quot;what are your skills.&quot; Conversation design case study by Djoaniel Hernandez.">
 <meta property="og:image" content="https://djoaniel.com/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Djoaniel Hernandez — enterprise HUD design">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="TESSA — a career coach that lives where the jobseekers already are">
-<meta name="twitter:description" content="TESSA — a Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. Conversation design case study by Djoaniel Hernandez.">
+<meta name="twitter:title" content="TESSA — they had the skills. Nobody had given them the words.">
+<meta name="twitter:description" content="A Messenger career coach for young Filipino jobseekers, built by Accenture for Plan International Philippines. The questionnaire never asks &quot;what are your skills.&quot;">
 <meta name="twitter:image" content="https://djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
 </head>
@@ -45,6 +45,19 @@
 <header class="top">
   <div class="in">
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <div class="crumb">
+      <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
+        <span class="n">01 / 06</span><span class="t">The barrier</span><span class="cv" aria-hidden="true">&#9662;</span>
+      </button>
+      <ul class="crumb-l" id="crumb-l" hidden>
+        <li><a href="#s01" data-t="The barrier"><span class="n">01</span><span>The barrier</span></a></li>
+        <li><a href="#s02" data-t="Before the first question"><span class="n">02</span><span>Before the first question</span></a></li>
+        <li><a href="#s03" data-t="The translation engine"><span class="n">03</span><span>The translation engine</span></a></li>
+        <li><a href="#s04" data-t="What it hands back"><span class="n">04</span><span>What it hands back</span></a></li>
+        <li><a href="#s05" data-t="What I'd change"><span class="n">05</span><span>What I'd change</span></a></li>
+        <li><a href="#s06" data-t="What I cannot show you"><span class="n">06</span><span>What I cannot show you</span></a></li>
+      </ul>
+    </div>
     <nav>
       <a href="../index.html" aria-current="page">Work</a>
       <a href="../about.html">About</a>
@@ -57,118 +70,284 @@
 <div class="cs-head" style="padding-top:var(--space-4xl)">
   <a class="arrow plain" href="../index.html"><span class="g">←</span> All work</a>
   <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 03 · Conversation design · Social impact</p>
-  <h1 class="d-hero" style="view-transition-name:vt-tessa">A career coach that lives<br>where the jobseekers <span class="mark">already are</span></h1>
-  <p class="prose lead">TESSA — the Training &amp; Employment Support Services Assistant — is a Facebook Messenger chatbot built by Accenture for Plan International Philippines. It coaches young Filipino jobseekers, particularly young women from marginalized communities, toward employment through
-    <button type="button" class="term" data-tip-label="Conversation, not portal" data-tip="A job portal shows every option at once and asks the user to filter. A conversation reveals one turn at a time &mdash; which means the designer, not the user, carries the burden of anticipation.">conversation instead of a job portal</button>.
-    I designed the engine underneath it.</p>
+  <h1 class="d-hero" style="view-transition-name:vt-tessa">They had the skills.<br>Nobody had given them<br>the <span class="mark">words.</span></h1>
+  <p class="prose lead">TESSA — the Training &amp; Employment Support Services Assistant — is a Facebook Messenger career coach built by Accenture for Plan International Philippines. It takes the way a young Filipino jobseeker describes their own ordinary life and hands back
+    <button type="button" class="term" data-tip-label="Résumé vocabulary" data-tip="Hiring runs on a controlled vocabulary &mdash; a small set of nouns like &ldquo;stakeholder management&rdquo; or &ldquo;prioritisation.&rdquo; Not knowing those nouns reads to a recruiter as not having the skills.">the vocabulary hiring actually prices</button>.
+    I designed the conversational engine, and the portable skills module at the centre of it.</p>
+
+  <div class="hero-live">
+    <span class="live-mk">Live</span>
+    <span class="t"><b>Two exchanges on this page play.</b> The questionnaire turning an ordinary sentence into a résumé skill — and, further down, the one field where the flow failed me three times running.</span>
+    <span class="btn"><span class="slab" aria-hidden="true"></span>
+      <a href="#chat-live">Play the first one <span aria-hidden="true">&rarr;</span></a></span>
+  </div>
 
   <div class="facts" style="margin-top:var(--space-2xl)">
-    <div class="f"><div class="k">My role</div><div class="v">Conversation / CUI Designer<small>End-to-end dialogue architecture</small></div></div>
-    <div class="f"><div class="k">Client</div><div class="v">Plan International PH<small>via Accenture</small></div></div>
-    <div class="f"><div class="k">Platform</div><div class="v">Facebook Messenger<small>No app install required</small></div></div>
-    <div class="f"><div class="k">Year</div><div class="v">2018<small>Recognised at WEF 2018</small></div></div>
+    <div class="f"><div class="k">My role</div><div class="v">Conversation / CUI Designer<small>Dialogue architecture · skills module</small></div></div>
+    <div class="f"><div class="k">Client</div><div class="v">Plan International PH<small>Built via Accenture</small></div></div>
+    <div class="f"><div class="k">Platform</div><div class="v">Facebook Messenger<small>No install · usable without load</small></div></div>
+    <div class="f"><div class="k">Evidence</div><div class="v">Sept 2018 – Feb 2019<small>My own test conversation</small></div></div>
   </div>
 </div>
 
 <!-- ============================== BODY ============================== -->
-<div class="cs-grid" style="margin-top:var(--space-5xl)">
+<div class="cs-body" style="margin-top:var(--space-5xl)">
 
-  <nav class="snav" aria-label="Case study sections">
-    <a href="#s01"><span class="n">01</span><span>The situation</span></a>
-    <a href="#s02"><span class="n">02</span><span>The system move</span></a>
-    <a href="#s03"><span class="n">03</span><span>The engine</span></a>
-    <a href="#s04"><span class="n">04</span><span>The outcome</span></a>
-    <a href="#s05"><span class="n">05</span><span>Reflection</span></a>
-  </nav>
 
   <main>
 
     <!-- ===================== 01 ===================== -->
     <section class="sec" id="s01" style="padding-top:0">
-      <div class="srule"><span class="eb">01 · The situation</span><span class="ln"></span><span class="sq"></span></div>
-      <h2 class="d-lg">The users who need guidance most are the ones job portals <span class="mark">serve worst.</span></h2>
-      <p class="prose">Traditional job platforms assume a lot: a polished CV, confident English, reliable data access, and the self-assurance to navigate filters and application forms alone. For young Filipinos from marginalized communities — Plan International's audience — those assumptions fail quietly and constantly.</p>
-      <p class="prose">The gap wasn't job listings. It was <b>guidance</b>: someone to ask "what am I even qualified for?" without embarrassment.</p>
+      <div class="srule"><span class="eb">01 · The barrier</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The barrier wasn't jobs.<br>It was <span class="mark">vocabulary.</span></h2>
+      <p class="prose">Every job platform opens with a version of the same question: <i>what are your skills?</i> For a first-generation jobseeker that question is unanswerable — not because the skills are missing, but because nobody ever taught them the nouns their skills are filed under. They have run a sari-sari store's stock. They have talked a price down at the palengke. They have been the one the family asks for advice. None of it arrives with a label attached.</p>
+      <p class="prose">So the résumé comes back blank, and the blankness gets read as <b>having nothing to offer</b>. The gap wasn't listings. It was somewhere to ask <i>"what am I even qualified for?"</i> without embarrassment.</p>
 
       <div class="cards3" style="margin-top:var(--space-lg)">
-        <div class="cardx"><div class="n">Barrier 01</div><div class="t">No coach, no map</div><div class="d">Career counseling barely exists for this audience. First-generation jobseekers navigate hiring blind.</div></div>
-        <div class="cardx"><div class="n">Barrier 02</div><div class="t">Portals assume readiness</div><div class="d">Forms, filters, and CV uploads presume a user who already knows how hiring works.</div></div>
-        <div class="cardx"><div class="n">Barrier 03</div><div class="t">New apps are a cost</div><div class="d">Data is expensive and trust is scarce. Asking this audience to install something new is asking them to leave.</div></div>
+        <div class="cardx"><div class="n">Barrier 01</div><div class="t">No coach, no map</div><div class="d">Career counselling barely exists for this audience. First-generation jobseekers navigate hiring blind, and usually get one attempt at it.</div></div>
+        <div class="cardx"><div class="n">Barrier 02</div><div class="t">Portals assume readiness</div><div class="d">Forms, filters and CV uploads presume a user who already knows how hiring works — and quietly reject the ones who don't.</div></div>
+        <div class="cardx"><div class="n">Barrier 03</div><div class="t">A new app is a cost</div><div class="d">Mobile data is expensive and trust is scarce. Asking this audience to install something new is asking them to leave.</div></div>
       </div>
+
+      <p class="prose">Messenger answered the third barrier almost by itself — already installed, already trusted, free-rated on most Philippine mobile plans. The channel was the easy part. The interesting problem was what had to happen inside it.</p>
     </section>
 
     <!-- ===================== 02 ===================== -->
     <section class="sec" id="s02">
-      <div class="srule"><span class="eb">02 · The system move</span><span class="ln"></span><span class="sq"></span></div>
-      <h2 class="d-lg">Don't build a destination. <span class="mark">Build a conversation.</span></h2>
-      <p class="prose">The core decision was to meet users inside Facebook Messenger — already installed, already trusted, already free-rated on most Philippine mobile plans. No new app, no new account, no new interface to learn. The interface is literally the one they use to talk to friends.</p>
+      <div class="srule"><span class="eb">02 · Before the first question</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">Trust gets built <span class="mark">before any data is asked for.</span></h2>
 
-      <blockquote class="pq" style="margin:var(--space-xl) 0">
-        <q>If the user already knows how to chat, the entire UI problem becomes a conversation-design problem.</q>
-        <div class="by"><span class="r"></span><span>The reframe that set the scope</span></div>
-      </blockquote>
+      <p class="prose">End to end, the conversation does four things in order. Each stage has to earn the next one.</p>
 
-      <p class="prose">That reframing is where my work lived. I designed the <b>main engine</b> — the conversational logic that drove the whole bot: the intent structure, the decision flows, and the dialogue architecture that turned a user's messy, human answers into a coherent coaching path. Not a scripted FAQ — a structured decision engine that maps a person's situation (skills, availability, goals) to actionable next steps, entirely through natural back-and-forth.</p>
-
-      <div class="chat" data-replay style="margin-top:var(--space-lg)">
-        <div class="hdr">Interaction model · illustrative
-          <button type="button" class="replay">Replay</button></div>
-        <div class="bub bot">Hi! I'm TESSA 👋 I can help you get ready for work. Ano'ng gusto mong gawin — find a job, or build your skills first?</div>
-        <div class="bub user">di ko alam eh... wala pa akong experience</div>
-        <div class="bub bot">That's okay — everyone starts there. Let's find out what you're already good at. Tell me: have you ever helped in a family business, sari-sari store, or taken care of siblings?</div>
+      <div class="steps" style="margin-top:var(--space-lg)">
+        <div class="step"><div class="n">1</div><div class="t">Consent &amp; literacy</div><div class="d">Age gate, privacy terms, explicit consent — then a lesson in how to use the interface, with a practice turn.</div></div>
+        <div class="step"><div class="n">2</div><div class="t">Personal information</div><div class="d">Name, birthdate, address, contact. Reviewed and saved section by section, with permission to skip.</div></div>
+        <div class="step"><div class="n">3</div><div class="t">Transferable skills</div><div class="d">The questionnaire. Ordinary sentences in, a named skills profile out. The core of the product.</div></div>
+        <div class="step"><div class="n">4</div><div class="t">Résumé &amp; leads</div><div class="d">A real PDF, emailed and attached in chat, plus a job board that hands off honestly when it has nothing.</div></div>
       </div>
-      <p class="mono-note">Reconstructed to show the engine's behaviour: no dead ends, no shame, every answer routes somewhere useful. Production dialogue belongs to the client.</p>
+
+      <p class="prose">Everything in this section is stage one, because in 2018 it was the stage nobody was building. A career bot asks for your name, your birthdate, your address, your phone number and your email — from an audience with every reason to be careful about handing those over. So the flow spends its entire opening on permission and literacy, before a single résumé field.</p>
+
+      <div class="plist" style="margin-top:var(--space-lg)">
+        <div class="prow"><div class="n">01</div>
+          <div><div class="t">An age gate, then actual consent</div><div class="d">Confirm 18+. Read the Data Privacy Policy and Terms of Service, both linked. Tap <i>I give consent</i> — a deliberate, separate action. Then a receipt: <i>"Salamat! Tatandaan ko yan."</i> <b>Consent is a state the system holds and admits to holding,</b> not a checkbox it passes on the way somewhere.</div></div></div>
+        <div class="prow"><div class="n">02</div>
+          <div><div class="t">The cost of using it, disclosed first</div><div class="d">Before anything else: <i>you can still use most of my features even with no load.</i> Data cost is the barrier that silently ends the session, so it gets named up front. <b>A tool that won't tell you what it costs to use is a trap.</b></div></div></div>
+        <div class="prow"><div class="n">03</div>
+          <div><div class="t">Teaching the interface inside the interface</div><div class="d">Quick-reply buttons and free typing are two different modes, and a first-time bot user has no way to know which one is being asked for. So the ✏️ writing cue gets explained — and then <b>practised on a throwaway phrase, before any real data is at risk.</b> In the user's own slang, not corporate Filipino.</div></div></div>
+        <div class="prow"><div class="n">04</div>
+          <div><div class="t">An accuracy contract, and an honest warning</div><div class="d">The user taps <i>"I will be accurate"</i> before data entry — a small pre-commitment that changes how the next ten answers get typed. Paired with a plain admission: <b>a section left half-finished will not save.</b> Disclosing your own system's limitation is cheaper than letting someone lose their work.</div></div></div>
+      </div>
+
+      <div class="pair">
+        <div class="chat">
+          <div class="hdr">Stage 1 · Teaching the writing cue</div>
+          <div class="bub bot">Kailangan mo ba ng tulong sa paggamit ng app na ito? Pwede kong ipaliwanag sa 'yo.</div>
+          <div class="bub user">Yes, show me how</div>
+          <div class="bub bot">Ang icon na ito ✏️ ay isang WRITING CUE. Kapag nakita mo ito, ibig sabihin may hinihingi ako sa iyo na kailangan mong i-type.</div>
+          <div class="bub user">Try it</div>
+          <div class="bub bot">Sige nga, i-type mo ang "Pak ganern" ✏️</div>
+        </div>
+        <div class="aside">
+          <span class="k">What to watch</span>
+          <p><b>The interface teaches itself before it asks for anything.</b> The pencil is given a name, then a meaning, then a rehearsal — three turns spent on a convention most products assume you already know.</p>
+          <p>The practice rep runs on a nonsense phrase on purpose, so the first real typed answer is never also the first typed answer ever. A user who has only ever tapped buttons in Messenger gets to fail somewhere that costs nothing.</p>
+          <p class="note">Recreated in this site's own system from my test conversation.</p>
+        </div>
+      </div>
+
+      <p class="prose">One line in the personal-information stage is the whole philosophy compressed: <b><i>"Kung hindi mo alam kung kailan ka ipinanganak, pwede mo itong i-skip."</i></b> If you don't know when you were born, you can skip this. Late birth registration is ordinary in the communities Plan International works in. A form would have marked that field required and lost the user at question three. The conversation treats the gap as normal and keeps going.</p>
     </section>
 
     <!-- ===================== 03 ===================== -->
     <section class="sec" id="s03">
-      <div class="srule"><span class="eb">03 · The engine</span><span class="ln"></span><span class="sq"></span></div>
-      <h2 class="d-lg">Rules for a bot that talks to people with <span class="mark">everything at stake.</span></h2>
-      <p class="prose">A conversational UI for a vulnerable audience has almost no margin for confusion. A confusing form annoys a user; a confusing coach convinces them the problem is <i>them</i>. The architecture followed from that.</p>
+      <div class="srule"><span class="eb">03 · The translation engine</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The questionnaire never asks <span class="mark">"what are your skills."</span></h2>
+      <p class="prose">It asks which of three ordinary sentences sounds most like you. The sentences are deliberately domestic and unglamorous — haggling at the market, being the one people come to for advice, keeping a list and actually following it. Nothing in them sounds like a résumé. That is the point: <b>they're answerable.</b></p>
+
+      <div class="live" id="chat-live">
+        <div class="live-hd">
+          <span class="live-mk">Live</span>
+          <span class="live-im">Three ordinary sentences. Watch what the system files them as.</span>
+          <span class="ln"></span>
+          <span class="live-note">Circumstance &middot; not self-assessment</span>
+          <span class="btn"><span class="slab" aria-hidden="true"></span>
+            <button type="button" class="replay">Play the exchange &rarr;</button></span>
+        </div>
+        <div class="pair">
+        <div class="chat" data-replay>
+          <div class="hdr">Stage 3 · One round of four</div>
+          <div class="bub bot">1. Laging nanghihingi ng advice ang mga kapamilya at kaibigan ko sa akin.</div>
+          <div class="bub bot">2. Hindi problema sa akin ang tumawad o humingi ng pinakamababang presyo sa palengke.</div>
+          <div class="bub bot">3. Kaya kong ibahagi ang aking istorya sa mga kaibigan ko at sa aking pamilya.</div>
+          <div class="bub bot">Sa tingin mo, alin sa mga sumusunod ang pinakamalapit na nag-dedescribe sa 'yo?</div>
+          <div class="bub user">3</div>
+          <div class="bub bot">🗣 Communication Skills<br>Articulating · Persuading</div>
+        </div>
+        <!-- The reading of the specimen, beside it. This is the note that
+             used to sit underneath in muted mono, where it arrived after
+             the reader had already decided what they thought. -->
+        <div class="aside">
+          <span class="k">What to watch</span>
+          <p><b>Nobody is asked to rate themselves.</b> No scale, no "how would you describe your leadership style." Every option is a circumstance the user can simply recognise or not.</p>
+          <p>That is the whole trick: self-assessment requires the exact vocabulary the user came here to get. Asking for it first would fail the people the product exists for.</p>
+          <p><b>The last bubble is the translation.</b> Haggling at the market became <i>Communication Skills · Articulating · Persuading</i> — language she can put in front of an employer, derived from a life she already had.</p>
+          <p class="note">Recreated in this site's own system. Production dialogue belongs to the client.</p>
+        </div>
+        </div><!-- /pair -->
+      </div><!-- /live -->
+
+      <p class="prose">Four rounds of that, and the system performs the move the entire product exists for. It hands the answers back translated:</p>
+
+      <div class="vpairs" style="margin-top:var(--space-lg)">
+        <div class="vpair"><div class="tag">Interpersonal</div>
+          <div class="before">Napapansin ko ang mga pangangailangan ng ibang tao at tinutulungan ko sila.</div>
+          <div class="after">Responding to concerns · Assisting others</div></div>
+        <div class="vpair"><div class="tag">Organisational</div>
+          <div class="before">Mahilig akong mag-ayos at mag-lista ng mga gagawin ko, at sinusunod ko ang mga ito.</div>
+          <div class="after">Planning · Budgeting</div></div>
+        <div class="vpair"><div class="tag">Leadership</div>
+          <div class="before">Parati akong naghahanap ng solusyon kung may hinaharap akong problema.</div>
+          <div class="after">Initiating · Decision making</div></div>
+        <div class="vpair"><div class="tag">Communication</div>
+          <div class="before">Hindi problema sa akin ang tumawad sa palengke.</div>
+          <div class="after">Articulating · Persuading</div></div>
+      </div>
+      <p class="mono-note">Left: what the user recognised about their own life. Right: what the résumé now says. The user never had to know the right-hand column existed.</p>
+
+      <blockquote class="pq" style="margin:var(--space-2xl) 0">
+        <q>A person who can't name their skills doesn't have fewer skills. They have fewer nouns.</q>
+        <div class="by"><span class="r"></span><span>The reframe the engine is built on</span></div>
+      </blockquote>
+
+      <p class="prose">I built this as a <b>portable module, not a script</b>. The questionnaire is a container with three replaceable parts: a bank of circumstantial statements, a mapping table from statement to skill, and a synthesis step that assembles the result. Swap the statement bank and the same machine profiles a different population — a different region, a different language, a different sector. It was designed to be lifted out of TESSA and injected somewhere else, which is what happened to it.</p>
 
       <div class="plist" style="margin-top:var(--space-lg)">
         <div class="prow"><div class="n">01</div>
-          <div><div class="t">Every input routes somewhere</div><div class="d">The decision tree had to absorb real human answers — uncertain, misspelled, off-script — and still move the user forward. <b>"I don't know" is a valid answer with its own branch,</b> not an error state.</div></div></div>
+          <div><div class="t">Every input routes somewhere</div><div class="d">The tree had to absorb real human answers — uncertain, misspelled, off-script — and still move forward. <b>"I don't know" is a branch with a destination,</b> not an error state. There is no turn in the flow where the correct system response is to stop.</div></div></div>
         <div class="prow"><div class="n">02</div>
-          <div><div class="t">Coach, don't interrogate</div><div class="d">The same data a job portal collects through a form gets gathered through dialogue — a few questions at a time, each one earning the next. The structure is an interview; <b>the experience is a chat with someone on your side.</b></div></div></div>
+          <div><div class="t">Every explainer has an exit</div><div class="d">"Next topic." "I think I got it." "I'm done." "Anything else?" Every piece of teaching in the flow can be ended by the user in a single tap. <b>Explaining something to someone who already understands it is a way of insulting them,</b> and this audience gets enough of that.</div></div></div>
         <div class="prow"><div class="n">03</div>
-          <div><div class="t">Structure carries the empathy</div><div class="d">Warmth isn't a coat of friendly copy on top — it's architectural. Branch design decides whether a user with no work experience feels guided or judged. <b>The kindest thing a system can do is always have a next step.</b></div></div></div>
+          <div><div class="t">Nothing saves without being shown first</div><div class="d">Each section ends with the collected data read back in full, then <i>"Gusto mo bang i-save 'to?"</i> — save, or start over. <b>A linear chat has no back button,</b> so review has to be built as a turn in the conversation or it doesn't exist at all.</div></div></div>
         <div class="prow"><div class="n">04</div>
-          <div><div class="t">End at action, not information</div><div class="d">Every path terminates in something the user can do — a skill to build, a preparation step, a concrete lead — because the goal was employment readiness, <b>not a well-informed dead end.</b></div></div></div>
+          <div><div class="t">Ungendered, all the way through</div><div class="d">The programme's framing centred young women. The coaching doesn't. Gender is one neutral data field and never touches the register, the encouragement, or the skills mapping. <b>I wrote it for the youth I talked to, not for the demographic on the brief</b> — and a flow that coaches everyone identically is the one that can be handed to anyone.</div></div></div>
       </div>
-
-      <p class="mono-note">A visual UI shows all its options at once; a conversation reveals one turn at a time. Every plausible situation has to be mapped, branched, and resolved before the first user ever types "hi."</p>
     </section>
 
     <!-- ===================== 04 ===================== -->
     <section class="sec" id="s04">
-      <div class="srule"><span class="eb">04 · The outcome</span><span class="ln"></span><span class="sq"></span></div>
-      <h2 class="d-lg">Recognised on the <span class="mark">world stage.</span></h2>
-      <p class="prose">TESSA's impact on youth employment was significant enough to be featured at the <b>World Economic Forum in 2018</b> — a social-impact chatbot from the Philippines, alongside global initiatives. Plan International Philippines and Accenture publicly featured testimonials from young Filipinas who found employment with TESSA's guidance: the outcome the entire engine was designed to route toward.</p>
+      <div class="srule"><span class="eb">04 · What it hands back</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">It ends with something <span class="mark">you can take with you.</span></h2>
+      <p class="prose">The conversation terminates in a real document — a résumé PDF, emailed <i>and</i> attached in the chat window, assembled from everything the user confirmed along the way. It is portable. It works on employers who have never heard of TESSA. <b>A coaching product that hands you a file you can walk away with is refusing to be the destination,</b> and that refusal is the right call for an audience whose data plan may not survive the week.</p>
 
-      <div class="slot" data-ratio="16/9" style="margin-top:var(--space-xl)">
-        <span class="idx">01</span>
-        <span class="lbl">Dialogue architecture map<br>(reconstructed · client dialogue withheld)</span>
+      <div class="pair">
+        <div class="chat">
+          <div class="hdr">Stage 4 · The handoff</div>
+          <div class="bub bot">WORK EXPERIENCE<br>You have not added a work experience yet.</div>
+          <div class="bub bot">Ito ang impormasyong nakuha ko para sa iyong resume.</div>
+          <div class="bub user">View Resume Document</div>
+          <div class="bub bot">Nag-email ako ng document ng resume mo at inattach ang kopya nito sa chat window. 📄 Hernandez.pdf</div>
+        </div>
+        <div class="aside">
+          <span class="k">What to watch</span>
+          <p><b>The empty state is printed, not hidden.</b> A user with no work history sees a gap they can go and fill — which is a task — rather than a section that silently vanished, which is a verdict.</p>
+          <p>And the flow ends in a file. Emailed <i>and</i> attached in the thread, so it survives the session, the data plan, and the app. A coaching product that hands you something you can walk away with is refusing to be the destination.</p>
+        </div>
       </div>
-      <p class="mono-note">Outcomes limited to publicly documented facts. Detailed usage metrics belong to the client and are not reproduced here.</p>
+
+      <p class="prose">The job board is the other half, and it's the part I'd defend hardest. At the time, the partnership meant to feed it real listings wasn't live yet. The flow says so, out loud.</p>
+
+      <div class="two" style="margin-top:var(--space-lg)">
+        <div>
+          <p class="prose">Instead of an empty list or a fabricated one, a listing hands the user to a real government employment office with everything needed to actually arrive there: address, Facebook page, email, phone number. The dead end becomes a referral. And the content model carries one field most job boards still don't ship — <b>the language the interview will be conducted in.</b> In a country with dozens of them, that field is the difference between showing up and showing up prepared.</p>
+          <p class="prose">Designing the degraded state as a genuine handoff, rather than hiding it, is what keeps the whole thing honest. The bot doesn't pretend to have jobs it doesn't have.</p>
+        </div>
+        <div class="dl">
+          <div class="r"><div class="k">Company</div><div class="v">Reach out to PESO Tacloban<small>Public Employment Service Office</small></div></div>
+          <div class="r"><div class="k">Address</div><div class="v">Kanhuraw Hill City Hall, Tacloban City</div></div>
+          <div class="r"><div class="k">Schedule</div><div class="v">Contact PESO</div></div>
+          <div class="r"><div class="k">Contact</div><div class="v">Facebook page · email · mobile<small>Three routes, in case two fail</small></div></div>
+          <div class="r"><div class="k">Language</div><div class="v">English / Waray-Waray<small>The field nobody else ships</small></div></div>
+          <div class="r"><div class="k">Salary</div><div class="v">Minimum wage applicable and negotiable<small>Stated, not "competitive"</small></div></div>
+        </div>
+      </div>
+      <p class="mono-note">Content model of a single job posting, reproduced from the shipped flow.</p>
     </section>
 
     <!-- ===================== 05 ===================== -->
     <section class="sec" id="s05">
-      <div class="srule"><span class="eb">05 · Reflection</span><span class="ln"></span><span class="sq"></span></div>
-      <p class="prose">TESSA is the same discipline I use in banking and pharma work, pointed at a different stake: take a user with low context and zero tolerance for friction, and design a system that simply cannot strand them. <b>Enterprise software users are trapped by their jobs; TESSA's users would just leave</b> — which makes conversational architecture for them the more honest test of whether a flow actually works.</p>
+      <div class="srule"><span class="eb">05 · What I'd change</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The phone number field asked <span class="mark">three times.</span></h2>
+      <p class="prose">Here is the flow failing, in my own test conversation. The prompt wants an international format. My first two attempts didn't match it. The bot re-sent the identical message, twice, without ever saying what was wrong — and the repetition is the part a static screenshot can't convey.</p>
 
-      <blockquote class="pq" style="margin-top:var(--space-xl)">
+      <div class="live" id="loop-live">
+        <div class="live-hd">
+          <span class="live-mk">Live</span>
+          <span class="live-im">The same prompt, three times. Nothing tells her what's wrong.</span>
+          <span class="ln"></span>
+          <span class="live-note">Shipped &middot; unedited</span>
+          <span class="btn"><span class="slab" aria-hidden="true"></span>
+            <button type="button" class="replay">Play the loop &rarr;</button></span>
+        </div>
+        <div class="pair">
+        <div class="chat" data-replay>
+          <div class="hdr">Stage 2 · Validation loop</div>
+          <div class="bub bot">I-type ang cellphone number mo. ✏️<br>⚠️ Pakigamit ang +63 bilang country code ng Philippines. Isulat gaya nito: +639279999999</div>
+          <div class="bub user">09178889999</div>
+          <div class="bub bot">I-type ang cellphone number mo. ✏️<br>⚠️ Pakigamit ang +63 bilang country code ng Philippines. Isulat gaya nito: +639279999999</div>
+          <div class="bub user">+6397••••••••</div>
+          <div class="bub bot">I-type ang cellphone number mo. ✏️<br>⚠️ Pakigamit ang +63 bilang country code ng Philippines. Isulat gaya nito: +639279999999</div>
+          <div class="bub user">+6391••••••••</div>
+        </div>
+        <div class="aside">
+          <span class="k">What to watch</span>
+          <p><b>The bot's message never changes.</b> Three attempts, three identical replies. Nothing names what was wrong, so the user is left to reverse-engineer the rule from an example.</p>
+          <p>The repetition is the failure, and it is the part a screenshot cannot carry — one frame of this looks like a normal prompt. You have to watch it happen.</p>
+          <p><b>This is my own work, failing.</b> The architecture was right and the error state was an afterthought, which is the usual order in which these things go wrong.</p>
+          <p class="note">Shipped, unedited. Digits masked. Leaving this out would make the page a brochure.</p>
+        </div>
+        </div><!-- /pair -->
+      </div><!-- /live -->
+
+      <p class="prose">The user is left to reverse-engineer the rule from the example. In a flow that spends its entire opening teaching people that the system is on their side — that "I don't know" is allowed, that a missing birthdate is fine — <b>a silent rejection is the one moment it stops being on their side.</b> The architecture was right and the failure state was an afterthought, which is the usual order in which these things go wrong.</p>
+
+      <div class="plist" style="margin-top:var(--space-lg)">
+        <div class="prow"><div class="n">01</div>
+          <div><div class="t">Echo what was received</div><div class="d">"I got <i>0917 888 9999</i>" — so the user can see the system heard them correctly before being told they're wrong.</div></div></div>
+        <div class="prow"><div class="n">02</div>
+          <div><div class="t">Name the rule that failed</div><div class="d">Not the format again. The <b>difference</b> between what they typed and what's needed: <i>"Palitan ang 0 sa simula ng +63."</i></div></div></div>
+        <div class="prow"><div class="n">03</div>
+          <div><div class="t">Offer the fix as a tap</div><div class="d">The system can already infer the correct string. Show it and let them confirm it. <b>Validation is a conversational act,</b> and this one was written as a form error.</div></div></div>
+      </div>
+    </section>
+
+    <!-- ===================== 06 ===================== -->
+    <section class="sec" id="s06">
+      <div class="srule"><span class="eb">06 · What I cannot show you</span><span class="ln"></span><span class="sq"></span></div>
+      <h2 class="d-lg">The outcome data isn't <span class="mark">mine to publish.</span></h2>
+      <p class="prose">Conversation volumes, beneficiary counts, employment results — that belongs to Plan International, and releasing it isn't a decision I get to make. So there are no numbers on this page. What I can point to is that I was invited to teach the work, which leaks nothing and happened in public.</p>
+
+      <div class="marks" style="margin-top:var(--space-xl)">
+        <span>Feb 2019 · <a href="https://mini.formfunctionclass.com/history">MiniFFC #53 · with DevCon</a></span>
+        <span>"Developing Design-Led Virtual Agents for People"</span>
+        <span>Accenture Liquid Studio, Taguig</span>
+      </div>
+
+      <p class="prose" style="margin-top:var(--space-xl)">One piece of housekeeping, because the internet is inconsistent about it: TESSA was showcased during <b>WEF Davos in January 2018, while still in pilot</b>. It wasn't a session, and it wasn't a results announcement. Plan International Philippines has published one testimonial video from a user who found work. That is the whole of the public record, and I'd rather state its size than let it be inferred as larger.</p>
+
+      <p class="prose">The timestamps in this conversation run from September 2018 to February 2019, which is honest in a different way: this is legacy work. The engine reasoning is the part that aged well.</p>
+
+      <blockquote class="pq" style="margin-top:var(--space-2xl)">
         <q>The model generating the words matters less than the architecture deciding where the conversation is allowed to go.</q>
         <div class="by"><span class="r"></span><span>Djoaniel Hernandez · System note № 02</span></div>
       </blockquote>
 
-      <div class="actions" style="margin-top:var(--space-xl)">
+      <div class="actions" style="margin-top:var(--space-2xl)">
         <div class="btn">
           <span class="slab" aria-hidden="true"></span>
           <a href="../index.html">See all work <span aria-hidden="true">&rarr;</span></a>
         </div>
-        <a class="arrow plain" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20TESSA">Talk to me about systems work<span class="sr-only"> (opens your email app)</span> <i class="ph ph-envelope-simple" aria-hidden="true"></i></a>
+        <a class="arrow plain" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20TESSA">Talk to me about conversation systems<span class="sr-only"> (opens your email app)</span> <i class="ph ph-envelope-simple" aria-hidden="true"></i></a>
       </div>
     </section>
 
@@ -198,59 +377,80 @@
    which is the medium's own grammar and the cheapest possible proof
    that the engine underneath decides what comes next.
 
-   It runs once on first contact with the section and on demand after
-   that. Never on scroll: nothing on this site moves on arrival.
+   Two transcripts run on this page, so the player is per-band rather
+   than per-page: the engine working (§03) and the engine failing (§05).
+   The failure is the one that needs the cadence most — three identical
+   prompts read as a typo in a static block and as a wall in real time.
+
+   Each runs once on first contact with its own band, and on demand
+   after that. Never on scroll: nothing on this site moves on arrival.
    ==================================================================== */
 (function () {
   'use strict';
-  var chat = document.querySelector('.chat[data-replay]');
-  if (!chat) return;
+  var chats = [].slice.call(document.querySelectorAll('.chat[data-replay]'));
+  if (!chats.length) return;
   var REDUCED = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  var btn  = chat.querySelector('.replay');
-  var bubs = [].slice.call(chat.querySelectorAll('.bub'));
   var TURN = 420, TYPING = 1100;
-  var timers = [];
 
-  if (REDUCED) { bubs.forEach(function (b) { b.classList.add('in'); }); if (btn) btn.hidden = true; return; }
+  chats.forEach(function (chat) {
+    /* The replay control sits on the live band header, outside .chat — it
+       used to sit inside the specimen's own chrome in muted mono, which made
+       the one interactive thing on this page the quietest thing on it. */
+    var band = chat.closest('.live');
+    var btn  = (band && band.querySelector('.replay')) || chat.querySelector('.replay');
+    var bubs = [].slice.call(chat.querySelectorAll('.bub'));
+    var timers = [];
 
-  function clear() { timers.forEach(clearTimeout); timers = []; 
-    var d = chat.querySelector('.dots'); if (d) d.remove(); }
+    /* Under reduced motion the exchange arrives already played, so the control
+       has nothing to do. Hide the .btn wrapper, not the button — hiding the
+       button alone would leave its offset slab floating on the band. */
+    if (REDUCED) {
+      bubs.forEach(function (b) { b.classList.add('in'); });
+      if (btn) { (btn.closest('.btn') || btn).hidden = true; }
+      return;
+    }
 
-  function play() {
-    clear();
-    bubs.forEach(function (b) { b.classList.remove('in'); });
-    var t = 0;
-    bubs.forEach(function (b) {
-      var isBot = b.classList.contains('bot');
-      if (isBot) {
-        timers.push(setTimeout(function () {
-          var d = document.createElement('div');
-          d.className = 'dots'; d.innerHTML = '<i></i><i></i><i></i>';
-          d.setAttribute('aria-hidden', 'true');
-          b.parentNode.insertBefore(d, b);
-          timers.push(setTimeout(function () { d.remove(); b.classList.add('in'); }, TYPING));
-        }, t));
-        t += TYPING + TURN;
-      } else {
-        timers.push(setTimeout(function () { b.classList.add('in'); }, t));
-        t += TURN;
-      }
-    });
-  }
+    function clear() {
+      timers.forEach(clearTimeout); timers = [];
+      var d = chat.querySelector('.dots'); if (d) d.remove();
+    }
 
-  if (btn) btn.addEventListener('click', play);
-
-  /* first run happens when the section is genuinely being read, not when
-     it grazes the viewport edge — and exactly once */
-  if ('IntersectionObserver' in window) {
-    var seen = false;
-    new IntersectionObserver(function (es, obs) {
-      es.forEach(function (e) {
-        if (!e.isIntersecting || seen) return;
-        seen = true; obs.disconnect(); play();
+    function play() {
+      clear();
+      bubs.forEach(function (b) { b.classList.remove('in'); });
+      var t = 0;
+      bubs.forEach(function (b) {
+        var isBot = b.classList.contains('bot');
+        if (isBot) {
+          timers.push(setTimeout(function () {
+            var d = document.createElement('div');
+            d.className = 'dots'; d.innerHTML = '<i></i><i></i><i></i>';
+            d.setAttribute('aria-hidden', 'true');
+            b.parentNode.insertBefore(d, b);
+            timers.push(setTimeout(function () { d.remove(); b.classList.add('in'); }, TYPING));
+          }, t));
+          t += TYPING + TURN;
+        } else {
+          timers.push(setTimeout(function () { b.classList.add('in'); }, t));
+          t += TURN;
+        }
       });
-    }, { threshold: 0.6 }).observe(chat);
-  } else { bubs.forEach(function (b) { b.classList.add('in'); }); }
+    }
+
+    if (btn) btn.addEventListener('click', play);
+
+    /* first run happens when the section is genuinely being read, not when
+       it grazes the viewport edge — and exactly once, per transcript */
+    if ('IntersectionObserver' in window) {
+      var seen = false;
+      new IntersectionObserver(function (es, obs) {
+        es.forEach(function (e) {
+          if (!e.isIntersecting || seen) return;
+          seen = true; obs.disconnect(); play();
+        });
+      }, { threshold: 0.6 }).observe(chat);
+    } else { bubs.forEach(function (b) { b.classList.add('in'); }); }
+  });
 })();
 </script>
 </body>

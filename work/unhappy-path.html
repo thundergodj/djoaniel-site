@@ -128,7 +128,7 @@
    A grayscale filter was the wrong tool: .hp.off already declares its
    own neutral fields, and a filter would have greyed the labels too —
    which are deliberate, and are evidence. */
-.hp .band,.hp .rail .c,.hp .band .cta{
+.hp .band,.hp .cardstrip .c,.hp .band .cta{
   transition:background-color var(--wipe-dur,480ms) var(--ease-hold),
              border-color var(--wipe-dur,480ms) var(--ease-hold),
              opacity var(--wipe-dur,480ms) var(--ease-hold)}
@@ -136,15 +136,15 @@
 .hp .three .band:nth-child(1){transition-delay:40ms}
 .hp .three .band:nth-child(2){transition-delay:70ms}
 .hp .three .band:nth-child(3){transition-delay:100ms}
-.hp .rail .c:nth-child(1){transition-delay:130ms}
-.hp .rail .c:nth-child(2){transition-delay:150ms}
-.hp .rail .c:nth-child(3){transition-delay:170ms}
-.hp .rail .c:nth-child(4){transition-delay:190ms}
-.hp .rail .c:nth-child(5){transition-delay:210ms}
+.hp .cardstrip .c:nth-child(1){transition-delay:130ms}
+.hp .cardstrip .c:nth-child(2){transition-delay:150ms}
+.hp .cardstrip .c:nth-child(3){transition-delay:170ms}
+.hp .cardstrip .c:nth-child(4){transition-delay:190ms}
+.hp .cardstrip .c:nth-child(5){transition-delay:210ms}
 .hp .acc{transition-delay:240ms}
 .hp .give{transition-delay:270ms}
 @media (prefers-reduced-motion:reduce){
-  .hp .band,.hp .rail .c,.hp .band .cta{transition:none;transition-delay:0s}
+  .hp .band,.hp .cardstrip .c,.hp .band .cta{transition:none;transition-delay:0s}
 }
 
 /* ==================================================================
@@ -237,8 +237,8 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 .hp .band .cta{margin-top:11px;font-size:10.5px;font-weight:600;letter-spacing:.09em;
   text-transform:uppercase;background:var(--white);border:0.667px solid var(--b-line);padding:6px 12px}
 .hp .three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.hp .rail{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
-.hp .rail .c{aspect-ratio:3/4;border:0.667px solid var(--b-line)}
+.hp .cardstrip{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
+.hp .cardstrip .c{aspect-ratio:3/4;border:0.667px solid var(--b-line)}
 .hp .give{min-height:74px}
 .hp .cap{font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
   color:#9A9892}
@@ -250,12 +250,12 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 .hp.on .three .band:nth-child(2){background:var(--b-tidal)}
 .hp.on .three .band:nth-child(3){background:var(--b-meadow)}
 .hp.on .hero{background:var(--b-peony)}
-.hp.on .rail .c{background:var(--b-sands)}
+.hp.on .cardstrip .c{background:var(--b-sands)}
 .hp.on .give{background:var(--b-tidal)}
 .hp.on .acc{background:var(--b-peacock)}
 
 /* UNPOPULATED: exactly how the template shipped to the merch team. */
-.hp.off .band,.hp.off .rail .c{background:#E3E1DC;
+.hp.off .band,.hp.off .cardstrip .c{background:#E3E1DC;
   background-image:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(9,9,9,.022) 10px 20px)}
 .hp.off .band .cta{opacity:.5}
 
@@ -352,6 +352,19 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 <header class="top">
   <div class="in">
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <div class="crumb">
+      <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
+        <span class="n">01 / 06</span><span class="t">The brief was pages</span><span class="cv" aria-hidden="true">&#9662;</span>
+      </button>
+      <ul class="crumb-l" id="crumb-l" hidden>
+        <li><a href="#s01" data-t="The brief was pages"><span class="n">01</span><span>The brief was pages</span></a></li>
+        <li><a href="#s02" data-t="The unhappy path"><span class="n">02</span><span>The unhappy path</span></a></li>
+        <li><a href="#s03" data-t="The worst case"><span class="n">03</span><span>The worst case</span></a></li>
+        <li><a href="#s04" data-t="The gray homepage"><span class="n">04</span><span>The gray homepage</span></a></li>
+        <li><a href="#s05" data-t="Every colour has a job"><span class="n">05</span><span>Every colour has a job</span></a></li>
+        <li><a href="#s06" data-t="What I cannot show you"><span class="n">06</span><span>What I cannot show you</span></a></li>
+      </ul>
+    </div>
     <nav>
       <a href="../index.html" aria-current="page">Work</a>
       <a href="../about.html">About</a>
@@ -369,6 +382,13 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
     <button type="button" class="term" data-tip-label="State" data-tip="A state is what a component looks like once reality gets to it: nothing selected, everything selected, sold out, loading, empty, too long, too many. The happy path is one state out of a dozen.">state</button>:
     the size nobody picked, the filter row with every chip in it, the hero image the merchandising team had not shipped yet. So the deliverable stopped being screens and became the component and state library the screens were assembled from. Below, the four artifacts that made the argument &mdash; rebuilt in code, and yours to break.</p>
 
+  <div class="hero-live">
+    <span class="live-mk">Live</span>
+    <span class="t"><b>Three instruments on this page, all of them running.</b> A four-state button, a filter row you can push past breaking, and a homepage with the photography taken away.</span>
+    <span class="btn"><span class="slab" aria-hidden="true"></span>
+      <a href="#atb-live">Break the first one <span aria-hidden="true">&rarr;</span></a></span>
+  </div>
+
   <div class="facts" style="margin-top:var(--space-2xl)">
     <div class="f"><div class="k">My role</div><div class="v">Design system &amp; templates<small>Began on comps, ended on the system</small></div></div>
     <div class="f"><div class="k">Client</div><div class="v">US activewear retailer<small>One line inside a five-brand house</small></div></div>
@@ -385,16 +405,8 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 </div>
 
 <!-- ============================== BODY ============================== -->
-<div class="cs-grid" style="margin-top:var(--space-5xl)">
+<div class="cs-body" style="margin-top:var(--space-5xl)">
 
-  <nav class="snav" aria-label="Case study sections">
-    <a href="#s01"><span class="n">01</span><span>The brief was pages</span></a>
-    <a href="#s02"><span class="n">02</span><span>The unhappy path</span></a>
-    <a href="#s03"><span class="n">03</span><span>The worst case</span></a>
-    <a href="#s04"><span class="n">04</span><span>The gray homepage</span></a>
-    <a href="#s05"><span class="n">05</span><span>Every colour has a job</span></a>
-    <a href="#s06"><span class="n">06</span><span>What I cannot show you</span></a>
-  </nav>
 
   <main>
 
@@ -425,7 +437,14 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 
       <p class="prose">So the add-to-bag action detaches and follows &mdash; and once it follows, it has to carry the whole variant transaction with it, including the ways that transaction fails. <b>The most common add-to-bag failure is not a server error. It is an unselected size.</b> Which makes the error state the most important state on the most important control on the highest-value page on the site.</p>
 
-      <div class="spec" style="margin-top:var(--space-lg)">
+      <div class="live" id="atb-live">
+        <div class="live-hd">
+          <span class="live-mk">Live</span>
+          <span class="live-im">Add to bag without picking a size. Watch what the button has to say.</span>
+          <span class="ln"></span>
+          <span class="live-note">Four states &middot; one control</span>
+        </div>
+      <div class="spec">
         <p class="hd">Sticky add-to-bag &middot; state machine <span class="r">Recreation &mdash; interactive</span></p>
         <div class="bd">
           <div class="states" id="atbStates" role="tablist" aria-label="Add to bag states">
@@ -470,6 +489,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
           <span class="k">Rule</span><span class="v" id="atbRule"></span>
         </div>
       </div>
+      </div><!-- /live -->
       <p class="mono-note">Product name and prices are invented. The states, and the rule attached to each one, are the deliverable.</p>
 
       <p class="prose" style="margin-top:var(--space-xl)">State 02 is the one worth arguing about. The obvious answer is a toast &mdash; leave the button saying <em>Add to bag</em>, throw an error when it fails. We put the instruction <em>in the button</em>, because a toast reports a failure and a label describes what the control will do next. Same information, no blame, nothing to dismiss, and nothing that can land under a thumb.</p>
@@ -489,7 +509,14 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 
       <p class="prose">So the specimen I designed against was the maximum: every colour, every size, every sleeve length, all applied at once. Run the slider up and watch the readout &mdash; <b>the number that matters is not the chip count, it is the height of the row</b>, because that height is subtracted from the products. The fold is drawn in. The first product row never crosses it; the second one pays for every chip you add.</p>
 
-      <div class="spec" style="margin-top:var(--space-lg)">
+      <div class="live">
+        <div class="live-hd">
+          <span class="live-mk">Live</span>
+          <span class="live-im">Run the slider to 27. Watch the products get pushed off the fold.</span>
+          <span class="ln"></span>
+          <span class="live-note">Measured from the DOM, not asserted</span>
+        </div>
+      <div class="spec">
         <p class="hd">Listing page &middot; filter row at load <span class="r">Recreation &mdash; interactive</span></p>
         <div class="bd">
           <div class="ctl" style="border-top:0;padding-top:0">
@@ -535,6 +562,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
           </div>
         </div>
       </div>
+      </div><!-- /live -->
       <p class="mono-note">Result count and product names are placeholder values, exactly as they were in the spec. Row height, wrap count and fold clearance are measured live in your browser. The fold is derived from your actual window, scaled by the same factor this recreation is scaled by &mdash; it is 1000px standing in for a 1440px page, and the wrong ruler confidently applied is worse than no ruler.</p>
 
       <p class="prose" style="margin-top:var(--space-xl)">Three rules came out of that specimen. Chips wrap rather than scroll, because a horizontal rail hides the filters a shopper most wants to remove. <b>Clear all is pinned first and never wraps away</b>, so the escape hatch cannot leave the screen when the mess is at its worst. And the grid holds a fixed minimum above the fold &mdash; the filters are allowed to get ugly, the products are not allowed to disappear.</p>
@@ -551,7 +579,14 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
         <button type="button" class="term" data-tip-label="Merchandiser" data-tip="The internal user who swaps hero imagery, promo copy, banner dates and product rails on a weekly or campaign cadence — usually through a CMS, usually without a designer in the room, usually on a Friday.">merchandiser</button>
         swapping a hero, three promo tiles, a five-product rail and a give-back banner through a CMS, on a campaign cadence, with no designer in the room. If the layout only holds when the photography is beautiful, it does not hold &mdash; it degrades a little every week until somebody calls it a redesign.</p>
 
-      <div class="spec" style="margin-top:var(--space-lg)">
+      <div class="live">
+        <div class="live-hd">
+          <span class="live-mk">Live</span>
+          <span class="live-im">Take the photography away. See whether the layout still holds.</span>
+          <span class="ln"></span>
+          <span class="live-note">The gray version is the deliverable</span>
+        </div>
+      <div class="spec">
         <p class="hd">Homepage template <span class="r">Recreation &mdash; toggle the fill</span></p>
         <div class="bd">
           <div class="ctl sr" style="border-top:0;padding-top:0">
@@ -572,7 +607,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
               <div class="band"><div><div class="ttl">Top<br>it all</div><div class="cta">Shop tops</div></div></div>
             </div>
             <div class="cap">Summer's easiest picks</div>
-            <div class="rail">
+            <div class="cardstrip">
               <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div>
             </div>
             <div class="band acc" style="min-height:120px"><div><div class="ttl">The<br>accessories shop</div><div class="cta">Shop accessories</div></div></div>
@@ -583,6 +618,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
           <span class="k">Slot</span><span class="v" id="hpRead"></span>
         </div>
       </div>
+      </div><!-- /live -->
       <p class="mono-note">Campaign photography belongs to the client and is not reproduced. In the populated state the palette itself stands in for the imagery &mdash; which is, conveniently, the point being made.</p>
     </section>
 
