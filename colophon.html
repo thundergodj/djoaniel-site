@@ -28,16 +28,16 @@
    the content, not the chrome. Everything stated is a real fact about
    how the page you are reading was made — no invented readouts.
    ================================================================== */
+/* MONO LOCK — was 11px at .12em, two violations. Now the shared token. */
 .skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--text-primary);
-  color:var(--paper);padding:10px 16px;font-family:var(--font-mono);font-size:11px;
-  letter-spacing:.12em;text-transform:uppercase}
+  color:var(--paper);padding:10px 16px;font:var(--mono-label);
+  letter-spacing:var(--track-label);text-transform:uppercase}
 .skip:focus{left:8px;top:8px}
-.logo .wm{font-family:var(--font-sans);font-weight:700;letter-spacing:-.02em}
-.logo .sq{width:.28em;height:.72em;font-size:17px;background:var(--accent);display:block}
+/* Wordmark override deleted — the lockup is defined once in eishiki-v3.css. */
 
 .pw{padding:var(--space-5xl) 0 0}
 .pt{font:var(--text-display-lg);letter-spacing:-.02em;margin:0 0 var(--space-md);color:var(--text-primary)}
-.pk{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+.pk{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
   color:var(--text-muted);margin:0 0 var(--space-lg)}
 .sect{margin:var(--space-5xl) 0 0}
 .sect .srule{margin-bottom:var(--space-lg)}
@@ -46,20 +46,66 @@
 .spec{border-top:var(--border-hair);margin-top:var(--space-lg)}
 .spec .r{display:grid;grid-template-columns:150px 1fr;gap:var(--space-lg);
   padding:var(--space-md) 0;border-bottom:var(--border-hair);align-items:baseline}
-.spec .k{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;
+/* MONO LOCK. This page documents the type lock and was breaking it in five
+   places — 11px uppercase mono at .12em, .11em and .1em. A colophon that
+   fails its own spec is not a colophon, it is a claim. All five now resolve
+   to --mono-label / --track-label.
+   The descriptor is the tabular exception: sentence case, 400, zero tracking.
+   It also moves off --text-faint, which measures 2.78:1 and fails AA — the
+   same defect the accessibility lab called out and fixed in its own chrome. */
+.spec .k{font:var(--mono-label);letter-spacing:var(--track-label);
   text-transform:uppercase;color:var(--text-muted)}
-.spec .k small{display:block;text-transform:none;letter-spacing:0;font-size:11px;
-  color:var(--text-faint);margin-top:4px}
+.spec .k small{display:block;text-transform:none;font:var(--mono-caption);
+  letter-spacing:var(--track-data);color:var(--text-muted);margin-top:4px}
 .spec .serif{font-family:var(--font-display);font-size:34px;line-height:1.1;letter-spacing:-.02em}
 .spec .body{font-family:var(--font-sans);font-size:17px;line-height:1.5}
-.spec .mono{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--text-primary)}
+.spec .mono{font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-primary)}
 
 /* palette — colour bound to a legend */
 .swz{display:flex;flex-wrap:wrap;gap:var(--space-lg);margin-top:var(--space-md)}
 .sw{display:flex;flex-direction:column;gap:9px;min-width:150px}
 .sw .chip{height:56px;border:0.667px solid var(--border-default)}
-.sw .n{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-primary)}
+.sw .n{font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-primary)}
 .sw .m{font-family:var(--font-sans);font-size:13px;line-height:1.5;color:var(--text-muted)}
+
+/* ==================================================================
+   THE FLOOR, OPERABLE.
+   The serif's 24px rule is the most consequential decision in the type
+   system and it was asserted in prose. Here it is a control: drag the
+   size and watch the hairline thin, cross the floor, and hand off to
+   Radio Canada 700. A real constraint, a real decision, and a real
+   automatic behaviour in one slider.
+   ================================================================== */
+.floor{border:var(--border-hair);background:var(--surface-card-30);margin-top:var(--space-lg)}
+.floor .hd{display:flex;align-items:center;gap:var(--space-xs);padding:13px 16px;
+  border-bottom:var(--border-hair);font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-primary)}
+.floor .hd .px{margin-left:auto;font:var(--mono-data);letter-spacing:var(--track-data);
+  color:var(--text-primary);font-variant-numeric:tabular-nums}
+.floor .ctl{display:flex;align-items:center;gap:var(--space-md);padding:14px 16px;
+  border-bottom:var(--border-hair)}
+.floor .ctl input[type=range]{flex:1;height:26px;accent-color:var(--accent);cursor:pointer}
+.floor .stp{width:32px;height:32px;flex:none;border:var(--border-solid);background:var(--white);
+  font-family:var(--font-mono);font-size:15px;font-weight:600;cursor:pointer;padding:0;
+  color:var(--text-primary)}
+.floor .stp:hover{border-color:var(--accent);color:var(--accent)}
+.floor .pane{display:grid;grid-template-columns:repeat(2,1fr)}
+@media(max-width:760px){.floor .pane{grid-template-columns:1fr}}
+.floor .half{padding:var(--space-lg) 16px;border-right:var(--border-hair);min-height:172px}
+.floor .half:last-child{border-right:0}
+.floor .lb{font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
+  color:var(--text-muted);margin-bottom:13px}
+.floor .smp{line-height:1.06;letter-spacing:-.02em;color:var(--text-primary);
+  font-family:var(--font-display);font-weight:400}
+.floor .smp.swapped{font-family:var(--font-sans);font-weight:700;letter-spacing:-.03em}
+.floor .flag{display:inline-block;margin-top:15px;padding:5px 9px;border:var(--border-hair);
+  font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--data-ok);border-color:var(--data-ok)}
+.floor .flag.bad{color:var(--data-null);border-color:var(--data-null)}
+.floor .rd{padding:13px 16px;border-top:var(--border-hair);background:var(--surface-card-25);
+  font:var(--mono-data);letter-spacing:var(--track-data);color:var(--text-body)}
 </style>
 
 <!-- Link preview — what a recruiter sees when this URL is pasted -->
@@ -107,7 +153,29 @@
       <div class="srule"><span class="eb">01 · Type</span><span class="ln"></span><span class="sq"></span></div>
       <p class="prose">Three families, one job each. <b>Instrument Serif</b> carries display and statements. <b>Radio Canada</b> carries prose and the wordmark. <b>IBM Plex Mono</b> carries labels, data, and captions — the machine-read voice. Instrument Sans was removed from the system entirely.</p>
       <p class="prose">The serif has one hard rule: <b>it never renders below 24px.</b> Its thin strokes are about a fifteenth of cap height, so at 16px a hairline falls to roughly three-quarters of a device pixel and the rasteriser greys it into mush — on the 1× Windows laptops most of this audience uses, retina cannot be assumed. Where a viewport can't afford 24px, titles swap to Radio Canada 700 rather than shrink the serif into its failure zone.</p>
-      <div class="spec">
+      <div class="floor">
+        <p class="hd">The 24px floor <span class="px" id="flPx">31px</span></p>
+        <div class="ctl">
+          <button type="button" class="stp" id="flDn" aria-label="Decrease size">−</button>
+          <input type="range" id="flSize" min="11" max="56" step="1" value="31"
+                 aria-label="Display size in pixels">
+          <button type="button" class="stp" id="flUp" aria-label="Increase size">+</button>
+        </div>
+        <div class="pane">
+          <div class="half">
+            <div class="lb">Unguarded — the serif at any size</div>
+            <div class="smp" id="flA">The Art of Nothing</div>
+          </div>
+          <div class="half">
+            <div class="lb">With the floor rule applied</div>
+            <div class="smp" id="flB">The Art of Nothing</div>
+            <span class="flag" id="flFlag">Serif · above the floor</span>
+          </div>
+        </div>
+        <p class="rd" id="flRead"></p>
+      </div>
+
+      <div class="spec" style="margin-top:var(--space-lg)">
         <div class="r"><div class="k">Instrument Serif<small>display · statements</small></div><div class="serif">Dense systems, read at a glance.</div></div>
         <div class="r"><div class="k">Radio Canada<small>prose · wordmark</small></div><div class="body">The body voice. Calm measure, generous leading — the frame is dense, the reading is quiet.</div></div>
         <div class="r"><div class="k">IBM Plex Mono<small>labels · data</small></div><div class="mono">Case study 01 · No value returned</div></div>
@@ -151,5 +219,46 @@
   </div>
 </footer>
 
+<script src="assets/eishiki-v3.js"></script>
+<script>
+/* ====================================================================
+   THE TYPE FLOOR, LIVE.
+   Left specimen obeys the slider. Right specimen obeys the rule: below
+   24px it stops being Instrument Serif and becomes Radio Canada 700,
+   because a hairline a fifteenth of cap height falls under one device
+   pixel there and the rasteriser greys it out. On a 1x Windows laptop —
+   the most common viewport in this audience — that is not theoretical.
+   ==================================================================== */
+(function () {
+  'use strict';
+  var sl = document.getElementById('flSize');
+  if (!sl) return;
+  var a = document.getElementById('flA'), b = document.getElementById('flB'),
+      px = document.getElementById('flPx'), flag = document.getElementById('flFlag'),
+      read = document.getElementById('flRead');
+  var FLOOR = 24;
+
+  function paint() {
+    var n = +sl.value;
+    px.textContent = n + 'px';
+    a.style.fontSize = n + 'px';
+    b.style.fontSize = n + 'px';
+    var below = n < FLOOR;
+    b.classList.toggle('swapped', below);
+    flag.className = 'flag' + (below ? ' bad' : '');
+    flag.textContent = below ? 'Swapped · Radio Canada 700' : 'Serif · above the floor';
+    /* hairline ≈ cap height / 15, and cap height ≈ 0.72em */
+    var hair = (n * 0.72 / 15);
+    read.textContent = 'Hairline ≈ ' + hair.toFixed(2) + ' device pixels at 1×. ' +
+      (below
+        ? 'Under 1.00 the rasteriser has nothing solid to draw, so the rule fires and the title swaps.'
+        : 'At or above 1.00 the stroke survives, so the serif holds.');
+  }
+  sl.addEventListener('input', paint);
+  document.getElementById('flDn').addEventListener('click', function () { sl.value = +sl.value - 1; paint(); });
+  document.getElementById('flUp').addEventListener('click', function () { sl.value = +sl.value + 1; paint(); });
+  paint();
+})();
+</script>
 </body>
 </html>

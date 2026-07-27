@@ -96,8 +96,18 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap
    Sized in em so it tracks the wordmark's clamp at every viewport. */
 .wm::after{
   content:"";display:inline-block;
-  width:var(--wm-block-w,.28em);height:.72em;background:var(--accent);
+  width:var(--wm-block-w,.28em);height:.72em;background:var(--legend,var(--accent));
   margin-left:.09em;vertical-align:baseline;
+  transition:background var(--dur-hover) linear;
+}
+
+/* THE TEASER TICK — the one motion on this site not started by the reader,
+   allowed because a readout that never updates is not a readout. One cell,
+   one card, every nine seconds. The cell flashes; the digit does not fade. */
+.tick-flash{animation:cellflash var(--dur-flash,220ms) linear}
+@keyframes cellflash{
+  0%{background:rgba(11,63,255,.135)}
+  100%{background:transparent}
 }
 /* Was clamp(17px,…) — which put Instrument Serif at 19px on a 768px
    laptop, well under its own 24px floor. The floor is the clamp minimum. */
@@ -213,13 +223,32 @@ a.card:hover::before,a.card:focus-visible::before{transform:scaleX(1)}
 .bub.u{background:var(--ink-900);color:var(--white);align-self:flex-end;border-color:var(--ink-900)}
 .branch{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);
   font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent);margin-top:4px;font-weight:500}
-.branch .ln{height:.667px;background:var(--accent);flex:1;opacity:.45}
+/* THE HOVER TELL — every card runs one beat of the interface it recreates.
+   Cards 01, 02, 05 and 06 already had one; 03 and 04 were inert, which is
+   the whole argument of this grid failing on two of six tiles. */
+.branch .ln{height:.667px;background:var(--accent);flex:1;opacity:.45;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform var(--dur-sweep) var(--ease-out)}
+.card:hover .branch .ln,.card:focus-visible .branch .ln{transform:scaleX(1)}
 
 /* 03 · configurator steps */
 .steps{display:flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:12.5px;
   letter-spacing:0.04em;text-transform:uppercase;font-weight:500}
-.steps span{border:var(--hair);padding:5px 7px;color:var(--text-muted);background:var(--white)}
+.steps span{border:var(--hair);padding:5px 7px;color:var(--text-muted);background:var(--white);
+  transition:background var(--dur-hover) var(--ease-snap),border-color var(--dur-hover) linear,
+             color var(--dur-hover) linear}
 .steps span.on{background:var(--accent);border-color:var(--accent);color:var(--white)}
+/* card 04's beat: hovering advances the configurator one step, and the
+   completed step collapses to a tick — the flow has memory, not just a
+   current position. */
+.card:hover .steps span.s02,.card:focus-visible .steps span.s02{
+  background:var(--white);border-color:var(--line);color:var(--text-muted)}
+.card:hover .steps span.s03,.card:focus-visible .steps span.s03{
+  background:var(--accent);border-color:var(--accent);color:var(--white)}
+.steps span.s01{position:relative}
+.card:hover .steps span.s01 .lbl,.card:focus-visible .steps span.s01 .lbl{visibility:hidden}
+.card:hover .steps span.s01::after,.card:focus-visible .steps span.s01::after{
+  content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:var(--data-ok)}
 .steps .ar{color:var(--text-muted);border:0;padding:0}
 .frame{flex:1;border:var(--hair);background:var(--white);display:grid;place-items:center;min-height:0;
   font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted)}
@@ -474,10 +503,10 @@ a.card[href$="about.html"]             .ct{view-transition-name:vt-about}
       <div class="tz">
         <div class="in">
           <div class="steps">
-            <span>01 Size</span><span class="ar">→</span>
-            <span class="on">02 Frame</span><span class="ar">→</span>
-            <span>03 Photos</span><span class="ar">→</span>
-            <span>04 Review</span>
+            <span class="s01"><span class="lbl">01 Size</span></span><span class="ar">→</span>
+            <span class="s02 on">02 Frame</span><span class="ar">→</span>
+            <span class="s03">03 Photos</span><span class="ar">→</span>
+            <span class="s04">04 Review</span>
           </div>
           <div class="frame"><div class="phold"></div></div>
         </div>
@@ -538,6 +567,60 @@ a.card[href$="about.html"]             .ct{view-transition-name:vt-about}
 
   </main>
 </div>
+
+<script>
+/* ====================================================================
+   HOMEPAGE BEHAVIOUR — two things, both small on purpose.
+   Values are the ship cut from experiments/richness-sandbox.html.
+   ==================================================================== */
+(function () {
+  'use strict';
+  var REDUCED = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* ---- 1 · the legend answers -------------------------------------
+     The blue block after the wordmark is the site's colour legend. Bound
+     to the hovered card's category it stops being punctuation and starts
+     being an instrument: the cheapest possible proof that colour here
+     carries meaning rather than decoration. */
+  var wm = document.querySelector('.wm');
+  document.querySelectorAll('.card').forEach(function (card) {
+    var retail = card.querySelector('.cat.retail');
+    function on()  { wm.style.setProperty('--legend', retail ? 'var(--ink-600)' : 'var(--accent)'); }
+    function off() { wm.style.removeProperty('--legend'); }
+    card.addEventListener('mouseenter', on);
+    card.addEventListener('mouseleave', off);
+    card.addEventListener('focus', on);
+    card.addEventListener('blur', off);
+  });
+
+  /* ---- 2 · the teaser tick ----------------------------------------
+     Six recreated instruments that never move are six screenshots. One
+     value updates every nine seconds, one card at a time, never while
+     that card is being hovered — an update under the cursor reads as a
+     misclick rather than as telemetry. */
+  if (REDUCED) return;
+
+  var beats = [
+    { sel: '.tbl .null td:last-child',       vals: ['—', '0.00'] },
+    { sel: '.crit .no .s',                   vals: ['2.9:1', '3.4:1'] },
+    { sel: '.rec div:nth-child(4) .n',       vals: ["30 days' notice", 'Open to talk'] }
+  ].map(function (b) {
+    b.el = document.querySelector(b.sel); b.i = 0; return b;
+  }).filter(function (b) { return b.el; });
+
+  var n = 0;
+  setInterval(function () {
+    if (!beats.length || document.hidden) return;
+    var b = beats[n++ % beats.length];
+    var card = b.el.closest('.card');
+    if (card && card.matches(':hover')) return;
+    b.i = 1 - b.i;
+    b.el.textContent = b.vals[b.i];
+    b.el.classList.add('tick-flash');
+    setTimeout(function () { b.el.classList.remove('tick-flash'); }, 600);
+  }, 9000);
+})();
+</script>
 
 </body>
 </html>

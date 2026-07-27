@@ -27,15 +27,15 @@
    NORTH-STAR §4: lead with the work and the through-line; the 16 years
    are evidence, not the opening move. No title-stack up top.
    ================================================================== */
+/* MONO LOCK — was 11px at .12em, two violations. Now the shared token. */
 .skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--text-primary);
-  color:var(--paper);padding:10px 16px;font-family:var(--font-mono);font-size:11px;
-  letter-spacing:.12em;text-transform:uppercase}
+  color:var(--paper);padding:10px 16px;font:var(--mono-label);
+  letter-spacing:var(--track-label);text-transform:uppercase}
 .skip:focus{left:8px;top:8px}
-.logo .wm{font-family:var(--font-sans);font-weight:700;letter-spacing:-.02em}
-.logo .sq{width:.28em;height:.72em;font-size:17px;background:var(--accent);display:block}
+/* Wordmark override deleted — the lockup is defined once in eishiki-v3.css. */
 
 .pw{padding:var(--space-5xl) 0 0}
-.pk{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+.pk{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
   color:var(--text-muted);margin:0 0 var(--space-lg)}
 .pt{font:var(--text-display-lg);letter-spacing:-.02em;margin:0 0 var(--space-md);color:var(--text-primary);max-width:20ch}
 .sect{margin:var(--space-5xl) 0 0}

@@ -58,8 +58,13 @@
 .spec > .hd{display:flex;align-items:center;gap:var(--space-2xs);padding:13px 16px;
   border-bottom:var(--border-hair);font:var(--mono-label);letter-spacing:var(--track-label);
   text-transform:uppercase;color:var(--text-primary)}
+/* --text-faint (ink-400) measures 2.78:1 here. This label is the SITE
+   talking about the specimen, not the specimen itself, so it takes the
+   site's floor: --text-muted, 5.34:1. Same correction the accessibility
+   lab took. The greys *inside* the recreations stay wrong on purpose —
+   they are evidence, and evidence is quoted, not improved. */
 .spec > .hd .r{margin-left:auto;font:var(--mono-caption);letter-spacing:var(--track-caption);
-  text-transform:none;color:var(--text-faint)}
+  text-transform:none;color:var(--text-muted)}
 .spec > .bd{padding:var(--space-lg) var(--space-md)}
 .spec > .bd.flush{padding:0}
 
@@ -103,13 +108,44 @@
   text-transform:uppercase;cursor:pointer;text-align:center;line-height:1.2}
 .atb[data-state="nosize"] .cta{background:var(--white);color:var(--b-slab)}
 
-/* the tray that opens IN the bar rather than scrolling the page back up */
+/* the tray that opens IN the bar rather than scrolling the page back up.
+   [hidden] is a UA display:none, so an author display:flex outranks it —
+   states 01 and 02 were painting an empty stone-coloured strip under the
+   bar. The attribute is the state carrier here, so it wins explicitly. */
+.atb .tray[hidden]{display:none}
 .atb .tray{border-top:0.667px dashed var(--b-line);padding:14px 16px;display:flex;
   align-items:center;gap:10px;flex-wrap:wrap;background:var(--b-stone)}
 .atb .tray .tl{font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
   color:#6E6E68;margin-right:4px}
 .atb .msg{padding:9px 16px;background:var(--b-error);color:#fff;font-size:12.5px;font-weight:600;
   letter-spacing:.06em;text-transform:uppercase}
+
+/* THE WIPE — top to bottom, not a swap.
+   Populated and delivered are the same layout in two conditions, so the
+   change should read as the page being re-dressed rather than as two
+   images being exchanged. Each band carries the same transition with a
+   small cumulative delay, so the condition sweeps down the template.
+   A grayscale filter was the wrong tool: .hp.off already declares its
+   own neutral fields, and a filter would have greyed the labels too —
+   which are deliberate, and are evidence. */
+.hp .band,.hp .rail .c,.hp .band .cta{
+  transition:background-color var(--wipe-dur,480ms) var(--ease-hold),
+             border-color var(--wipe-dur,480ms) var(--ease-hold),
+             opacity var(--wipe-dur,480ms) var(--ease-hold)}
+.hp .hero{transition-delay:0ms}
+.hp .three .band:nth-child(1){transition-delay:40ms}
+.hp .three .band:nth-child(2){transition-delay:70ms}
+.hp .three .band:nth-child(3){transition-delay:100ms}
+.hp .rail .c:nth-child(1){transition-delay:130ms}
+.hp .rail .c:nth-child(2){transition-delay:150ms}
+.hp .rail .c:nth-child(3){transition-delay:170ms}
+.hp .rail .c:nth-child(4){transition-delay:190ms}
+.hp .rail .c:nth-child(5){transition-delay:210ms}
+.hp .acc{transition-delay:240ms}
+.hp .give{transition-delay:270ms}
+@media (prefers-reduced-motion:reduce){
+  .hp .band,.hp .rail .c,.hp .band .cta{transition:none;transition-delay:0s}
+}
 
 /* ==================================================================
    02 · PLP FILTER ROW — the max-load stress test
@@ -134,17 +170,61 @@
   background-image:repeating-linear-gradient(-45deg,transparent 0 9px,rgba(9,9,9,.02) 9px 18px)}
 .plp .prods .p .n{font-size:12.5px;margin-top:8px}
 .plp .prods .p .v{font-size:12.5px;color:#8A8A84;margin-top:2px}
-.plp .fold{position:relative;border-top:1px dashed var(--b-error)}
+/* The fold. Written months ago, never once placed in the markup — so the
+   sentence "the products are not allowed to disappear" had no picture
+   attached to it. It is absolute inside .plp now, driven off --fold, and
+   the offset is a declared reference rather than a live viewport read:
+   this recreation is 1000px standing in for a 1440px page, so a raw
+   window.innerHeight would be the wrong ruler applied confidently. */
+.plp{position:relative}
+.plp .fold{position:absolute;left:0;right:0;top:var(--fold,600px);
+  border-top:1px dashed var(--b-error);pointer-events:none;z-index:2}
 .plp .fold span{position:absolute;right:8px;top:-9px;background:var(--white);padding:0 7px;
   font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
   color:var(--b-error)}
 
-.ctlbar{display:flex;flex-wrap:wrap;gap:var(--space-2xs);margin-bottom:var(--space-md)}
-.mini{padding:9px 14px;border:var(--border-hair);background:transparent;cursor:pointer;
-  font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
-  color:var(--text-muted);transition:background var(--dur-fast) linear,color var(--dur-fast) linear}
-.mini:hover{background:var(--white);color:var(--text-primary)}
-.mini.on{background:var(--surface-inverse);border-color:var(--surface-inverse);color:var(--text-inverse)}
+/* ---- control grammar, borrowed verbatim from the accessibility lab ----
+   One continuous variable gets a slider; a binary gets a switch. Discrete
+   named states get the .state cards, which section 02 already uses. Three
+   demos, three control types, one rule for choosing between them — that is
+   the difference between a system and three demos that happen to sit on
+   the same page. Steppers are not decoration: 2.5.7 says a control may
+   never be drag-only. */
+.ctl{border-top:var(--border-hair);padding-top:var(--space-md)}
+.ctl .sc{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--accent)}
+.ctl .nm{display:block;font-family:var(--font-sans);font-size:15px;font-weight:600;
+  line-height:1.3;color:var(--text-primary);margin:6px 0 3px}
+.ctl .hp{font-family:var(--font-sans);font-size:13px;line-height:1.5;
+  color:var(--text-muted);margin:0}
+.sl{display:flex;align-items:center;gap:var(--space-2xs);margin-top:var(--space-xs)}
+.sl input[type=range]{flex:1;height:24px;accent-color:var(--accent);cursor:pointer}
+.stp{width:30px;height:30px;flex:none;border:var(--border-solid);background:var(--white);
+  font-family:var(--font-mono);font-size:15px;font-weight:600;color:var(--text-primary);
+  cursor:pointer;line-height:1;padding:0}
+.stp:hover{border-color:var(--accent);color:var(--accent)}
+/* Ticks name the two counts worth knowing: a plausible session and max
+   load. The chip order is built so the first seven ARE the plausible
+   session, which is why one slider can replace three preset buttons. */
+.ticks{display:flex;justify-content:space-between;margin-top:6px;
+  font:var(--mono-caption);letter-spacing:var(--track-caption);color:var(--text-muted)}
+.ticks b{font-weight:400;color:var(--text-primary)}
+
+.sr{display:flex;gap:var(--space-md);align-items:flex-start}
+.sr .tx{flex:1}
+button.tg{flex:none;margin-top:3px;width:52px;height:24px;border:var(--border-solid);
+  background:var(--white);position:relative;cursor:pointer;padding:0;overflow:hidden;
+  font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:0.06em;
+  color:var(--text-muted);
+  transition:background var(--dur-fast) linear,border-color var(--dur-fast) linear}
+button.tg::before{content:'OFF';position:absolute;top:0;right:0;width:30px;height:100%;
+  display:grid;place-items:center;pointer-events:none}
+button.tg::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;
+  background:var(--ink-700);transition:transform var(--dur-fast) var(--ease-snap),
+  background var(--dur-fast) linear}
+button.tg[aria-pressed="true"]{border-color:var(--accent);background:rgba(11,63,255,.06)}
+button.tg[aria-pressed="true"]::before{content:'ON';left:0;right:auto;color:var(--accent)}
+button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(--accent)}
 
 /* ==================================================================
    03 · HOMEPAGE TEMPLATE — populated vs. unpopulated
@@ -186,8 +266,16 @@
 @media(max-width:900px){.fields{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.fields{grid-template-columns:1fr}}
 .fcell{background:var(--white);padding:var(--space-md) 15px;font-family:var(--font-sans)}
+/* Caption reserves two lines whether it needs them or not. "EMPTY-FIELD
+   HIGHLIGHT" measures ~167px; the cell's content box drops under that
+   between 1101 and 1166px viewport (rail still in, band at its narrowest),
+   so that one caption wrapped and dropped its sample 17px below the three
+   beside it. The samples are the thing being compared — they have to sit
+   on one line across the row, so the label reserves the space instead of
+   borrowing it. Colour raised off --text-faint (3.0:1) for the same reason
+   as .spec .hd .r. */
 .fcell .st{font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;
-  color:var(--text-faint);margin-bottom:11px}
+  color:var(--text-muted);min-height:34px;margin-bottom:9px}
 .fcell .fl{font-size:11.5px;color:var(--b-dusk);margin-bottom:5px}
 .inp{display:flex;align-items:center;border:1px solid var(--b-field);background:var(--white);
   height:34px;padding:0 9px;font-size:12.5px;color:var(--b-dusk);gap:6px}
@@ -207,12 +295,17 @@
 /* ==================================================================
    05 · PALETTE — job table
    ================================================================== */
-.rule.job{grid-template-columns:190px 1fr 96px}
+/* 210px, not 190: the Error/Success row carries two 30px chips in this
+   column, which left "Error / Success" and "System pair" fighting for
+   ~108px and wrapping the name onto the swatches. The widest label sets
+   the column, not the average one. */
+.rule.job{grid-template-columns:210px 1fr 96px}
 @media(max-width:760px){.rule.job{grid-template-columns:1fr}}
 .rule.job .sw{display:flex;align-items:center;gap:11px}
 .rule.job .sw i{width:30px;height:30px;flex:none;border:0.667px solid rgba(9,9,9,.14);display:block}
 .rule.job .sw .nm{font-family:var(--font-sans);font-size:14px;font-weight:600;line-height:1.2}
-.rule.job .sw .hx{font:var(--mono-data);letter-spacing:var(--track-data);color:var(--text-faint)}
+/* hex is site-voice data, not client artwork — muted, not faint (2.78 → 5.34:1) */
+.rule.job .sw .hx{font:var(--mono-data);letter-spacing:var(--track-data);color:var(--text-muted)}
 .rule.job .jb{font-family:var(--font-sans);font-size:14px;line-height:1.55;color:var(--text-body)}
 .rule.job .tg{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
   color:var(--text-muted);text-align:right}
@@ -312,7 +405,7 @@
 
       <p class="prose">The engagement started the way retail engagements usually start: design the product detail page, the listing page, the homepage, and the supporting templates around them. Comps. Redlines. Ship.</p>
 
-      <p class="prose">The pages were not the hard part. The hard part showed up the first time somebody asked a question the comps could not answer &mdash; <em>what does the add-to-bag button say when no size is selected?</em> There were four plausible answers and no rule, and the same shape of question was waiting behind every other component. A page is one answer to that question. A system is the answer to all of them.</p>
+      <p class="prose">The pages were not the hard part. The hard part arrived with the first question the comps could not answer &mdash; <em>what does the add-to-bag button say when no size is selected?</em> Four plausible answers, no rule, and the same question waiting behind every other component. A page answers it once. A system answers it every time.</p>
 
       <p class="prose">So the scope moved. I kept delivering templates, and underneath them I defined the thing the templates were actually made of: a component library, a state taxonomy for each component, and a colour system where every value carried a job description instead of a mood.</p>
 
@@ -328,7 +421,7 @@
       <div class="srule"><span class="eb">02 &middot; The unhappy path</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">The button that had to <span class="mark">say four things.</span></h2>
 
-      <p class="prose">This product page is long. Details, sizing, shipping, recommendations, paired products, ratings, a wall of customer photos, two more carousels. By the time a shopper has read enough to decide, the thing they decide <em>with</em> is a thousand pixels above them.</p>
+      <p class="prose">This product page is long. Details, sizing, shipping, recommendations, ratings, a wall of customer photos, two more carousels. By the time a shopper has read enough to decide, the thing they decide <em>with</em> is a thousand pixels above them.</p>
 
       <p class="prose">So the add-to-bag action detaches and follows &mdash; and once it follows, it has to carry the whole variant transaction with it, including the ways that transaction fails. <b>The most common add-to-bag failure is not a server error. It is an unselected size.</b> Which makes the error state the most important state on the most important control on the highest-value page on the site.</p>
 
@@ -379,7 +472,7 @@
       </div>
       <p class="mono-note">Product name and prices are invented. The states, and the rule attached to each one, are the deliverable.</p>
 
-      <p class="prose" style="margin-top:var(--space-xl)">State 02 is the one worth arguing about. The obvious solution is a toast: leave the button saying <em>Add to bag</em>, and throw an error somewhere when it fails. We put the instruction <em>in the button itself</em>, because a toast is a message about a failure and a label is a description of what the control will do next. The shopper never gets told they did something wrong &mdash; the button simply tells them what it needs. Same information, no blame, nothing to dismiss, and it survives on a phone where a toast can land under a thumb.</p>
+      <p class="prose" style="margin-top:var(--space-xl)">State 02 is the one worth arguing about. The obvious answer is a toast &mdash; leave the button saying <em>Add to bag</em>, throw an error when it fails. We put the instruction <em>in the button</em>, because a toast reports a failure and a label describes what the control will do next. Same information, no blame, nothing to dismiss, and nothing that can land under a thumb.</p>
 
       <blockquote class="pq" style="margin-top:var(--space-xl)">
         <q>A disabled button is a designer refusing to say why.</q>
@@ -394,18 +487,34 @@
 
       <p class="prose">Filter chips are the easiest component in retail to design and one of the easiest to ship broken, because the comp always shows two or three of them. Nobody selects three filters. People select a colour family, then a couple of sizes, then a sleeve length, then change their mind and leave the old ones on.</p>
 
-      <p class="prose">So the specimen I designed against was the maximum: every colour, every size, every sleeve length, all applied at once. Push the chips yourself and watch the readout &mdash; <b>the number that matters is not the chip count, it is the height of the row</b>, because that height is subtracted from the products.</p>
+      <p class="prose">So the specimen I designed against was the maximum: every colour, every size, every sleeve length, all applied at once. Run the slider up and watch the readout &mdash; <b>the number that matters is not the chip count, it is the height of the row</b>, because that height is subtracted from the products. The fold is drawn in. The first product row never crosses it; the second one pays for every chip you add.</p>
 
-      <div class="ctlbar" style="margin-top:var(--space-lg)">
-        <button type="button" class="mini" id="fAll">Apply every filter</button>
-        <button type="button" class="mini" id="fSome">Realistic session</button>
-        <button type="button" class="mini on" id="fNone">Clear all</button>
-      </div>
-
-      <div class="spec">
+      <div class="spec" style="margin-top:var(--space-lg)">
         <p class="hd">Listing page &middot; filter row at load <span class="r">Recreation &mdash; interactive</span></p>
+        <div class="bd">
+          <div class="ctl" style="border-top:0;padding-top:0">
+            <span class="sc">One variable &middot; chip count</span>
+            <label class="nm" for="fCount">Filters applied</label>
+            <p class="hp">Drag, step or arrow-key from an empty row to every filter in the facet set. Everything below the slider is measured from the live DOM, not asserted.</p>
+            <div class="sl">
+              <button class="stp" type="button" id="fDec" aria-label="One fewer filter">&minus;</button>
+              <input type="range" id="fCount" min="0" max="31" step="1" value="0" aria-describedby="fRead">
+              <button class="stp" type="button" id="fInc" aria-label="One more filter">+</button>
+            </div>
+            <p class="ticks"><span>0 &middot; clean</span><span><b>7</b> &middot; a plausible session</span><span><b>31</b> &middot; max load</span></p>
+          </div>
+        </div>
+
+        <!-- Readout sits ABOVE the specimen here, unlike section 02. It measures
+             the chip row, the chip row is at the top of the specimen, and at max
+             load a 350px product grid was pushing the evidence off-screen at
+             exactly the moment it became interesting. -->
+        <div class="readout" style="border-top:var(--border-hair);border-bottom:var(--border-hair)">
+          <span class="k">Measured</span><span class="v" id="fRead"></span>
+        </div>
+
         <div class="bd flush">
-          <div class="plp">
+          <div class="plp" id="fPlp">
             <div class="hdr">
               <span class="t">New Arrivals</span>
               <span class="c">1,010 results</span>
@@ -417,16 +526,18 @@
               <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$79.95</div></div>
               <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$169.95</div></div>
               <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$69.95</div></div>
+              <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$45.00</div></div>
+              <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$89.95</div></div>
+              <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$120.00</div></div>
+              <div class="p"><div class="im"></div><div class="n">Product name</div><div class="v">$34.95</div></div>
             </div>
+            <div class="fold" id="fFold"><span>Fold</span></div>
           </div>
         </div>
-        <div class="readout">
-          <span class="k">Measured</span><span class="v" id="fRead"></span>
-        </div>
       </div>
-      <p class="mono-note">Result count and product names are placeholder values, exactly as they were in the spec. The row height is measured live in your browser.</p>
+      <p class="mono-note">Result count and product names are placeholder values, exactly as they were in the spec. Row height, wrap count and fold clearance are measured live in your browser. The fold is derived from your actual window, scaled by the same factor this recreation is scaled by &mdash; it is 1000px standing in for a 1440px page, and the wrong ruler confidently applied is worse than no ruler.</p>
 
-      <p class="prose" style="margin-top:var(--space-xl)">Three rules came out of that specimen. Chips wrap rather than scroll horizontally, because a horizontal chip rail hides the filters a shopper most wants to remove. <b>Clear all is pinned first and never wraps away from the row</b>, so the escape hatch cannot leave the screen when the mess is at its worst. And the grid keeps a fixed minimum above the fold regardless of chip count &mdash; the filters are allowed to get ugly, the products are not allowed to disappear.</p>
+      <p class="prose" style="margin-top:var(--space-xl)">Three rules came out of that specimen. Chips wrap rather than scroll, because a horizontal rail hides the filters a shopper most wants to remove. <b>Clear all is pinned first and never wraps away</b>, so the escape hatch cannot leave the screen when the mess is at its worst. And the grid holds a fixed minimum above the fold &mdash; the filters are allowed to get ugly, the products are not allowed to disappear.</p>
     </section>
 
     <!-- ===================== 04 ===================== -->
@@ -438,15 +549,20 @@
 
       <p class="prose">Because the person who touches this page every week is not the shopper. It is a
         <button type="button" class="term" data-tip-label="Merchandiser" data-tip="The internal user who swaps hero imagery, promo copy, banner dates and product rails on a weekly or campaign cadence — usually through a CMS, usually without a designer in the room, usually on a Friday.">merchandiser</button>
-        swapping a hero, three promo tiles, a five-product rail and a give-back banner on a campaign cadence, through a CMS, with no designer in the room. If the layout only holds when the photography is beautiful, it does not hold. Every slot has to declare its ratio, its safe area, its character budget and what it does when it is empty &mdash; or the page degrades a little every week until somebody calls it a redesign.</p>
+        swapping a hero, three promo tiles, a five-product rail and a give-back banner through a CMS, on a campaign cadence, with no designer in the room. If the layout only holds when the photography is beautiful, it does not hold &mdash; it degrades a little every week until somebody calls it a redesign.</p>
 
-      <div class="ctlbar" style="margin-top:var(--space-lg)">
-        <button type="button" class="mini on" id="hpOn">Populated</button>
-        <button type="button" class="mini" id="hpOff">As delivered</button>
-      </div>
-
-      <div class="spec">
+      <div class="spec" style="margin-top:var(--space-lg)">
         <p class="hd">Homepage template <span class="r">Recreation &mdash; toggle the fill</span></p>
+        <div class="bd">
+          <div class="ctl sr" style="border-top:0;padding-top:0">
+            <span class="tx">
+              <span class="sc">Binary &middot; asset state</span>
+              <span class="nm" id="hpLbl">Campaign imagery loaded</span>
+              <span class="hp">On is the version that gets screenshotted. Off is the version the merchandising team actually receives, and the one the layout has to survive.</span>
+            </span>
+            <button type="button" class="tg" id="hpTg" aria-pressed="true" aria-labelledby="hpLbl"></button>
+          </div>
+        </div>
         <div class="bd flush">
           <div class="hp on" id="hpGrid">
             <div class="band hero" style="min-height:150px"><div><div class="ttl">Welcome<br>Summer</div><div class="cta">Shop summer</div></div></div>
@@ -534,7 +650,8 @@
       <div class="ledger">
         <div class="r"><div class="k">The client</div><div class="v">Named nowhere on this page, by choice. No logos, no wordmarks, no store photography, no campaign imagery.</div></div>
         <div class="r"><div class="k">The screens</div><div class="v"><b>Every artifact above is a recreation I coded for this site</b>, set in my own typefaces, from my own working files. Nothing here is a lifted screenshot.</div></div>
-        <div class="r"><div class="k">The numbers</div><div class="v">There are none. I do not hold post-launch analytics for this engagement, so there is no conversion lift quoted, no error-rate reduction, no time-on-task. An invented number would be worth less than the blank.</div></div>
+        <div class="r"><div class="k">The numbers</div><div class="v">None, and none estimated. I do not hold post-launch analytics for this engagement, and an invented number is worth less than the blank.</div></div>
+        <div class="r"><div class="k">The grey type</div><div class="v">Some labels inside the recreations sit under 4.5:1. That is the source, reproduced. <b>The site's own voice around them is not allowed to.</b> Evidence gets quoted, not improved.</div></div>
         <div class="r"><div class="k">What is mine</div><div class="v">The state taxonomy, the component and colour system, the template specs and the redlines. The photography, the merchandising and the brand identity were not.</div></div>
       </div>
 
@@ -606,6 +723,19 @@
       }
     };
 
+    /* THE ERROR IS HELD.
+       Recovering instantly hides the failure this whole page is about.
+       When the reader lands on the no-size state the bar sits wrong for
+       --dur-hold before the tray becomes available. Under ~250ms nobody
+       registers the error; over ~600ms it stops being a beat and starts
+       reading as a bug. 500ms is the tuned value. */
+    var HOLD = (function () {
+      var v = getComputedStyle(document.documentElement).getPropertyValue('--dur-hold').trim();
+      return parseFloat(v) || 500;
+    })();
+    var REDUCED = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var holdTimer = null;
+
     function render(key) {
       var s = SPEC[key];
       bar.setAttribute('data-state', key);
@@ -614,7 +744,15 @@
       cta.textContent = s.cta;
       rule.textContent = s.rule;
 
+      clearTimeout(holdTimer);
       if (!s.tray) { tray.hidden = true; tray.innerHTML = ''; return; }
+
+      /* On the error state the tray is withheld for a beat so the reader
+         sits in the failure before the remedy arrives. Every other state
+         opens immediately — the hold is the point being made, not a
+         transition applied everywhere. */
+      var held = (bar.getAttribute('data-state') === 'nosize') && !REDUCED;
+      if (held) { tray.hidden = true; }
       tray.hidden = false;
       var html = '<span class="tl">' + s.tray.label + '</span>';
       s.tray.items.forEach(function (it, i) {
@@ -634,78 +772,164 @@
         render(b.getAttribute('data-st'));
       }
       b.addEventListener('click', pick);
-      b.addEventListener('focus', pick);
+      /* was also bound to focus, which changed the specimen four times
+         while a keyboard user was merely tabbing past the group */
+      b.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1
+              : e.key === 'ArrowLeft'  || e.key === 'ArrowUp'   ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        var i = stateBtns.indexOf(b);
+        var next = stateBtns[(i + d + stateBtns.length) % stateBtns.length];
+        stateBtns.forEach(function (x) { x.tabIndex = -1; });
+        next.tabIndex = 0; next.focus(); next.click();
+      });
     });
+    stateBtns.forEach(function (b, i) { b.tabIndex = i === 0 ? 0 : -1; });
     render('default');
+
+    /* Clicking the live CTA in the no-size state performs the failure
+       rather than describing it: the bar holds wrong, then the tray
+       arrives. This is the one control on the page whose delay is the
+       content. */
+    cta.addEventListener('click', function () {
+      if (bar.getAttribute('data-state') !== 'nosize') return;
+      tray.hidden = true;
+      clearTimeout(holdTimer);
+      holdTimer = setTimeout(function () {
+        var t = SPEC.sizetray.tray;
+        var html = '<span class="tl">' + t.label + '</span>';
+        t.items.forEach(function (it, i) {
+          html += '<span class="sz' + (i === t.on ? ' on' : '') + '">' + it + '</span>';
+        });
+        tray.innerHTML = html;
+        tray.hidden = false;
+      }, REDUCED ? 0 : HOLD);
+    });
   }
 
-  /* ---------- 03 · filter row stress test ---------- */
+  /* ---------- 03 · filter row stress test ----------
+     ORDER MATTERS. The chips are not grouped by facet, they are ordered by
+     the sequence a real session accretes them in: a colour, a second
+     colour, two sizes, a sleeve length, a third colour nobody meant to
+     leave on. The first seven ARE the plausible session, which is what
+     lets one slider do the job three preset buttons were doing. */
+  /* ---------- 04 · the gray homepage, wiped not swapped ----------
+     A swap says "here are two images." A wipe says "this is one page in
+     two conditions," which is the argument the section is making. */
+  (function () {
+    var grid = document.getElementById('hpGrid');
+    if (!grid) return;
+    var d = getComputedStyle(document.documentElement).getPropertyValue('--dur-wipe').trim();
+    grid.style.setProperty('--wipe-dur', parseFloat(d) ? d : '480ms');
+  })();
+
   var chipWrap = document.getElementById('fChips');
   if (chipWrap) {
-    var GROUPS = [
-      ['Colour', ['Red','Orange','Yellow','Green','Blue','Indigo','Violet','White','Silver','Gray','Beige','Pink','Purple','Multi','Black']],
-      ['Size',   ['XS','S','M','L','XL','XXL','0','4','8','16']],
-      ['Sleeve', ['Sleeveless','Short sleeve','Long sleeve','Strap','3/4','Full sleeve']]
+    var ALL = [
+      'Blue','Black','S','M','Pink','Sleeveless','Short sleeve',
+      'Red','Orange','Yellow','Green','Indigo','Violet','White','Silver','Gray',
+      'Beige','Purple','Multi','XS','L','XL','XXL','0','4','8','16',
+      'Long sleeve','Strap','3/4','Full sleeve'
     ];
-    var ALL = [];
-    GROUPS.forEach(function (g) { g[1].forEach(function (v) { ALL.push(v); }); });
+    /* THE FOLD, derived rather than declared.
+       This recreation is however wide the band happens to be, standing in
+       for a 1440px page — so a raw window.innerHeight is the wrong ruler.
+       Scale it by the same factor the page is scaled by, and subtract the
+       site header a real PLP would be sitting under. Everything then falls
+       out honestly: on a tall desktop the first product row always clears,
+       and on a short or narrow window it does not, which is the true
+       finding and a stronger one than any number I could assert. */
+    var REF_PAGE = 1440, SITE_CHROME = 80;
+    var slider = document.getElementById('fCount'),
+        read   = document.getElementById('fRead'),
+        plp    = document.getElementById('fPlp'),
+        fold   = document.getElementById('fFold');
 
-    var active = [];
-    var read = document.getElementById('fRead');
+    slider.max = ALL.length;
+
+    function foldPx() {
+      var scale = plp.getBoundingClientRect().width / REF_PAGE;
+      return Math.round(Math.max(0, window.innerHeight - SITE_CHROME) * scale);
+    }
 
     function paint() {
+      var n = Math.max(0, Math.min(ALL.length, +slider.value));
       var html = '';
-      if (active.length) {
+      if (n) {
         html += '<button class="fchip clear" type="button" data-clear>Clear all filters <span class="x">&times;</span></button>';
-      }
-      active.forEach(function (v) {
-        html += '<button class="fchip" type="button" data-v="' + v + '">' + v + ' <span class="x">&times;</span></button>';
-      });
-      if (!active.length) {
-        html += '<span class="fchip" style="border-style:dashed;color:#9A9892;cursor:default">No filters applied</span>';
+        ALL.slice(0, n).forEach(function (v) {
+          html += '<button class="fchip" type="button" data-v="' + v + '">' + v + ' <span class="x">&times;</span></button>';
+        });
+      } else {
+        html += '<span class="fchip" style="border-style:dashed;color:#6E6E68;cursor:default">No filters applied</span>';
       }
       chipWrap.innerHTML = html;
 
-      var h = Math.round(chipWrap.getBoundingClientRect().height);
-      var rows = Math.max(1, Math.round((h - 24) / 30));
-      var verdict = active.length >= ALL.length
-        ? ' · ROW OUTGROWS THE FIRST PRODUCT ROW'
-        : (rows > 2 ? ' · grid pushed down ' + (rows - 1) + ' rows' : '');
-      read.textContent = 'chips ' + active.length + '/' + ALL.length +
-        ' · row height ' + h + 'px · wraps to ' + rows + ' line' + (rows === 1 ? '' : 's') + verdict;
+      /* --- everything below is read off the DOM. The old build hardcoded
+         "ROW OUTGROWS THE FIRST PRODUCT ROW" to the chip count, which was
+         simply untrue at this width — the row is ~130px and the product
+         row is ~350px. A strip labelled "Measured" printing an unmeasured
+         verdict is the one defect this whole page argues against. --- */
+      var FOLD   = foldPx();
+      var plpTop = plp.getBoundingClientRect().top;
+      var h      = Math.round(chipWrap.getBoundingClientRect().height);
+      var cells  = plp.querySelectorAll('.prods .p');
+      var first  = cells[0].getBoundingClientRect();
+      var last   = cells[cells.length - 1].getBoundingClientRect();
+      var r1     = Math.round(first.bottom - plpTop);
+      var rN     = Math.round(last.bottom  - plpTop);
+      var rowH   = Math.max(1, Math.round(first.height));
+      var lineH  = Math.max(1, Math.round(chipWrap.querySelector('.fchip')
+                     ? chipWrap.querySelector('.fchip').getBoundingClientRect().height + 6 : 30));
+      var rows   = Math.max(1, Math.round((h - 24) / lineH));
+
+      plp.style.setProperty('--fold', FOLD + 'px');
+      fold.querySelector('span').textContent =
+        'Fold — ' + window.innerHeight + 'px window, scaled to a ' + REF_PAGE + 'px page';
+
+      /* how much of the LAST product row survives above the fold */
+      var vis = Math.max(0, Math.min(rowH, rowH - (rN - FOLD)));
+      var pct = Math.round((vis / rowH) * 100);
+
+      var verdict = r1 <= FOLD
+        ? 'first row clears by ' + (FOLD - r1) + 'px'
+        : 'FIRST ROW IS BELOW THE FOLD';
+      read.textContent =
+        'chips ' + n + '/' + ALL.length +
+        ' · row ' + h + 'px, ' + rows + ' line' + (rows === 1 ? '' : 's') +
+        ' · fold at ' + FOLD + 'px · ' + verdict +
+        ' · last row ' + pct + '% visible';
     }
 
+    /* chips stay individually removable — removing one is the gesture a
+       shopper actually makes, and it drives the slider back down. */
     chipWrap.addEventListener('click', function (e) {
-      var c = e.target.closest('[data-clear]');
-      if (c) { active = []; setMode('fNone'); paint(); return; }
+      if (e.target.closest('[data-clear]')) { slider.value = 0; paint(); return; }
       var b = e.target.closest('[data-v]');
       if (!b) return;
-      active = active.filter(function (v) { return v !== b.getAttribute('data-v'); });
-      setMode(null); paint();
+      var i = ALL.indexOf(b.getAttribute('data-v'));
+      if (i > -1) { ALL.splice(i, 1); ALL.push(b.getAttribute('data-v')); }
+      slider.value = Math.max(0, +slider.value - 1);
+      paint();
     });
 
-    function setMode(id) {
-      ['fAll','fSome','fNone'].forEach(function (x) {
-        document.getElementById(x).classList.toggle('on', x === id);
-      });
-    }
-    document.getElementById('fAll').addEventListener('click', function () {
-      active = ALL.slice(); setMode('fAll'); paint();
+    slider.addEventListener('input', paint);
+    document.getElementById('fDec').addEventListener('click', function () {
+      slider.value = Math.max(0, +slider.value - 1); paint();
     });
-    document.getElementById('fSome').addEventListener('click', function () {
-      active = ['Blue','Black','Pink','S','M','Sleeveless','Short sleeve']; setMode('fSome'); paint();
-    });
-    document.getElementById('fNone').addEventListener('click', function () {
-      active = []; setMode('fNone'); paint();
+    document.getElementById('fInc').addEventListener('click', function () {
+      slider.value = Math.min(ALL.length, +slider.value + 1); paint();
     });
     window.addEventListener('resize', paint, { passive: true });
     paint();
   }
 
-  /* ---------- 04 · homepage fill toggle ---------- */
+  /* ---------- 04 · homepage fill switch ---------- */
   var hp = document.getElementById('hpGrid');
   if (hp) {
-    var hpRead = document.getElementById('hpRead');
+    var hpRead = document.getElementById('hpRead'),
+        hpTg   = document.getElementById('hpTg');
     var COPY = {
       on:  'Populated · what the stakeholder review saw. Palette fields stand in for campaign photography.',
       off: 'As delivered · what the merchandising team receives. Every slot declares a ratio, a safe area and a character budget — so the page holds on a week when the assets are late.'
@@ -713,12 +937,12 @@
     function fill(isOn) {
       hp.classList.toggle('on', isOn);
       hp.classList.toggle('off', !isOn);
-      document.getElementById('hpOn').classList.toggle('on', isOn);
-      document.getElementById('hpOff').classList.toggle('on', !isOn);
+      hpTg.setAttribute('aria-pressed', isOn ? 'true' : 'false');
       hpRead.textContent = isOn ? COPY.on : COPY.off;
     }
-    document.getElementById('hpOn').addEventListener('click', function () { fill(true); });
-    document.getElementById('hpOff').addEventListener('click', function () { fill(false); });
+    hpTg.addEventListener('click', function () {
+      fill(hpTg.getAttribute('aria-pressed') !== 'true');
+    });
     fill(true);
   }
 })();

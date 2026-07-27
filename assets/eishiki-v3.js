@@ -4,6 +4,15 @@
 (function () {
   'use strict';
 
+  /* Motion values are declared once in eishiki-v3.css and read here, so a
+     retune is a stylesheet edit and never a JavaScript edit. */
+  function ms(name, fallback) {
+    var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    var n = parseFloat(v);
+    return isNaN(n) ? fallback : (v.indexOf('ms') > -1 ? n : n * 1000);
+  }
+  var REDUCED = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
   /* ================================================================
      TOOLTIPS
      ================================================================ */
@@ -85,9 +94,21 @@
       tok.style.color = b.dataset.tone === 'ok' ? 'var(--data-ok)'
         : b.dataset.tone === 'dash' ? 'var(--text-faint)' : 'var(--text-primary)';
     }
-    btns.forEach(function (b) {
+    /* Activation on focus meant a keyboard user changed the displayed
+       state four times just tabbing past the group. Selection now follows
+       arrow keys and click, which is what role="tab" already promised. */
+    btns.forEach(function (b, i) {
+      b.tabIndex = i === 0 ? 0 : -1;
       b.addEventListener('click', function () { pick(b); });
-      b.addEventListener('focus', function () { pick(b); });
+      b.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1
+              : e.key === 'ArrowLeft'  || e.key === 'ArrowUp'   ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        var next = btns[(i + d + btns.length) % btns.length];
+        btns.forEach(function (x) { x.tabIndex = -1; });
+        next.tabIndex = 0; next.focus(); pick(next);
+      });
     });
     pick(btns[0]);
   });
@@ -98,20 +119,30 @@
   document.querySelectorAll('[data-demo]').forEach(function (demo) {
     var before = demo.querySelector('[data-before]');
     var after = demo.querySelector('[data-after]');
+    var GAP = ms('--gap-cause', 120), STAGGER = ms('--stagger-row', 90);
+
     function render(isAfter) {
-      demo.querySelectorAll('.df').forEach(function (f) {
-        var v = f.querySelector('.val');
-        var fired = f.querySelector('.fired');
-        f.classList.remove('is-null', 'is-ok', 'is-dash', 'dashed', 'show-rule');
-        if (isAfter) {
-          v.textContent = f.dataset.a;
-          if (f.dataset.at) f.classList.add('is-' + f.dataset.at);
-          if (f.dataset.at === 'dash') f.classList.add('dashed');
-          if (fired) { fired.innerHTML = '<b>▸</b> ' + f.dataset.rule; f.classList.add('show-rule'); }
-        } else {
-          v.textContent = f.dataset.b;
-          f.classList.add('is-null');
-        }
+      demo.querySelectorAll('.df').forEach(function (f, i) {
+        var delay = REDUCED ? 0 : i * STAGGER;
+        setTimeout(function () {
+          var v = f.querySelector('.val');
+          var fired = f.querySelector('.fired');
+          f.classList.remove('is-null', 'is-ok', 'is-dash', 'dashed', 'show-rule', 'cellflash');
+          if (!isAfter) {
+            v.textContent = f.dataset.b;
+            f.classList.add('is-null');
+            return;
+          }
+          /* the cell flashes first — that is the rule firing — and only
+             then does the attribution write in underneath it */
+          if (!REDUCED) { void f.offsetWidth; f.classList.add('cellflash'); }
+          setTimeout(function () {
+            v.textContent = f.dataset.a;
+            if (f.dataset.at) f.classList.add('is-' + f.dataset.at);
+            if (f.dataset.at === 'dash') f.classList.add('dashed');
+            if (fired) { fired.innerHTML = '<b>▸</b> ' + f.dataset.rule; f.classList.add('show-rule'); }
+          }, REDUCED ? 0 : GAP);
+        }, delay);
       });
       if (before) { before.classList.toggle('active', !isAfter); before.setAttribute('aria-pressed', String(!isAfter)); }
       if (after) { after.classList.toggle('active', isAfter); after.setAttribute('aria-pressed', String(isAfter)); }
@@ -145,6 +176,11 @@
         p.setAttribute('d', 'M' + cx + ',' + cy + ' C' + ((cx + x) / 2) + ',' + cy + ' ' + ((cx + x) / 2) + ',' + y + ' ' + x + ',' + y);
         p.setAttribute('class', 'edge'); p.id = coi.id + '-e' + i;
         edges.appendChild(p);
+        /* the draw-on needs a dash length, and getTotalLength only works
+           once the path is in the document */
+        var len = p.getTotalLength();
+        p.style.strokeDasharray = len;
+        p.style.strokeDashoffset = REDUCED ? 0 : len;
         var s = document.createElement('div');
         s.className = 'sat'; s.id = coi.id + '-s' + i;
         s.style.left = x + 'px'; s.style.top = y + 'px';
@@ -154,9 +190,12 @@
     function activate(b, i) {
       btns.forEach(function (x) { x.classList.remove('active'); });
       b.classList.add('active');
-      coi.querySelectorAll('.edge,.sat').forEach(function (e) { e.classList.remove('lit'); });
+      coi.querySelectorAll('.edge,.sat').forEach(function (e) {
+        e.classList.remove('lit');
+        if (e.classList.contains('edge') && !REDUCED) e.style.strokeDashoffset = e.style.strokeDasharray;
+      });
       var e = document.getElementById(coi.id + '-e' + i), s = document.getElementById(coi.id + '-s' + i);
-      if (e) e.classList.add('lit');
+      if (e) { void e.getBoundingClientRect(); e.classList.add('lit'); }
       if (s) s.classList.add('lit');
       if (desc) { desc.textContent = b.dataset.d; desc.classList.add('show'); }
     }
@@ -166,7 +205,10 @@
       b.addEventListener('click', function () { activate(b, i); });
     });
     stage.addEventListener('mouseleave', function () { if (desc) desc.classList.remove('show'); });
-    setTimeout(layout, 220);
+    /* was setTimeout(layout, 220) — a race with the font loader that put
+       the satellites in the wrong place on a cold load */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+    else setTimeout(layout, 220);
     window.addEventListener('resize', layout);
   });
 
@@ -176,17 +218,17 @@
   document.querySelectorAll('.btn button').forEach(function (b) {
     b.addEventListener('click', function () {
       if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-      var host = b.parentElement, n = 9;
+      var host = b.parentElement, n = 12;
       for (var i = 0; i < n; i++) {
-        var a = (-Math.PI / 2) + (i - (n - 1) / 2) * 0.26 + (Math.random() - 0.5) * 0.16;
-        var d = 34 + Math.random() * 46;
+        var a = (-Math.PI / 2) + (i - (n - 1) / 2) * 0.39 + (Math.random() - 0.5) * 0.16;
+        var d = 59 + Math.random() * 50;   /* 84px mean throw */
         var sz = 3 + Math.round(Math.random() * 3);
         var s = document.createElement('span');
         s.className = 'spark';
         s.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;left:50%;top:50%;--tx:' +
           (Math.cos(a) * d) + 'px;--ty:' + (Math.sin(a) * d) + 'px';
         host.appendChild(s);
-        setTimeout(function (el) { return function () { el.remove(); }; }(s), 640);
+        setTimeout(function (el) { return function () { el.remove(); }; }(s), 700);
       }
     });
   });

@@ -14,7 +14,7 @@
   gtag('config', 'G-8897FSV2XF');
 </script>
 
-<meta name="description" content="Setting the null-value display standard for a Swiss private-wealth platform. One everywhere-problem resolved into one deterministic rule — and the seven roles it took to ship it.">
+<meta name="description" content="Setting the null-value display standard at Avaloq, the Swiss private-wealth platform. One everywhere-problem resolved into one deterministic rule — and the seven roles it took to ship it.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -25,54 +25,95 @@
 /* ==================================================================
    CASE STUDY SHELL — brief + evidence
    The page is split once, hard. Everything above the break is the
-   argument; everything below is optional depth. The separators are
-   readouts, not ornament: they tell a skimmer the shape of the
-   document so that skimming produces the right conclusion.
-   No blue in this file's structure — blue means "read this".
+   argument; everything below is optional depth.
+
+   STYLE AUDIT, this pass. The page had drifted into its own dialect:
+   a local 11px mono, its own section separator, no role table, a
+   fourth nav link nobody else carries. Individually small, together
+   the reason it read as a different site. Everything structural now
+   resolves to eishiki-v3 — .srule for sections, --mono-label for
+   every uppercase string, .facts under the lead.
+
+   The old note here said "no blue in this file's structure." That was
+   the drift talking. Blue means "read this" site-wide, and the blue
+   square is how a section says it starts — withholding it on one page
+   didn't make the page quieter, it made it foreign.
+
+   What survives as local: .hardbreak, .sysname, and the sticky rail.
+   All three carry the brief/evidence argument, which no other page
+   makes. Local because it is load-bearing, not because it is new.
    ================================================================== */
 :root{
   --chrome-h:57px;
-  --rail-h:32px;
-  --mono:11px/1.1 "IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --rail-h:36px;
 }
+/* MONO LOCK. This file used to declare its own --mono at 11px/1.1 and set it
+   uppercase at .12–.14em, weight 400 — under the 12.5px floor, over the .05em
+   ceiling, under the 500 weight. Three violations, and the only three on the
+   site. Every mono string below now resolves to --mono-label / --track-label
+   like every other page. */
 .skip{position:absolute;left:-9999px;top:0;z-index:100;background:var(--text-primary);
-  color:var(--paper);padding:10px 16px;font:var(--mono);letter-spacing:.12em;text-transform:uppercase}
+  color:var(--paper);padding:10px 16px;font:var(--mono-label);
+  letter-spacing:var(--track-label);text-transform:uppercase}
 .skip:focus{left:8px;top:8px}
 
-/* Wordmark: Radio Canada 700 — J and I are tailed and barred.
-   The block matches the homepage — cap height, on the baseline. */
-.logo .wm{font-family:var(--font-sans);font-weight:700;letter-spacing:-.02em}
-.logo .sq{width:.28em;height:.72em;font-size:17px;background:var(--accent);display:block}
+/* The wordmark override that used to live here is deleted. It set the mark
+   as a 4.76 x 12.24px bar, which at that width reads as a text caret rather
+   than a mark, and it disagreed with the four case studies that render a
+   square. The lockup — Radio Canada 700 at -.02em, 9x9 square on the
+   baseline — is now defined once in eishiki-v3.css. */
 
-/* ---------- position readout ---------- */
+/* ---------- position readout ----------
+   Kept — it is the one HUD behaviour on the page that earns its row, because
+   this document is split and a skimmer needs to know which half they are in.
+   Now set in the same register as the primary nav directly above it, so the
+   two sticky rows read as one chrome block instead of two typefaces. */
 .rail{position:sticky;top:var(--chrome-h);z-index:35;background:var(--paper);
   border-bottom:0.667px solid var(--border-default)}
-.rail .in{max-width:var(--inner);margin:0 auto;padding:10px var(--gut);
-  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
-  font:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted)}
+.rail .in{max-width:var(--outer);margin:0 auto;padding:9px var(--gut);
+  display:flex;justify-content:space-between;align-items:baseline;gap:var(--space-md);
+  font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-muted)}
 .rail .now{color:var(--text-primary)}
 .rail .of{white-space:nowrap}
 
-/* ---------- separators ---------- */
-.sep{margin:0 0 22px}
-.sep .ln{height:0.667px;background:var(--border-default)}
-.sep .rw{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-top:11px}
-.sep .ix,.sep .tag{font:var(--mono);letter-spacing:.14em;text-transform:uppercase}
-.sep .ix{color:var(--text-primary)}
-.sep .tag{color:var(--text-muted)}
+/* ---------- separators ----------
+   The bespoke .sep is gone. The site's section landmark is .srule — eyebrow,
+   hairline, blue square — used on all four other case studies. This page had
+   invented a second one and used it ten times, which is most of why the page
+   read as a different site. .srule also costs one row instead of two, and the
+   ~34px that buys back on each of ten separators goes to the instruments,
+   which are the reason anyone is on this page.
+   The only local addition is the right-hand tag, on the three sections that
+   are actually drivable. It sits between the hairline and the square, so the
+   square stays the last mark on the row on every page of the site. */
+/* My own violation, from the previous pass: I set this uppercase at
+   --mono-caption, which is weight 400, to make the tag quieter than the
+   eyebrow. Uppercase mono is 500. Weight is not the axis available for
+   that job — position is, and the tag already sits on the far side of the
+   hairline, which is a stronger distinction than 100 units of weight. */
+.srule .tag{flex:none;font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-muted)}
+/* At phone width the eyebrow and the tag fight for the same row and the
+   hairline collapses to nothing. The tag is an invitation, not information —
+   the section below it is visibly interactive either way. It goes. */
+@media(max-width:560px){.srule .tag{display:none}}
 
-/* The one hard boundary. Two rules, unequal — a stop, not a divider. */
-.hardbreak{margin:var(--space-4xl) 0 var(--space-xl)}
+/* The one hard boundary. Two rules, unequal — a stop, not a divider.
+   This is the page's only structural invention that survives, because the
+   brief/evidence split is the page's actual argument about attention. */
+.hardbreak{margin:var(--space-3xl) 0 var(--space-lg)}
 .hardbreak .a{height:2px;background:var(--text-primary)}
 .hardbreak .b{height:0.667px;background:var(--text-primary);margin-top:3px}
-.hardbreak .rw{display:flex;justify-content:space-between;align-items:baseline;gap:16px;
-  margin-top:13px;font:var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.hardbreak .rw{display:flex;justify-content:space-between;align-items:baseline;
+  gap:var(--space-md);margin-top:12px;font:var(--mono-label);
+  letter-spacing:var(--track-label);text-transform:uppercase}
 .hardbreak .l{color:var(--text-primary)}
 .hardbreak .r{color:var(--text-muted)}
 
 /* ---------- the brief ---------- */
-.brief{padding-top:var(--space-3xl)}
-.brief .kick{font:var(--mono);letter-spacing:.14em;color:var(--text-muted);
+.brief{padding-top:var(--space-4xl)}
+.brief .kick{font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);
   text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)}
 /* THE DESIGNATION — the exact string on the homepage card.
    The card said one thing and this page said another, so a visitor
@@ -96,7 +137,8 @@
   align-items:baseline;padding:13px 16px;border-bottom:0.667px solid var(--border-default)}
 .ruleset .r:last-child{border-bottom:0}
 .ruleset .r.blanket{background:var(--surface-card-30)}
-.ruleset .c{font:var(--mono);letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted);font-weight:500}
+.ruleset .c{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-muted)}
 .ruleset .o{font-family:var(--font-sans);font-size:14px;line-height:1.5;color:var(--text-body)}
 .ruleset .k{font-family:var(--font-mono);font-size:15px;font-weight:500;text-align:right;
   color:var(--text-primary)}
@@ -139,14 +181,14 @@
 <meta property="og:site_name" content="Djoaniel Hernandez">
 <meta property="og:url" content="https://djoaniel.com/work/no-value">
 <meta property="og:title" content="The Art of Nothing — the “No Value” system">
-<meta property="og:description" content="Setting the null-value display standard for a Swiss private-wealth platform. One everywhere-problem resolved into one deterministic rule — and the seven roles it took to ship it.">
+<meta property="og:description" content="Setting the null-value display standard at Avaloq, the Swiss private-wealth platform. One everywhere-problem resolved into one deterministic rule — and the seven roles it took to ship it.">
 <meta property="og:image" content="https://djoaniel.com/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Djoaniel Hernandez — enterprise HUD design">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The Art of Nothing — the “No Value” system">
-<meta name="twitter:description" content="Setting the null-value display standard for a Swiss private-wealth platform. One everywhere-problem resolved into one deterministic rule — and the seven roles it took to ship it.">
+<meta name="twitter:description" content="Setting the null-value display standard at Avaloq, the Swiss private-wealth platform. One everywhere-problem resolved into one deterministic rule — and the seven roles it took to ship it.">
 <meta name="twitter:image" content="https://djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
 </head>
@@ -158,11 +200,14 @@
 <header class="top">
   <div class="in">
     <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
-    <nav aria-label="Primary">
-      <a href="../index.html">Work</a>
+    <!-- Matches the other four case studies exactly: three links, Work carrying
+         aria-current. The fourth email link this page used to carry made the
+         top-left corner — the first thing read — announce a different site.
+         The mailto still lives at both CTAs, where it converts. -->
+    <nav>
+      <a href="../index.html" aria-current="page">Work</a>
       <a href="../about.html">About</a>
       <a href="../colophon.html">Colophon</a>
-      <a href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20No%20Value"><i class="ph ph-envelope-simple inl" aria-hidden="true"></i> djoaniel@gmail.com<span class="sr-only"> (opens your email app)</span></a>
     </nav>
   </div>
 </header>
@@ -183,7 +228,7 @@
      ================================================================== -->
 <div class="cs-head brief" data-pos="The brief">
   <a class="arrow plain" href="../index.html"><span class="g">←</span> All work</a>
-  <p class="kick">// Case study 01 · Design systems · Enterprise banking</p>
+  <p class="kick">// Case study 01 · Design systems · Avaloq</p>
   <!-- The transition name moved off .sysname and onto the h1, because the
        card it morphs from now reads "The Art of Nothing" — anchoring the
        morph to a string the grid no longer contains would have paired the
@@ -191,15 +236,27 @@
        internal name of the artifact, which is what a colleague would call
        it, not what the essay calls it. -->
   <p class="sysname">Null-state display rule · platform-wide</p>
-  <h1 class="d-hero" style="view-transition-name:vt-no-value">The Art<br>of Nothing</h1>
+  <h1 class="d-hero" style="view-transition-name:vt-no-value">The Art<br>of <span class="mark">Nothing</span></h1>
   <p class="prose lead">In private wealth software, a blank field isn't nothing — it's a
     <button type="button" class="term" data-tip-label="Why it's a question" data-tip="A blank can mean &ldquo;nothing was entered,&rdquo; &ldquo;this doesn't apply,&rdquo; or &ldquo;the value is genuinely zero.&rdquo; The screen looks identical in all three cases — so the reader has to guess.">question</button>.
     I wrote the rule that ended the guesswork.</p>
 
+  <!-- The role table every other case study opens with, and the one thing a
+       hiring reader scans for first. Systems work reads as diffuse without it:
+       "wrote a display rule" is small until the four columns show it was a
+       platform standard carried through seven roles. Avaloq is named because
+       it is an employer, not a third-party client — same disclosure tier the
+       accessibility lab uses. The bank's own data stays out. -->
+  <div class="facts" style="margin-top:var(--space-2xl)">
+    <div class="f"><div class="k">My role</div><div class="v">Rule owner<small>Authored the rule set and drove sign-off</small></div></div>
+    <div class="f"><div class="k">Employer</div><div class="v">Avaloq<small>Swiss private-wealth platform</small></div></div>
+    <div class="f"><div class="k">Scope</div><div class="v">Platform-wide<small>Null display, every datatype, every screen</small></div></div>
+    <div class="f"><div class="k">Shown here</div><div class="v">Recreations<small>Localised, NDA-safe — no client data</small></div></div>
+  </div>
+
   <!-- the situation, shown rather than described -->
-  <div class="sep" style="margin-top:var(--space-2xl)">
-    <div class="ln"></div>
-    <div class="rw"><span class="ix">01 · the situation</span><span class="tag">brief</span></div>
+  <div class="srule" style="margin-top:var(--space-2xl)">
+    <span class="eb">01 · The situation</span><span class="ln"></span><span class="sq"></span>
   </div>
   <p class="claim">One empty value. Five different answers.</p>
   <p class="prose">Across the CRM, an empty field was rendered however each screen's author felt that day. Same underlying state — no data — read five different ways by the advisor looking at it. In wealth management that ambiguity isn't cosmetic: a field reading <b>0.00</b> where it should read <b>no data</b> misrepresents a client's position.</p>
@@ -218,9 +275,8 @@
   <p class="mono-note">Inconsistent null-handling, sampled from real screens (localised recreation, NDA-safe).</p>
 
   <!-- the move -->
-  <div class="sep" style="margin-top:var(--space-3xl)">
-    <div class="ln"></div>
-    <div class="rw"><span class="ix">02 · the move</span><span class="tag">brief</span></div>
+  <div class="srule" style="margin-top:var(--space-2xl)">
+    <span class="eb">02 · The move</span><span class="ln"></span><span class="sq"></span>
   </div>
   <p class="claim">"Empty" isn't one state. It's four — so one blanket rule, and three exceptions.</p>
   <p class="prose">The rule set is
@@ -251,9 +307,9 @@
   </div>
 
   <!-- the payoff — the instrument resolves as it comes into view -->
-  <div class="sep" style="margin-top:var(--space-3xl)">
-    <div class="ln"></div>
-    <div class="rw"><span class="ix">03 · the payoff</span><span class="tag">live · try it</span></div>
+  <div class="srule" style="margin-top:var(--space-2xl)">
+    <span class="eb">03 · The payoff</span><span class="ln"></span>
+    <span class="tag">Live · try it</span><span class="sq"></span>
   </div>
   <p class="claim">The same screen, before and after the rule.</p>
   <p class="prose">Each field shows <b>which rule fired</b> once the standard is applied. It resolves on its own as you reach it — toggle back and forth as much as you like.</p>
@@ -290,9 +346,8 @@
   <p class="mono-note">The address row is the one people miss: a concatenated field punctuating gaps that were never there.</p>
 
   <!-- the result -->
-  <div class="sep" style="margin-top:var(--space-3xl)">
-    <div class="ln"></div>
-    <div class="rw"><span class="ix">04 · the result</span><span class="tag">brief</span></div>
+  <div class="srule" style="margin-top:var(--space-2xl)">
+    <span class="eb">04 · The result</span><span class="ln"></span><span class="sq"></span>
   </div>
   <p class="claim">One everywhere-problem became one rule.</p>
   <p class="prose">The rule set became the <b>single source of truth for null-value display</b> — written as deterministic logic the delivery org builds against, instead of a dozen judgment calls made at render time. Specifics are under NDA, but the win is simpler than a number: the guesswork left the screen.</p>
@@ -339,10 +394,7 @@
 
     <!-- ===================== E01 ===================== -->
     <section class="sec" id="e01" style="padding-top:0" data-pos="Evidence 01 / 06">
-      <div class="sep">
-        <div class="ln"></div>
-        <div class="rw"><span class="ix">evidence 01 · why it cost</span><span class="tag">01 / 06</span></div>
-      </div>
+      <div class="srule"><span class="eb">01 · Why it cost</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">A blank is a question <span class="mark">the advisor can't afford</span> to guess.</h2>
       <p class="d-md">Is this data <em>missing</em>, or is the value <em>actually zero</em>?</p>
       <p class="prose">A field that reads "0.00" when it should read "no data" misrepresents a client's position — and a field that reads "None" where a number is expected makes an
@@ -359,10 +411,8 @@
 
     <!-- ===================== E02 ===================== -->
     <section class="sec" id="e02" data-pos="Evidence 02 / 06">
-      <div class="sep">
-        <div class="ln"></div>
-        <div class="rw"><span class="ix">evidence 02 · the four states</span><span class="tag">02 / 06 · live</span></div>
-      </div>
+      <div class="srule"><span class="eb">02 · The four states</span><span class="ln"></span>
+        <span class="tag">Live · try it</span><span class="sq"></span></div>
       <h2 class="d-lg">"Empty" isn't one state. It's <span class="mark">four</span>.</h2>
       <p class="prose">The breakthrough was refusing to treat emptiness as a single case. Each of these means something different to the person reading it — so each earns a different treatment. Select one to see what it renders as.</p>
 
@@ -395,10 +445,7 @@
 
     <!-- ===================== E03 ===================== -->
     <section class="sec" id="e03" data-pos="Evidence 03 / 06">
-      <div class="sep">
-        <div class="ln"></div>
-        <div class="rw"><span class="ix">evidence 03 · the rule set in full</span><span class="tag">03 / 06</span></div>
-      </div>
+      <div class="srule"><span class="eb">03 · The rule set in full</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">One blanket rule. Three exceptions.</h2>
       <p class="prose">The same rule set as the brief, with the reasoning that earned each exception a place. It starts with a single default, then handles the three cases where that default would lie.</p>
 
@@ -428,10 +475,8 @@
 
     <!-- ===================== E04 ===================== -->
     <section class="sec" id="e04" data-pos="Evidence 04 / 06">
-      <div class="sep">
-        <div class="ln"></div>
-        <div class="rw"><span class="ix">evidence 04 · circle of influence</span><span class="tag">04 / 06 · live</span></div>
-      </div>
+      <div class="srule"><span class="eb">04 · Circle of influence</span><span class="ln"></span>
+        <span class="tag">Live · try it</span><span class="sq"></span></div>
       <h2 class="d-lg">The logic was the easy part. <span class="mark">Alignment</span> was the work.</h2>
       <p class="prose">A display rule only becomes a standard when the whole delivery org agrees to build against it. Turning "just show a dash" and "just show 0.00" into one deterministic rule meant winning — and being sharpened by — seven roles. Hover or tab through each one.</p>
 
@@ -456,10 +501,7 @@
 
     <!-- ===================== E05 ===================== -->
     <section class="sec" id="e05" data-pos="Evidence 05 / 06">
-      <div class="sep">
-        <div class="ln"></div>
-        <div class="rw"><span class="ix">evidence 05 · the shipped spec</span><span class="tag">05 / 06</span></div>
-      </div>
+      <div class="srule"><span class="eb">05 · The shipped spec</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">Written as logic, not as guidance.</h2>
       <p class="prose">Guidance gets interpreted. Logic gets built. The rule set shipped as an implementation spec with no judgment calls left in it — which is the only reason it survived contact with seven teams.</p>
 
@@ -471,10 +513,7 @@
 
     <!-- ===================== E06 ===================== -->
     <section class="sec" id="e06" data-pos="Evidence 06 / 06">
-      <div class="sep">
-        <div class="ln"></div>
-        <div class="rw"><span class="ix">evidence 06 · reflection</span><span class="tag">06 / 06</span></div>
-      </div>
+      <div class="srule"><span class="eb">06 · Reflection</span><span class="ln"></span><span class="sq"></span></div>
       <blockquote class="pq">
         <q>The work I'm proudest of is invisible. Nobody notices null-handling done right — they just trust the screen. That's the job.</q>
         <div class="by"><span class="r"></span><span>Djoaniel Hernandez · System note № 04</span></div>

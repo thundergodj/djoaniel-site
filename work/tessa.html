@@ -110,8 +110,9 @@
 
       <p class="prose">That reframing is where my work lived. I designed the <b>main engine</b> — the conversational logic that drove the whole bot: the intent structure, the decision flows, and the dialogue architecture that turned a user's messy, human answers into a coherent coaching path. Not a scripted FAQ — a structured decision engine that maps a person's situation (skills, availability, goals) to actionable next steps, entirely through natural back-and-forth.</p>
 
-      <div class="chat" style="margin-top:var(--space-lg)">
-        <div class="hdr">Interaction model · illustrative</div>
+      <div class="chat" data-replay style="margin-top:var(--space-lg)">
+        <div class="hdr">Interaction model · illustrative
+          <button type="button" class="replay">Replay</button></div>
         <div class="bub bot">Hi! I'm TESSA 👋 I can help you get ready for work. Ano'ng gusto mong gawin — find a job, or build your skills first?</div>
         <div class="bub user">di ko alam eh... wala pa akong experience</div>
         <div class="bub bot">That's okay — everyone starts there. Let's find out what you're already good at. Tell me: have you ever helped in a family business, sari-sari store, or taken care of siblings?</div>
@@ -187,5 +188,70 @@
 </footer>
 
 <script src="../assets/eishiki-v3.js"></script>
+<script>
+/* ====================================================================
+   THE TRANSCRIPT DEALS ITSELF.
+   A visual UI shows all its options at once; a conversation reveals one
+   turn at a time. The static block said that in prose and contradicted
+   it in form. Now the turns arrive at a real Messenger cadence — 420ms
+   between turns, an 1100ms typing indicator before each bot reply —
+   which is the medium's own grammar and the cheapest possible proof
+   that the engine underneath decides what comes next.
+
+   It runs once on first contact with the section and on demand after
+   that. Never on scroll: nothing on this site moves on arrival.
+   ==================================================================== */
+(function () {
+  'use strict';
+  var chat = document.querySelector('.chat[data-replay]');
+  if (!chat) return;
+  var REDUCED = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var btn  = chat.querySelector('.replay');
+  var bubs = [].slice.call(chat.querySelectorAll('.bub'));
+  var TURN = 420, TYPING = 1100;
+  var timers = [];
+
+  if (REDUCED) { bubs.forEach(function (b) { b.classList.add('in'); }); if (btn) btn.hidden = true; return; }
+
+  function clear() { timers.forEach(clearTimeout); timers = []; 
+    var d = chat.querySelector('.dots'); if (d) d.remove(); }
+
+  function play() {
+    clear();
+    bubs.forEach(function (b) { b.classList.remove('in'); });
+    var t = 0;
+    bubs.forEach(function (b) {
+      var isBot = b.classList.contains('bot');
+      if (isBot) {
+        timers.push(setTimeout(function () {
+          var d = document.createElement('div');
+          d.className = 'dots'; d.innerHTML = '<i></i><i></i><i></i>';
+          d.setAttribute('aria-hidden', 'true');
+          b.parentNode.insertBefore(d, b);
+          timers.push(setTimeout(function () { d.remove(); b.classList.add('in'); }, TYPING));
+        }, t));
+        t += TYPING + TURN;
+      } else {
+        timers.push(setTimeout(function () { b.classList.add('in'); }, t));
+        t += TURN;
+      }
+    });
+  }
+
+  if (btn) btn.addEventListener('click', play);
+
+  /* first run happens when the section is genuinely being read, not when
+     it grazes the viewport edge — and exactly once */
+  if ('IntersectionObserver' in window) {
+    var seen = false;
+    new IntersectionObserver(function (es, obs) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting || seen) return;
+        seen = true; obs.disconnect(); play();
+      });
+    }, { threshold: 0.6 }).observe(chat);
+  } else { bubs.forEach(function (b) { b.classList.add('in'); }); }
+})();
+</script>
 </body>
 </html>

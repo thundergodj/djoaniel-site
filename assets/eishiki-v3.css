@@ -126,8 +126,26 @@
   --ease-linear:linear;
   --ease-out:cubic-bezier(0.22,1,0.36,1);
   --ease-snap:cubic-bezier(0.2,0.9,0.1,1);
+  --ease-hold:cubic-bezier(0.4,0,0.2,1);   /* view transitions and the wipe */
   --dur-fast:120ms; --dur-med:220ms; --dur-spark:560ms;
   --dur-vt:420ms;   /* cross-document title morph — tuned in the sandbox */
+  /* SHIP CUT — tuned in experiments/richness-sandbox.html, 2026-07-26.
+     Three classes of value cannot take salt and are held down here:
+     pointer response (<200ms), causality gaps (<150ms), and anything
+     that repeats. Everything else runs richer than the first spec. */
+  --dur-tip:180ms;      /* tooltip arrival */
+  --rise-tip:5px;
+  --dur-flash:220ms;    /* data-cell flash on a value change */
+  --alpha-flash:.16;
+  --gap-cause:120ms;    /* value swaps, THEN the rule writes in */
+  --stagger-row:90ms;
+  --dur-draw:320ms;     /* circle-of-influence edge draw */
+  --pop-sat:1.14;
+  --dur-step:260ms;     /* configurator chip fill */
+  --dur-hold:500ms;     /* the error, held on purpose */
+  --dur-wipe:480ms;
+  --dur-count:780ms;
+  --stagger-count:90ms;
 
   /* measure */
   --outer:1376px;
@@ -248,8 +266,8 @@ a.plain,a.arrow{text-decoration:none}
    ================================================================== */
 .tip{position:absolute;z-index:80;max-width:290px;background:var(--surface-inverse);
   color:var(--text-inverse);font-family:var(--font-sans);font-size:13px;line-height:1.55;
-  padding:10px 13px;opacity:0;transform:translateY(4px);pointer-events:none;
-  transition:opacity var(--dur-fast) linear,transform var(--dur-fast) var(--ease-out)}
+  padding:10px 13px;opacity:0;transform:translateY(var(--rise-tip));pointer-events:none;
+  transition:opacity var(--dur-tip) linear,transform var(--dur-tip) var(--ease-snap)}
 .tip.on{opacity:1;transform:translateY(0)}
 .tip i{display:block;font:var(--text-label);letter-spacing:0.04em;text-transform:uppercase;
   color:var(--ink-400);font-style:normal;margin-bottom:5px}
@@ -295,9 +313,17 @@ a.plain,a.arrow{text-decoration:none}
 /* ---- sticky numbered section nav ---- */
 .snav{position:sticky;top:var(--space-xl);display:flex;flex-direction:column;gap:2px;
   align-self:start;height:max-content}
+/* Two locked rules, both broken here, on every case study's section nav.
+   (1) --text-caption resolves to weight 400, and uppercase mono is 500 —
+   400 is the tabular/sentence-case register, not the label register.
+   (2) --text-faint is ink-400, 2.78:1 on paper. That fails AA for text,
+   and this is navigation: the one thing on the page whose whole job is to
+   be read at a glance from the corner of the eye. It moves to --text-muted
+   at 4.92:1, which still sits well below .on (--text-primary), so the
+   selected/unselected distinction the rail depends on is untouched. */
 .snav a{display:flex;gap:11px;align-items:baseline;padding:7px 0;
-  border-top:0.667px solid var(--border-default);font:var(--text-caption);
-  letter-spacing:.04em;text-transform:uppercase;color:var(--text-faint);
+  border-top:0.667px solid var(--border-default);font:var(--mono-label);
+  letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-muted);
   text-decoration:none;transition:color var(--dur-fast) linear}
 .snav a:hover{color:var(--accent);text-decoration:none}
 .snav a .n{color:inherit}
@@ -309,9 +335,28 @@ a.plain,a.arrow{text-decoration:none}
   background:var(--paper)}
 .top .in{max-width:var(--outer);margin:0 auto;padding:var(--space-md) var(--gut);
   display:flex;align-items:center;justify-content:space-between}
-.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
-.logo .wm{font-family:var(--font-wordmark);font-weight:600;font-size:17px;
-  letter-spacing:-.045em;text-transform:uppercase;color:var(--text-primary)}
+/* ---- THE LOCKUP — one definition, every page ----------------------
+   This was set two ways. The stylesheet said Radio Canada 600 at -.045em
+   with a 9x9 square centred on the flex line; no-value.html, about.html
+   and colophon.html each carried a local override saying 700 at -.02em
+   with a .28em x .72em bar. Three pages disagreed with four, and the one
+   element that appears on every page was the one element with no single
+   definition. NORTH-STAR locks the wordmark at 700, so the override was
+   right about the type and the stylesheet was right about the mark.
+   Both halves resolved here; all three overrides deleted.
+
+   BASELINE, NOT CENTRE. align-items:center floated the square at the
+   optical middle of a line of uppercase, which reads as unresolved —
+   the mark belongs to the type or it doesn't. A block-level flex item
+   with no inline content synthesises its baseline from its bottom
+   border edge, so `baseline` sits the square ON the wordmark's
+   baseline: same line the caps stand on, same relationship the square
+   has to the hairline at the end of every .srule. The site now owns
+   exactly one piece of punctuation and uses it in two places.
+   ------------------------------------------------------------------ */
+.logo{display:flex;align-items:baseline;gap:10px;text-decoration:none}
+.logo .wm{font-family:var(--font-wordmark);font-weight:700;font-size:17px;
+  letter-spacing:-.02em;text-transform:uppercase;color:var(--text-primary)}
 .logo .sq{width:9px;height:9px;background:var(--accent);display:block}
 .top nav{display:flex;gap:var(--space-xl)}
 .top nav a{font:var(--text-nav);letter-spacing:0.04em;text-transform:uppercase;
@@ -359,6 +404,15 @@ a.plain,a.arrow{text-decoration:none}
 .df.is-ok   .val{color:var(--data-ok)}
 .df.is-dash .val{color:var(--text-faint)}
 .df.dashed{background:transparent;border:var(--border-dashed)}
+/* THE FLASH IS THE CAUSE. Previously the value swap and the rule
+   attribution landed together, which reads as a re-render. The cell
+   now flashes, and --gap-cause later the rule writes in underneath.
+   Above ~150ms the two stop reading as one event. */
+.df.cellflash{animation:df-flash var(--dur-flash) linear}
+@keyframes df-flash{
+  0%{background:rgba(11,63,255,var(--alpha-flash))}
+  100%{background:var(--surface-card-30)}
+}
 
 /* the rule that fired — appears on the "after" side */
 .df .fired{font:var(--text-caption);letter-spacing:0.04em;text-transform:uppercase;
@@ -403,6 +457,13 @@ a.plain,a.arrow{text-decoration:none}
   padding:16px 15px;cursor:pointer;font:inherit;
   transition:border-color var(--dur-fast) linear,background var(--dur-fast) linear}
 .state:hover,.state.on{border-color:var(--accent);background:var(--white)}
+/* The three parts are <span>s inside a <button>, so they need an explicit
+   box. Without this they run inline — "01RESOLVED Colour and size both
+   chosen." — and the margins on .t silently do nothing, because vertical
+   margin does not apply to a non-replaced inline. Declared on the group so
+   the number, the title and the description stack on every page that uses
+   this component, not just the one it was last checked on. */
+.state .n,.state .t,.state .d{display:block}
 .state .n{font-family:var(--font-mono);font-weight:600;font-size:15px;line-height:19px;
   letter-spacing:-.025em;color:var(--text-primary)}
 .state.on .n{color:var(--accent)}
@@ -452,10 +513,20 @@ a.plain,a.arrow{text-decoration:none}
 .stage2 svg.edges{position:absolute;inset:0;width:100%;height:100%}
 .edge{fill:none;stroke:var(--border-default);stroke-width:1;
   transition:stroke var(--dur-fast) linear,stroke-width var(--dur-fast) linear}
-.edge.lit{stroke:var(--accent);stroke-width:1.6}
+/* Seven roles aligning is the story of that case, so the edge draws from
+   the centre outward — alignment happening, not a diagram highlighted. */
+.edge.lit{stroke:var(--accent);stroke-width:1.6;
+  animation:coi-draw var(--dur-draw) var(--ease-out) forwards}
+@keyframes coi-draw{to{stroke-dashoffset:0}}
 .sat{position:absolute;width:9px;height:9px;background:var(--text-faint);
   transform:translate(-50%,-50%);transition:all var(--dur-fast) linear}
-.sat.lit{background:var(--accent);width:12px;height:12px}
+.sat.lit{background:var(--accent);width:12px;height:12px;
+  animation:coi-pop var(--dur-draw) var(--ease-snap)}
+@keyframes coi-pop{
+  0%{transform:translate(-50%,-50%) scale(1)}
+  55%{transform:translate(-50%,-50%) scale(var(--pop-sat))}
+  100%{transform:translate(-50%,-50%) scale(1)}
+}
 .hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   background:var(--accent);color:var(--text-inverse);font:var(--text-data-value);
   font-weight:600;letter-spacing:0.02em;padding:12px 15px;text-align:center;z-index:2}
@@ -629,6 +700,31 @@ a.plain,a.arrow{text-decoration:none}
   line-height:1.5;margin-bottom:9px}
 .bub.bot{background:var(--white);border:var(--border-hair);color:var(--text-primary)}
 .bub.user{background:var(--surface-inverse);color:var(--text-inverse);margin-left:auto}
+
+/* ---- REPLAYABLE TRANSCRIPT ----
+   A conversation reveals one turn at a time; that is the entire premise
+   of the case study, and a static transcript is the one shape that hides
+   it. Turns are dealt on demand, never on arrival or on scroll. */
+.chat[data-replay] .bub{opacity:0;transform:translateY(10px)}
+.chat[data-replay] .bub.in{opacity:1;transform:none;
+  transition:opacity var(--dur-med) linear,transform var(--dur-med) var(--ease-out)}
+.chat .hdr .replay{margin-left:auto;font:var(--mono-caption);letter-spacing:var(--track-caption);
+  text-transform:uppercase;border:var(--border-hair);background:var(--white);
+  padding:4px 9px;cursor:pointer;color:var(--text-muted);
+  transition:border-color var(--dur-fast) linear,color var(--dur-fast) linear}
+.chat .hdr .replay:hover{border-color:var(--text-primary);color:var(--text-primary)}
+.chat .hdr{display:flex;align-items:center;gap:var(--space-xs)}
+.dots{display:inline-flex;gap:4px;padding:12px 14px;border:var(--border-hair);
+  background:var(--white);width:max-content;margin-bottom:9px}
+.dots i{width:4px;height:4px;background:var(--text-faint);display:block;
+  animation:dots-blink 1100ms infinite}
+.dots i:nth-child(2){animation-delay:183ms}
+.dots i:nth-child(3){animation-delay:366ms}
+@keyframes dots-blink{0%,60%,100%{opacity:.25}30%{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .chat[data-replay] .bub{opacity:1;transform:none}
+  .dots{display:none}
+}
 
 /* ---- BEFORE/AFTER COPY PAIRS ---- */
 .vpairs{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-xs)}

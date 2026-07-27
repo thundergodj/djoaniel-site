@@ -40,7 +40,8 @@
    says out loud it computes ratios rather than estimating them, that
    is the single worst defect available. Every one of those is now
    --text-muted (ink-600, 4.92:1), and the knob is ink-700.
-   --text-faint survives only where nothing has to be read from it.
+   --text-faint survives only on the inverse panel, where the same colour
+   measures 6.63:1 against ink-900 and is fine.
    Measured, not eyeballed:
      PASSED pill  #265438 on tint  7.01:1
      FAILED pill  #96261F on tint  6.57:1
@@ -55,7 +56,11 @@
   /* Raw --accent-warm measures 2.58:1 on the tab strip. Ochre is a fill
      and a rule colour in this system, never small text; where it has to
      be read it darkens to this. Same treatment the verdict pills get. */
-  --ochre-ink:rgb(140,96,22)}
+  --ochre-ink:rgb(140,96,22);
+  /* Verdict inks, darkened past the raw sage/red tokens so the badges clear
+     4.5:1 in their own tint. An accessibility artifact that fails its own
+     contrast check is not an artifact. Ratios in the header block above. */
+  --ok-ink:rgb(38,84,56); --no-ink:rgb(150,38,31)}
 
 /* ---- surface index (the five audited families) ----
    Rebuilt as a single-row tab bar rather than five stacked cards. The strip
@@ -217,14 +222,24 @@
    blue already means inherited-status, control-on, active-tab and the
    specimen's own brand — five jobs, in a case study about semantic
    clarity. An ID is a reference, not a state, so it is set as one. */
-.ctl .sc{font-family:var(--font-mono);font-size:11.5px;letter-spacing:0.04em;
-  text-transform:uppercase;color:var(--text-muted);font-weight:500}
+/* MONO LOCK. These two were 11.5px and 11px uppercase, under the 12.5px
+   floor. Density was the excuse — it is a dense control panel and the smaller
+   size fit more criteria per column. But this is the page that says out loud
+   it measures rather than eyeballs, and the floor exists because Instrument's
+   and Plex's hairlines fall under a device pixel on the 1x laptops most of
+   this audience uses. A criterion ID nobody can read is not a criterion ID.
+   Both now sit on --mono-label. The column absorbs it. */
+.ctl .sc{font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-muted)}
 .ctl .sc b{font-weight:500;color:var(--text-primary)}
 .ctl .pr{color:var(--ochre-ink);font-weight:600}
 .ctl .nm{display:block;font-family:var(--font-sans);font-weight:700;font-size:13.5px;
   line-height:1.3;color:var(--text-primary);margin:5px 0 3px}
 .ctl .hp{font-family:var(--font-sans);font-size:12px;line-height:1.45;
   color:var(--text-muted);margin:0}
+.ctl .sub{margin-top:10px}
+.ctl .sn{display:block;font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-primary)}
 
 /* slider + steppers — 2.5.7: never drag-only */
 .sl{display:flex;align-items:center;gap:8px;margin-top:9px}
@@ -242,12 +257,9 @@
   text-transform:uppercase;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ro .b{margin-left:auto;flex:none;font-size:11.5px;letter-spacing:0.04em;text-transform:uppercase;
   font-weight:600;padding:4px 7px}
-/* Verdict inks are darkened past the raw sage/red tokens so the badges
-   themselves clear 4.5:1 at 9px. An accessibility artifact that fails its
-   own contrast check is not an artifact. */
+/* verdict inks declared with the other tokens at the top of this sheet */
 .b-ok{background:rgba(86,128,102,.14);color:var(--ok-ink)}
 .b-no{background:rgba(169,46,38,.10);color:var(--no-ink)}
-:root{--ok-ink:rgb(38,84,56);--no-ink:rgb(150,38,31)}
 
 /* switch — square, no radius, system-consistent.
    Off-state read as an unchecked box rather than a switch, because a
@@ -393,8 +405,8 @@ table.tb tr:last-child td{border-bottom:0}
 table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:block;margin-top:2px}
 
 /* status chip */
-.ch{display:inline-flex;align-items:center;gap:6px;font-family:var(--ui-sans);font-size:12px;
-  font-weight:600;letter-spacing:0;text-transform:none;padding:4px 8px}
+.ch{position:relative;display:inline-flex;align-items:center;gap:6px;font-family:var(--ui-sans);
+  font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;padding:4px 8px}
 .ch i{width:8px;height:8px;flex:none;display:block;font-style:normal}
 .ch.ok{background:rgba(86,128,102,.13);color:var(--ok-ink)}     .ch.ok i{background:var(--data-ok)}
 .ch.wa{background:rgba(196,138,42,.14);color:var(--ochre-ink)}  .ch.wa i{background:var(--accent-warm)}
@@ -434,9 +446,22 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 #spec.rigid .ab{height:32px;overflow:hidden;white-space:nowrap}
 #spec.spacing,#spec.spacing *{line-height:1.5!important;letter-spacing:.12em!important;
   word-spacing:.16em!important}
-#spec.coloronly .ch{background:transparent!important;padding-left:0}
+/* Colour-only removes the word. It must not also remove the component.
+   Stripping the fill too left three 8px dots adrift in 92px of nothing,
+   which reads as a failed render rather than as a decision a team made and
+   defended — and an implausible defect teaches nobody anything. What ships
+   in the real world is a legible coloured block with the label taken out,
+   so that is what this shows: same chip, same footprint, hue as the sole
+   carrier of meaning. The dot goes up to 12px because when it is the only
+   signal left, a real component would have sized it to be seen.
+   The label is hidden with clip-path against a positioned .ch, so it stays
+   inside its own chip instead of escaping to the nearest positioned
+   ancestor — it is still in the accessibility tree, which is the point:
+   the criterion fails for sighted colour-blind users specifically. */
+#spec.coloronly .ch{gap:0;justify-content:center}
+#spec.coloronly .ch i{width:12px;height:12px}
 #spec.coloronly .ch span{position:absolute;width:1px;height:1px;overflow:hidden;
-  clip:rect(0 0 0 0);white-space:nowrap}
+  clip-path:inset(50%);white-space:nowrap}
 
 /* screen-reader simulator */
 .srs{flex:none;background:var(--surface-inverse);color:var(--text-inverse);
@@ -957,14 +982,16 @@ function watchScroll(el){
 /* ================= controls render ================= */
 function renderControls(){
   var s=SURF[current], h='';
-  h+='<div class="ctl"><span class="sc">1.4.11 · Non-text contrast</span>'+
-     '<label class="nm" for="uiC">Interface component contrast</label>'+
-     '<p class="hp">Buttons, borders and focus indicators must hold at least 3:1 against what sits beside them.</p>'+
-     slider('uiC',3)+'</div>';
-  h+='<div class="ctl"><span class="sc">1.4.3 · Contrast (minimum)</span>'+
-     '<label class="nm" for="txC">Body text contrast</label>'+
-     '<p class="hp">Values, labels and breadcrumbs must hold at least 4.5:1 against the surface behind them.</p>'+
-     slider('txC',4.5)+'</div>';
+  /* The two contrast criteria were two full controls with two headings and
+     two descriptions, and between them they ate a third of the panel. They
+     measure the same quantity against different floors, so they are one
+     group with one explanation and two readouts — which is both shorter
+     and a truer description of what contrast conformance actually is. */
+  h+='<div class="ctl"><span class="sc">1.4.11 &amp; 1.4.3 &middot; <b>contrast</b></span>'+
+     '<p class="hp">Two floors, computed live against the surface behind each element. Components need 3:1; text needs 4.5:1.</p>'+
+     '<div class="sub"><label class="sn" for="uiC">Interface components</label>'+slider('uiC',3)+'</div>'+
+     '<div class="sub"><label class="sn" for="txC">Body text</label>'+slider('txC',4.5)+'</div>'+
+     '</div>';
   s.controls.forEach(function(c){
     h+='<div class="ctl"><span class="sc">'+c.sc+'</span>'+
        '<div class="sr"><span class="tx"><span class="nm" id="l-'+c.key+'">'+c.nm+'</span>'+
