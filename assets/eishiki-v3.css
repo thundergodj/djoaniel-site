@@ -181,9 +181,9 @@
   --prose:714px;
   --object:620px;
   --gut:52px;
-  /* Widest a bleeding band may ever get. Past this, a row of repeated
-     cells stops being scannable — the eye has to travel the full width to
-     pair a label on the left with its value on the right, and on a 2560
+  /* Widest the page may ever get. Past this, a row of repeated cells
+     stops being scannable — the eye has to travel the full width to pair
+     a label on the left with its value on the right, and on a 2560
      display that is a head turn. Width is a resource, not a target. */
   --band-max:1400px;
 
@@ -195,20 +195,25 @@
      binds instead of being silently overridden by a narrower column. */
   --rail:220px;
   --railgap:var(--space-3xl);
-  /* THE PAGE CONTAINER — 1200, not --outer's 1376.
-     With the rail gone the body inherited the full 1376 and nothing was
-     laid out for it: instruments filled 92-98% of the container while
-     prose and stats filled 50-56%. Half of every text screen was air.
+  /* ==================================================================
+     THE PAGE CONTAINER — grows on BOTH sides, capped at --band-max.
+     ------------------------------------------------------------------
+     This used to be a fixed 1200 with instruments bleeding rightward to
+     reach width. That produced a lopsided page: the container sat
+     centred, but every band grew out of its right edge only, so on a
+     1920 screen the layout leaned. Expanding right is not the same as
+     having width.
 
-     1200 (=1096 of content) is the number where a 714px measure reads as
-     a deliberate column rather than as a stranded one, and it still
-     leaves every instrument more than the 1180 the audit lab needs once
-     the right bleed is added — 1188 at a 1280 window, 1268 at 1440.
+     Now the container itself expands, symmetrically, until it hits
+     --band-max. Bands simply fill it — no bleed, no negative margins, no
+     scrollbar maths. Everything stays on one left edge AND the page
+     reads centred, because the growth is even on both sides.
 
-     The chrome tracks this, not --outer, or the logo and the H1 would
-     sit on different left edges: the exact defect this whole pass began
-     by fixing. --outer survives for the homepage grid only. */
-  --csmax:1200px;
+     Prose is unaffected: --prose caps it at 714 wherever the container
+     lands, so widening the page widens the instruments, never the
+     paragraphs.
+     ================================================================== */
+  --csmax:min(var(--band-max), calc(100vw - var(--sbw,0px) - var(--gut) * 2));
 
   /* height of the sticky top bar. Global, because the top bar is global:
      anything that sticks below it (the evidence bookmark, the live band's
@@ -375,10 +380,8 @@ section[id],main[id],.live[id],.sec[id]{
    a left bleed would break the one left edge the whole site is aligned to,
    and that edge is doing more work than a symmetric gesture would buy.
    max() clamps to 0 below --outer, where it degrades to eating the gutter. */
-.bleed{margin-right:calc(-1 * min(
-    max(0px, (100vw - var(--sbw,0px) - var(--csmax))/2),
-    var(--band-max) - var(--csmax) + var(--gut)*2
-  ))}
+.bleed{}  /* retired: nothing in the markup uses it, and the container
+             now supplies the width it existed to borrow */
 .bleed-fade{-webkit-mask-image:linear-gradient(to right,#000 88%,transparent);
   mask-image:linear-gradient(to right,#000 88%,transparent)}
 
@@ -484,30 +487,11 @@ section[id],main[id],.live[id],.sec[id]{
    scrollbar — so the band bled ~15px past the visible edge and html's
    overflow-x:clip silently ate the last characters of every right-aligned
    label in the band header. */
-/* THE BLEED, WITH A GUTTER AND A CEILING.
-   Two bugs this replaces, both visible on a wide window:
-   (1) the old value included var(--gut), which spent the container's own
-       right padding — so the band's right edge landed EXACTLY on the
-       viewport edge and every right-aligned label, and the primary
-       button, sat flush against the browser chrome. Measured: 0px.
-   (2) it was uncapped, so at 1920 the band ran ~1600px and at 2560 it
-       kept going. A row you cannot scan without turning your head is
-       not "more width", it is a worse layout.
-   Now: bleed by whatever room exists outside the container, but never
-   past --band-max, and always leave the gutter intact. */
-.cs-body .live,.cs-head .live{
-  margin-right:calc(-1 * min(
-    max(0px, (100vw - var(--sbw,0px) - var(--csmax))/2),
-    var(--band-max) - var(--csmax) + var(--gut)*2
-  ))}
-
-/* A PAIRED BAND DOES NOT BLEED. The bleed exists for instruments that
-   need more width than the page column — the audit lab, the listing
-   page. A pair, by definition, holds a MEASURED instrument, so bleeding
-   it just moves the empty space further right and makes the aside column
-   wider than the text it holds. Stopping at the container keeps the
-   specimen, its reading, and the prose above all on one right edge. */
-.cs-body .live:has(.pair),.cs-head .live:has(.pair){margin-right:0}
+/* No bleed. The container grows on both sides now (see --csmax), so a
+   band simply fills it and is centred by construction. The negative
+   margin, the --sbw scrollbar correction and the gutter/ceiling clamp
+   this used to need are all gone with it — a whole class of alignment
+   bug removed rather than tuned. */
 /* anything in the band that is prose rather than instrument gets the inset */
 .live > .legend,.live > p{padding:0 0 var(--space-md)}
 /* The instrument is mounted on the bench, so it drops its own outer frame
@@ -566,13 +550,40 @@ section[id],main[id],.live[id],.sec[id]{
 .pair > .chat,.pair > .demo,.pair > .spec,.pair > .cfg{
   border-width:0.667px;margin:0}
 
+/* ------------------------------------------------------------------
+   ONE INSET INSIDE A BAND.
+   Measured from the band's own left edge, a single band was running
+   THREE different left edges — header at 0, the demo's bar and grid at
+   18, the legend back at 0 — and three right edges, 1291 / 1278 / 1296.
+   Every instrument had invented its own padding back when each sat in
+   its own bordered box, and once the band dropped those borders the
+   insets had nothing left to inset from. They just read as things
+   failing to line up, which is exactly what they were.
+
+   Inside a band, an instrument's OUTER padding is zero. Its rows now
+   start where the band starts, which is where the H1 starts. Padding
+   between rows, and inside cells, is untouched — this only removes the
+   outer frame's inset, because the outer frame is gone.
+   ------------------------------------------------------------------ */
+.live > .demo > .bar,
+.live > .demo > .grid,
+.live > .spec > .hd,
+.live > .spec > .bd,
+.live > .cfg > .hd,
+.live > .cfg > .bd,
+.live > .cfg > .rd,
+.live > .spec > .readout,
+.live > .legend{padding-left:0;padding-right:0}
+/* the .pair inset is deliberate — a paired instrument keeps its frame */
+.live > .pair > * {padding-left:revert;padding-right:revert}
+
 /* header: the marker, the imperative, the rule, the aside. One row. */
 /* 5px of right padding, not 0: the primary control's offset slab sits
    4px right of the button, and on a bleeding band the band's right edge
    IS the clipped viewport edge — so a flush header sheared the shadow
    off the one button the band exists to point at. */
 .live-hd{display:flex;align-items:baseline;gap:var(--space-sm);
-  flex-wrap:wrap;padding:var(--space-md) 5px var(--space-md) 0;
+  flex-wrap:wrap;padding:var(--space-md) 0;
   border-bottom:var(--border-hair);margin-bottom:0}
 .live-mk{display:inline-flex;align-items:center;gap:7px;flex:none;
   background:var(--accent);color:var(--text-inverse);
@@ -633,7 +644,7 @@ section[id],main[id],.live[id],.sec[id]{
     padding:var(--space-sm) var(--space-md)}
 }
 @media(max-width:860px){
-  .live-hd{padding:var(--space-sm) 5px var(--space-sm) 0}
+  .live-hd{padding:var(--space-sm) 0}
   .live > .legend,.live > p{padding:0 0 var(--space-sm)}
   .live-hd .ln{display:none}
 }
