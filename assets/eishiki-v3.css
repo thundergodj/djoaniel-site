@@ -905,13 +905,12 @@ section[id],main[id],.live[id],.sec[id]{
   color:var(--text-primary);text-align:right;white-space:nowrap}
 
 /* ==================================================================
-   SHARED INFLUENCE MAP
+   RULE COLLABORATION MAP
    360px stage · 80% node spread · 34% edge curvature.
 
-   The artifact owns the centre. Djoaniel's role is named beneath it,
-   and the orbit can contain people, standards, constraints or evidence,
-   so the same shape stays truthful in collaborative and solo studies.
-   The explanation is a stable panel below the map, never an overlay.
+   The rule owns the centre. The seven roles stay visible at rest,
+   while the stable panel below records the concrete contribution each made.
+   The explanation never overlays the collaboration itself.
    ================================================================== */
 .influence-map{margin-top:var(--space-lg)}
 .influence-stage{position:relative;min-height:0;border:var(--border-hair);

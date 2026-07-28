@@ -1,6 +1,6 @@
 /* EISHIKI v3 — behaviour
    tooltips · section nav scrollspy · four-state explorer · before/after
-   with rule attribution · system-of-influence maps · button spark */
+   with rule attribution · collaboration map · button spark */
 (function () {
   'use strict';
 
@@ -247,7 +247,7 @@
   });
 
   /* ================================================================
-     SHARED INFLUENCE MAP
+     RULE COLLABORATION MAP
      Committed geometry: 360px stage · 80% spread · 34% curvature.
      ================================================================ */
   document.querySelectorAll('[data-influence]').forEach(function (map) {
