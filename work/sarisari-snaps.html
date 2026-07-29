@@ -97,8 +97,9 @@
 .sku-visual i{display:block;min-width:4px;min-height:4px;background:var(--white);border:1px solid var(--border-default);border-radius:2px}
 .sku .name{font-weight:600;line-height:1.1;color:var(--text-primary)}
 .sku .meta{margin-top:4px;font:var(--mono-caption);letter-spacing:var(--track-caption);color:var(--text-muted)}
-.thesis{margin:var(--space-xl) 0;padding:var(--space-lg) 0;border-top:2px solid var(--text-primary);border-bottom:2px solid var(--text-primary)}
-.thesis q{display:block;font-family:var(--font-display);font-size:clamp(2rem,5vw,4.6rem);line-height:.98;letter-spacing:-.025em}
+.thesis{margin:var(--space-xl) 0 0;padding:var(--space-lg) 0;border-top:2px solid var(--text-primary);border-bottom:2px solid var(--text-primary)}
+.thesis .statement{margin:0;font-family:var(--font-display);font-size:clamp(2rem,4.4vw,4rem);line-height:1.02;letter-spacing:-.022em}
+.thesis .statement span{display:block}
 .thesis .by{margin-top:var(--space-sm);font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase;color:var(--text-muted)}
 .palette-final{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--space-xs);margin-top:var(--space-lg)}
 .tone{min-height:132px;display:flex;flex-direction:column;justify-content:flex-end;padding:10px;border:1px solid rgba(9,9,9,.17)}
@@ -125,6 +126,11 @@
   .rules4{grid-template-columns:1fr}
   .proof figcaption{display:grid;gap:4px}
   .proof figcaption span:last-child{margin:0;text-align:left}
+  .blueprint-wrap{min-height:330px;overflow:hidden}
+  .blueprint-frame{width:min(72%,230px)}
+  .measure.m2,.measure.m4{display:none}
+  .formula .r{grid-template-columns:1fr;gap:4px}
+  .sku{grid-template-columns:72px minmax(0,1fr);min-height:100px;padding:10px}
 }
 </style>
 
@@ -132,14 +138,14 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Djoaniel Hernandez">
 <meta property="og:url" content="https://www.djoaniel.com/work/sarisari-snaps">
-<meta property="og:title" content="SariSari Snaps &mdash; holding the photograph, then getting out of its way">
+<meta property="og:title" content="SariSari Snaps &mdash; nine frames, one rule, photographs first">
 <meta property="og:description" content="A rough Mt. Pulag prototype became a nine-format magnetic photo-frame system through print failures, fit tests, colour elimination, and parametric geometry.">
 <meta property="og:image" content="https://www.djoaniel.com/assets/sarisari/og-sarisari.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Hands arranging magnetic photographs across early SariSari Snaps prototypes">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="SariSari Snaps &mdash; physical product and parametric system">
+<meta name="twitter:title" content="SariSari Snaps &mdash; nine frames, one rule, photographs first">
 <meta name="twitter:description" content="How one rough print became nine magnetic photo-frame formats governed by shared pocket, spacing, edge, and personalisation rules.">
 <meta name="twitter:image" content="https://www.djoaniel.com/assets/sarisari/og-sarisari.jpg">
 <meta name="theme-color" content="#F7F6F2">
@@ -177,8 +183,8 @@
 <div class="cs-head" style="padding-top:var(--space-4xl)">
   <a class="arrow plain" href="../index.html"><i class="ph ph-arrow-left icon-action g" aria-hidden="true"></i> All work</a>
   <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 04 &middot; Physical product &middot; Parametric system</p>
-  <h1 class="d-hero" style="view-transition-name:vt-sarisari">Holding the photograph precisely, then <span class="mark">getting out of its way.</span></h1>
-  <p class="prose lead">SariSari Snaps began as a rough grey print carried up Mt. Pulag. It became a nine-format magnetic photo-frame system through print failures, physical fit tests, colour elimination, constrained personalisation, and one parametric model shared across the product family.</p>
+  <h1 class="d-hero" style="view-transition-name:vt-sarisari">Nine frames. One rule. <span class="mark">Photographs first.</span></h1>
+  <p class="prose lead">SariSari Snaps began as a rough grey print carried up Mt. Pulag. Print failures, fit tests, colour trials, and one shared OpenSCAD model turned it into a magnetic photo-frame system with nine formats.</p>
 
   <figure class="proof hero-proof">
     <img src="../assets/sarisari/pulag-hero.webp" width="960" height="1280" alt="The first rough grey SariSari Snap held above the landscape at Mt. Pulag">
@@ -198,39 +204,39 @@
 
   <section class="sec" id="s01">
     <div class="srule"><span class="eb">01 &middot; The first object</span><span class="ln"></span><span class="sq"></span></div>
-    <h2 class="d-lg">The first SariSari Snap broke nearly every rule I later established.</h2>
-    <p class="prose">It was rough, unfilled, centrally branded, and surrounded by a decorative border. The frame was asking to be seen before it had learned how to serve a photograph.</p>
+    <h2 class="d-lg">The first prototype contained almost everything the system would remove.</h2>
+    <p class="prose">It was rough, hollow, centrally branded, and wrapped in a decorative border. Before it could hold a photograph, the frame was already demanding attention.</p>
 
     <div class="evidence-pair mixed">
       <figure class="proof">
         <img src="../assets/sarisari/pulag-close.webp" width="960" height="1280" loading="lazy" alt="Close view of the rough grey prototype with a decorative edge and SariSari Snap lettering">
-        <figcaption><span class="id">Prototype 001</span><span>Decorative edge, centred lettering, visible print texture.</span></figcaption>
+        <figcaption><span class="id">Prototype 001</span><span>Decorative edge, centred lettering, exposed print texture.</span></figcaption>
       </figure>
       <figure class="proof">
         <img src="../assets/sarisari/pulag-finished.webp" width="1920" height="1282" loading="lazy" alt="A later white nine-photo SariSari Snap filled with photographs from Mt. Pulag">
-        <figcaption><span class="id">Later system</span><span>The memory takes the field; the frame becomes its boundary.</span></figcaption>
+        <figcaption><span class="id">Later system</span><span>The photographs take the field; the frame becomes their boundary.</span></figcaption>
       </figure>
     </div>
 
     <div class="origin-note">
       <span class="k">The joke</span>
-      <p>The first one went to Pulag as a toy for the gods. The joke gave the project its life; the work that followed gave it rules.</p>
+      <p>The prototype went to Pulag as a toy for the gods. The joke gave the project life; the work that followed gave it rules.</p>
     </div>
   </section>
 
   <section class="sec" id="s02">
     <div class="srule"><span class="eb">02 &middot; Material answered</span><span class="ln"></span><span class="sq"></span></div>
     <h2 class="d-lg">The printer turned clean geometry into a physical argument.</h2>
-    <p class="prose">A render can hide the exact place a design stops working. The print bed cannot. Lifted corners, rough first layers, excess filament, and damaged edges made every weak decision visible at full scale.</p>
+    <p class="prose">Renders concealed the exact point where a design failed. The print bed exposed it: lifted corners, rough first layers, excess filament, and damaged edges&mdash;each weakness at full scale.</p>
 
     <div class="evidence-pair">
       <figure class="proof">
         <img src="../assets/sarisari/print-failure-bed.webp" width="960" height="1280" loading="lazy" alt="Early grey frame prototypes surrounded by brims on a 3D printer bed">
-        <figcaption><span class="id">Failure 01</span><span>Brims and excess material around multiple test pieces.</span></figcaption>
+        <figcaption><span class="id">Failure 01</span><span>Brims and excess material across the test bed.</span></figcaption>
       </figure>
       <figure class="proof">
         <img src="../assets/sarisari/print-failure-corner.webp" width="960" height="1280" loading="lazy" alt="Close-up of a lifted and damaged corner on an early grey print">
-        <figcaption><span class="id">Failure 02</span><span>A corner lifting far enough to deform the frame.</span></figcaption>
+        <figcaption><span class="id">Failure 02</span><span>A lifted corner deforming the frame.</span></figcaption>
       </figure>
     </div>
 
@@ -244,7 +250,7 @@
   <section class="sec" id="s03">
     <div class="srule"><span class="eb">03 &middot; One rule, nine frames</span><span class="ln"></span><span class="sq"></span></div>
     <h2 class="d-lg">I stopped drawing products and built a rule.</h2>
-    <p class="prose">The system begins with one fixed square photograph pocket. Columns, rows, and orientation can change; the pocket, spacing, edge conditions, and lower personalisation zone remain governed by the same OpenSCAD model.</p>
+    <p class="prose">One fixed square pocket became the module. Columns, rows, and orientation could change; spacing, edge conditions, and the lower personalisation zone stayed governed by one OpenSCAD model.</p>
 
     <div class="system-board">
       <div class="blueprint-wrap" aria-label="Measured diagram of the two by two Classic frame">
@@ -257,7 +263,7 @@
         </div>
       </div>
       <div>
-        <p style="font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-muted);margin:0 0 var(--space-md)">The shared ruler</p>
+        <p style="font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-muted);margin:0 0 var(--space-md)">What stays fixed</p>
         <div class="formula">
           <div class="r"><span class="k">Photo pocket</span><span class="v plain">One fixed square module</span></div>
           <div class="r"><span class="k">Spacing</span><span class="v plain">One shared gap rule</span></div>
@@ -281,35 +287,35 @@
       <li class="sku"><div class="sku-visual" style="--c:4;--r:3;--w:84px;--h:68px"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div><div class="name">Darling Dozen</div><div class="meta">4 &times; 3 &middot; horizontal</div></div></li>
     </ol>
 
-    <p class="mono-note">Nine named formats, from one photograph to twelve. Orientation and scale change; the underlying product rule does not.</p>
+    <p class="mono-note">Nine formats hold between one and twelve photographs. Their orientation and scale change; the underlying rule does not.</p>
   </section>
 
   <section class="sec" id="s04">
     <div class="srule"><span class="eb">04 &middot; The photograph changed the brief</span><span class="ln"></span><span class="sq"></span></div>
-    <h2 class="d-lg">The first fit test taught me what the frame was for.</h2>
-    <p class="prose">Once a real photograph entered the grey prototype, the hierarchy became obvious. The object did not need a stronger identity. It needed to become a precise pocket, a reliable grip, a quiet boundary, and a small field for meaning outside the image.</p>
+    <h2 class="d-lg">The frame was not the subject.</h2>
+    <p class="prose">The moment a real photograph entered the prototype, the hierarchy became obvious. The object needed no stronger identity&mdash;only a precise pocket, a reliable grip, a quiet boundary, and a small place for meaning beyond the image.</p>
 
     <div class="evidence-pair mixed">
       <figure class="proof">
         <img src="../assets/sarisari/first-fit.webp" width="960" height="1280" loading="lazy" alt="The first photograph fitted into the rough grey prototype on a laptop">
-        <figcaption><span class="id">First fit</span><span>The photograph immediately became more important than the ornament around it.</span></figcaption>
+        <figcaption><span class="id">First fit</span><span>The photograph immediately outranked the ornament.</span></figcaption>
       </figure>
       <figure class="proof">
         <img src="../assets/sarisari/first-photo-test.webp" width="1920" height="1282" loading="lazy" alt="A later white Solo frame holding a cat photograph during a studio test">
-        <figcaption><span class="id">Later test</span><span>A calmer edge, a deeper pocket, and a dedicated lower skirt.</span></figcaption>
+        <figcaption><span class="id">Later test</span><span>A quieter edge, deeper pocket, and dedicated lower skirt.</span></figcaption>
       </figure>
     </div>
 
     <blockquote class="thesis">
-      <q>Hold the photograph precisely. Then get out of its way.</q>
-      <div class="by">The principle that survived every later decision</div>
+      <p class="statement"><span>Hold the photograph precisely.</span><span>Let everything else recede.</span></p>
+      <div class="by">The rule behind every later decision</div>
     </blockquote>
   </section>
 
   <section class="sec" id="s05">
     <div class="srule"><span class="eb">05 &middot; Colour by elimination</span><span class="ln"></span><span class="sq"></span></div>
-    <h2 class="d-lg">A colour remained only if it could survive beside a photograph.</h2>
-    <p class="prose">The first palette was broad, saturated, and often glossy. Testing those colours with real images exposed what a swatch could not: yellow dirtied pale areas, saturated edges pulled attention away from faces, and gloss produced highlights that competed with the print.</p>
+    <h2 class="d-lg">Colour stayed only when the photograph came first.</h2>
+    <p class="prose">The early palette was broad, saturated, and often glossy. Real images exposed what swatches could not: yellow dirtied pale areas, saturated edges pulled attention from faces, and gloss threw highlights across the print.</p>
 
     <figure class="proof">
       <img src="../assets/sarisari/color-elimination.webp" width="1920" height="1282" loading="lazy" alt="A wide range of early SariSari Snaps prototypes in bright colours and different finishes">
@@ -323,13 +329,13 @@
       <div class="tone blush"><span>Blush</span></div>
       <div class="tone blue"><span>Dusty Blue</span></div>
     </div>
-    <p class="mono-note">The surviving palette is matte: White, Black, Sage, Blush, and Dusty Blue. The test was not whether a colour looked good alone; it was whether the photograph still arrived first.</p>
+    <p class="mono-note">Five matte colours survived: White, Black, Sage, Blush, and Dusty Blue. Each worked only if the photograph still arrived first.</p>
   </section>
 
   <section class="sec" id="s06">
     <div class="srule"><span class="eb">06 &middot; Meaning within a boundary</span><span class="ln"></span><span class="sq"></span></div>
-    <h2 class="d-lg">Personalisation stopped before it became decoration.</h2>
-    <p class="prose">Text stays outside the photograph grid, on one line, inside a dedicated lower zone. In the parametric model, the available length follows the frame width and recalculates with orientation. A small stamp can share the same centre line, but neither text nor symbol is allowed to compete with the photographs.</p>
+    <h2 class="d-lg">Personalisation earned a boundary.</h2>
+    <p class="prose">Text stays on one line below the photograph grid. Its available length follows the frame width and orientation. A small stamp can share the same centre line; neither is allowed to compete with the images.</p>
 
     <figure class="proof">
       <img src="../assets/sarisari/personalization.webp" width="1616" height="1080" loading="lazy" alt="Several personalised SariSari Snaps frames with text placed in the lower skirt">
@@ -340,27 +346,27 @@
       <div class="rule-card"><div class="n">01 &middot; Position</div><div class="t">Outside the grid</div><div class="d">No text crosses a photograph pocket.</div></div>
       <div class="rule-card"><div class="n">02 &middot; Length</div><div class="t">Width-aware limit</div><div class="d">The limit follows the frame width and selected orientation.</div></div>
       <div class="rule-card"><div class="n">03 &middot; Language</div><div class="t">&ldquo;Your text&rdquo;</div><div class="d">Plain language replaced the old technical terminology.</div></div>
-      <div class="rule-card"><div class="n">04 &middot; Throughline</div><div class="t">Text + stamp</div><div class="d">Both share a fixed centre line in the lower skirt.</div></div>
+      <div class="rule-card"><div class="n">04 &middot; Throughline</div><div class="t">Text + stamp</div><div class="d">Both share the lower skirt&rsquo;s centre line.</div></div>
     </div>
   </section>
 
   <section class="sec" id="s07">
     <div class="srule"><span class="eb">07 &middot; What held</span><span class="ln"></span><span class="sq"></span></div>
-    <h2 class="d-lg">One frame became a family without becoming nine unrelated products.</h2>
-    <p class="prose">The final test was not whether one frame looked resolved. It was whether the same decisions could survive from Solo to Darling Dozen: more photographs, different orientations, and a much larger footprint without inventing a new object each time.</p>
+    <h2 class="d-lg">One rule held across all nine formats.</h2>
+    <p class="prose">The final test was consistency at scale: from Solo to Darling Dozen, more photographs, new orientations, and a larger footprint without inventing a new object each time.</p>
 
     <figure class="proof">
       <img src="../assets/sarisari/early-family.webp" width="1920" height="1282" loading="lazy" alt="A physical family of early SariSari Snaps frames laid out on a white surface">
-      <figcaption><span class="id">Family proof</span><span>Different capacities; the same pockets, boundaries, lower zone, and physical language.</span></figcaption>
+      <figcaption><span class="id">Family proof</span><span>Different capacities; the same module, boundary, lower zone, and physical language.</span></figcaption>
     </figure>
 
     <div class="decision-log" aria-label="The product rules that held across the family">
-      <div class="decision"><span class="k">The module held</span><span class="v">The photograph remained the fixed unit. Every format grew by combining it, not redrawing it.</span></div>
+      <div class="decision"><span class="k">The module held</span><span class="v">Every format grew by combining the same photograph pocket, not redrawing it.</span></div>
       <div class="decision"><span class="k">The hierarchy held</span><span class="v">The lower zone carried personalisation while the photograph grid remained uninterrupted.</span></div>
-      <div class="decision"><span class="k">The principle held</span><span class="v">Across every size, the frame stayed present enough to hold the memory and quiet enough not to become its subject.</span></div>
+      <div class="decision"><span class="k">The principle held</span><span class="v">At every size, the frame held the memory without becoming its subject.</span></div>
     </div>
 
-    <p class="closing">Most of the improvement came from removal: fewer colours, fewer arbitrary dimensions, fewer decorative gestures, and clearer limits. The frame remains present enough to hold the photograph&mdash;but quiet enough for the memory to arrive first.</p>
+    <p class="closing">The system improved by subtraction: fewer colours, fewer arbitrary dimensions, fewer decorative gestures, clearer limits. The result is a frame present enough to hold the photograph and quiet enough to let the memory arrive first.</p>
 
     <div class="actions" style="margin-top:var(--space-xl)">
       <div class="btn">
