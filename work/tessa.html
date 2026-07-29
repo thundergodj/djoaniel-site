@@ -193,9 +193,9 @@
              the reader had already decided what they thought. -->
         <div class="aside">
           <span class="k">What to watch</span>
-          <p><b>Nobody is asked to rate themselves.</b> No scale, no "how would you describe your leadership style." Every option is a circumstance the user can simply recognise or not.</p>
+          <p><b>Nobody is asked to rate themselves.</b> No scale, no "how would you describe your leadership style?" Every option is a circumstance the user can simply recognise or not.</p>
           <p>That is the whole trick: self-assessment requires the exact vocabulary the user came here to get. Asking for it first would fail the people the product exists for.</p>
-          <p><b>The last bubble is the translation.</b> Haggling at the market became <i>Communication Skills · Articulating · Persuading</i> — language she can put in front of an employer, derived from a life she already had.</p>
+          <p><b>The last bubble is the translation.</b> Sharing a story with friends and family became <i>Communication Skills · Articulating · Persuading</i> — language they can put in front of an employer, derived from a life they already had.</p>
           <p class="note">Recreated in this site's own system. Production dialogue belongs to the client.</p>
         </div>
         </div><!-- /pair -->
@@ -214,7 +214,7 @@
           <div class="before">Parati akong naghahanap ng solusyon kung may hinaharap akong problema.</div>
           <div class="after">Initiating · Decision making</div></div>
         <div class="vpair"><div class="tag">Communication</div>
-          <div class="before">Hindi problema sa akin ang tumawad sa palengke.</div>
+          <div class="before">Kaya kong ibahagi ang aking istorya sa mga kaibigan ko at sa aking pamilya.</div>
           <div class="after">Articulating · Persuading</div></div>
       </div>
       <p class="mono-note">Left: what the user recognised about their own life. Right: what the résumé now says. The user never had to know the right-hand column existed.</p>
@@ -255,18 +255,19 @@
         <div class="aside">
           <span class="k">What to watch</span>
           <p><b>The empty state is printed, not hidden.</b> A user with no work history sees a gap they can go and fill — which is a task — rather than a section that silently vanished, which is a verdict.</p>
-          <p>And the flow ends in a file. Emailed <i>and</i> attached in the thread, so it survives the session, the data plan, and the app. A coaching product that hands you something you can walk away with is refusing to be the destination.</p>
+          <p><b>The file survives the conversation.</b> It is emailed <i>and</i> attached in the thread, so it survives the session, the data plan, and the app — and works with employers who have never heard of TESSA.</p>
         </div>
       </div>
 
-      <p class="prose">The job board is the other half, and it's the part I'd defend hardest. At the time, the partnership meant to feed it real listings wasn't live yet. The flow says so, out loud.</p>
+      <h3 class="d-md handoff-subhead">The job board is the other half.</h3>
+      <p class="prose">It is also the part I'd defend hardest. At the time, the partnership meant to feed it real listings wasn't live yet. The flow says so, out loud.</p>
 
-      <div class="two" style="margin-top:var(--space-lg)">
+      <div class="two handoff-layout" style="margin-top:var(--space-lg)">
         <div>
           <p class="prose">Instead of an empty list or a fabricated one, a listing hands the user to a real government employment office with everything needed to actually arrive there: address, Facebook page, email, phone number. The dead end becomes a referral. And the content model carries one field most job boards still don't ship — <b>the language the interview will be conducted in.</b> In a country with dozens of them, that field is the difference between showing up and showing up prepared.</p>
           <p class="prose">Designing the degraded state as a genuine handoff, rather than hiding it, is what keeps the whole thing honest. The bot doesn't pretend to have jobs it doesn't have.</p>
         </div>
-        <div class="dl">
+        <div class="dl job-model">
           <div class="r"><div class="k">Company</div><div class="v">Reach out to PESO Tacloban<small>Public Employment Service Office</small></div></div>
           <div class="r"><div class="k">Address</div><div class="v">Kanhuraw Hill City Hall, Tacloban City</div></div>
           <div class="r"><div class="k">Schedule</div><div class="v">Contact PESO</div></div>
@@ -275,7 +276,7 @@
           <div class="r"><div class="k">Salary</div><div class="v">Minimum wage applicable and negotiable<small>Stated, not "competitive"</small></div></div>
         </div>
       </div>
-      <p class="mono-note">Content model of a single job posting, reproduced from the shipped flow.</p>
+      <p class="mono-note job-model-note">Content model of a single job posting, reproduced from the shipped flow.</p>
     </section>
 
     <!-- ===================== 05 ===================== -->
@@ -287,7 +288,7 @@
       <div class="live" id="loop-live">
         <div class="live-hd">
           <span class="live-mk">Live</span>
-          <span class="live-im">The same prompt, three times. Nothing tells her what's wrong.</span>
+          <span class="live-im">The same prompt, three times. Nothing tells them what's wrong.</span>
           <span class="ln"></span>
           <span class="live-note">Shipped &middot; unedited</span>
           <span class="btn"><span class="slab" aria-hidden="true"></span>
@@ -386,8 +387,9 @@
    The failure is the one that needs the cadence most — three identical
    prompts read as a typo in a static block and as a wall in real time.
 
-   Each runs once on first contact with its own band, and on demand
-   after that. Never on scroll: nothing on this site moves on arrival.
+   Each transcript is complete and readable by default. Playing one is a
+   deliberate action: the control in its band, or the hero's jump to the
+   first exchange. Nothing starts merely because it entered the viewport.
    ==================================================================== */
 (function () {
   'use strict';
@@ -421,6 +423,7 @@
 
     function play() {
       clear();
+      chat.classList.add('is-playing');
       bubs.forEach(function (b) { b.classList.remove('in'); });
       var t = 0;
       bubs.forEach(function (b) {
@@ -443,17 +446,15 @@
 
     if (btn) btn.addEventListener('click', play);
 
-    /* first run happens when the section is genuinely being read, not when
-       it grazes the viewport edge — and exactly once, per transcript */
-    if ('IntersectionObserver' in window) {
-      var seen = false;
-      new IntersectionObserver(function (es, obs) {
-        es.forEach(function (e) {
-          if (!e.isIntersecting || seen) return;
-          seen = true; obs.disconnect(); play();
-        });
-      }, { threshold: 0.6 }).observe(chat);
-    } else { bubs.forEach(function (b) { b.classList.add('in'); }); }
+    /* The hero control is an anchor first, so it remains useful without
+       JavaScript. With JavaScript it starts the promised exchange after
+       the browser has moved the band into view. */
+    if (band && band.id) {
+      var jump = document.querySelector('.hero-live a[href="#' + band.id + '"]');
+      if (jump) jump.addEventListener('click', function () {
+        window.setTimeout(play, 0);
+      });
+    }
   });
 })();
 </script>

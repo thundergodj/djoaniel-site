@@ -108,10 +108,10 @@ td code{font-family:var(--mono);font-size:11.5px;color:var(--accent)}
 
   <section>
     <div class="srule"><span class="eb">02 · The swap</span><span class="ln"></span><span class="sq"></span></div>
-    <p class="note" style="margin:0 0 20px">Same strings, same sizes. Left is the serif inside its failure zone; right is Radio Canada 700 doing the job instead. The point isn't that the serif looks bad — it's that below the floor it stops carrying any of the character you're paying it for, while costing you legibility.</p>
+    <p class="note" style="margin:0 0 20px">Same strings, same sizes. Left deliberately runs the serif through and up to its production floor; right shows Radio Canada 700 doing the job instead. The point isn't that the serif looks bad — it's that below the floor it stops carrying any of the character you're paying it for, while costing you legibility.</p>
     <div class="cmp">
       <div>
-        <div class="lbl">Instrument Serif — below floor</div>
+        <div class="lbl">Instrument Serif — comparison only</div>
         <p class="s16">The Art of Nothing</p>
         <p class="s19">The Art of Nothing</p>
         <p class="s24">The Art of Nothing</p>
@@ -128,8 +128,8 @@ td code{font-family:var(--mono);font-size:11.5px;color:var(--accent)}
   <section>
     <div class="srule"><span class="eb">03 · The locked rule</span><span class="ln"></span><span class="sq"></span></div>
     <div class="rule">
-      <h2>Instrument Serif never renders below 24px. Ever.</h2>
-      <p class="note" style="margin:0 0 22px">24px is where the hairline clears 1.0 device pixels on a standard 1× display — which is what most of your audience is on, since a 1920×1080 Windows laptop at 125% scaling is the single most common viewport. On a 2× retina panel you could cheat down to about 18px, but the site cannot detect that reliably enough to bet type on it. So: one floor, no exceptions.</p>
+      <h2>Production display type never renders below 24px.</h2>
+      <p class="note" style="margin:0 0 22px">22px is the arithmetic edge: about 1.01 device pixels on a standard 1× display. 24px is the production floor, carrying a safety margin at roughly 1.10 pixels. The comparison specimen intentionally renders the serif below that floor; production display type does not.</p>
       <table>
         <tr><th>Role</th><th>Face</th><th>Size</th></tr>
         <tr><td>Wordmark</td><td>Radio Canada 700, uppercase, <code>-0.035em</code></td><td><code>clamp(42px, 7.1vh, 98px)</code></td></tr>
@@ -137,8 +137,8 @@ td code{font-family:var(--mono);font-size:11.5px;color:var(--accent)}
         <tr><td>Card &amp; section titles</td><td>Instrument Serif — <em>if ≥24px</em></td><td><code>clamp(24px, 2.35vh, 27px)</code></td></tr>
         <tr><td>Card titles, short viewports</td><td>Radio Canada 700 <em>(automatic swap under 900px height)</em></td><td><code>clamp(15px, 2.05vh, 19px)</code></td></tr>
         <tr><td>Body prose</td><td>Radio Canada 400</td><td>15–17px / 1.6, max 62ch</td></tr>
-        <tr><td>Labels, data, captions</td><td>IBM Plex Mono</td><td>8–11px, <code>0.11–0.15em</code></td></tr>
-        <tr><td>Section eyebrows</td><td>Anybody 900</td><td>19px, uppercase</td></tr>
+        <tr><td>Labels, data, captions</td><td>IBM Plex Mono</td><td>12.5–15px; uppercase labels at <code>0.04em</code></td></tr>
+        <tr><td>Section eyebrows</td><td>IBM Plex Mono 500</td><td>13px, uppercase, <code>0.04em</code></td></tr>
       </table>
     </div>
   </section>

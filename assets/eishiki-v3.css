@@ -524,8 +524,12 @@ section[id],main[id],.live[id],.sec[id]{
    margin, the --sbw scrollbar correction and the gutter/ceiling clamp
    this used to need are all gone with it — a whole class of alignment
    bug removed rather than tuned. */
-/* anything in the band that is prose rather than instrument gets the inset */
-.live > .legend,.live > p{padding:0 0 var(--space-md)}
+/* Anything in the band that is prose rather than an instrument gets the
+   closing inset. The legend keeps its own top inset below the hairline:
+   putting it in this shorthand used to zero that padding, so its labels
+   sat visibly closer to the rule than every other label row in the band. */
+.live > p{padding:0 0 var(--space-md)}
+.live > .legend{padding:var(--space-sm) 0 var(--space-md)}
 /* The instrument is mounted on the bench, so it drops its own outer frame
    and top margin — otherwise every band renders a double hairline and a
    gap where the header's rule already did that job. Inner borders stay. */
@@ -581,6 +585,15 @@ section[id],main[id],.live[id],.sec[id]{
 .cfg .prev,.chat,.slot{max-width:var(--object)}
 .live > .pair{padding:var(--space-lg) 0}
 .cs-body > main .pair,.cs-head > .pair{margin-top:var(--space-lg)}
+/* Narrative resumes after an unframed instrument with one explicit beat.
+   These objects all open themselves with margin-top but carry no closing
+   margin, which left the next paragraph welded to their bottom edge. Keep
+   this on the shared construction rule so a new case page cannot recreate
+   TESSA's grid/transcript-to-prose collision. Live bands are excluded:
+   their own bottom margin already supplies the beat. */
+.sec > :is(.cards3,.steps,.plist,.pair,.two,.vpairs) + .prose{
+  margin-top:var(--space-lg)}
+
 
 /* ------------------------------------------------------------------
    THE ASIDE — a reading column, so it is set like one.
@@ -659,12 +672,16 @@ section[id],main[id],.live[id],.sec[id]{
    revert discards the AUTHOR value, so it silently stripped the aside's
    own padding-left and pushed its text against the rule. */
 
-/* header: the marker, the imperative, the rule, the aside. One row. */
+/* Header: the marker, the imperative, the rule, the aside. One row.
+   These are different-height objects, especially when the action button is
+   present. Baseline alignment left the button centred while the marker,
+   separator and note rode high; one vertical centre keeps the whole plate
+   on a single optical axis, including when the imperative wraps. */
 /* 5px of right padding, not 0: the primary control's offset slab sits
    4px right of the button, and on a bleeding band the band's right edge
    IS the clipped viewport edge — so a flush header sheared the shadow
    off the one button the band exists to point at. */
-.live-hd{display:flex;align-items:baseline;gap:var(--space-sm);
+.live-hd{display:flex;align-items:center;gap:var(--space-sm);
   flex-wrap:wrap;padding:var(--band-block) 0;
   border-bottom:var(--border-hair);margin-bottom:0}
 .live-mk{display:inline-flex;align-items:center;gap:7px;flex:none;
@@ -727,7 +744,8 @@ section[id],main[id],.live[id],.sec[id]{
 }
 @media(max-width:860px){
   .live-hd{padding:var(--band-row) 0}
-  .live > .legend,.live > p{padding:0 0 var(--space-sm)}
+  .live > p{padding:0 0 var(--space-sm)}
+  .live > .legend{padding:var(--space-sm) 0}
   .live-hd .ln{display:none}
 }
 
@@ -1146,10 +1164,13 @@ section[id],main[id],.live[id],.sec[id]{
 
 /* ---- REPLAYABLE TRANSCRIPT ----
    A conversation reveals one turn at a time; that is the entire premise
-   of the case study, and a static transcript is the one shape that hides
-   it. Turns are dealt on demand, never on arrival or on scroll. */
-.chat[data-replay] .bub{opacity:0;transform:translateY(10px)}
-.chat[data-replay] .bub.in{opacity:1;transform:none;
+   of the case study. The complete transcript remains readable by default
+   and without JavaScript; only an explicit play action deals the turns.
+   That avoids presenting a fully sized but apparently empty instrument
+   while a reader is simply scrolling through the page. */
+.chat[data-replay].is-playing .bub{
+  opacity:0;transform:translateY(10px);transition:none}
+.chat[data-replay].is-playing .bub.in{opacity:1;transform:none;
   transition:opacity var(--dur-med) linear,transform var(--dur-med) var(--ease-out)}
 .chat .hdr .replay{margin-left:auto;font:var(--mono-caption);letter-spacing:var(--track-caption);
   text-transform:uppercase;border:var(--border-hair);background:var(--white);
@@ -1165,7 +1186,7 @@ section[id],main[id],.live[id],.sec[id]{
 .dots i:nth-child(3){animation-delay:366ms}
 @keyframes dots-blink{0%,60%,100%{opacity:.25}30%{opacity:1}}
 @media (prefers-reduced-motion:reduce){
-  .chat[data-replay] .bub{opacity:1;transform:none}
+  .chat[data-replay].is-playing .bub{opacity:1;transform:none}
   .dots{display:none}
 }
 
@@ -1200,6 +1221,21 @@ section[id],main[id],.live[id],.sec[id]{
   color:var(--text-muted);padding-top:3px}
 .dl .v{font-family:var(--font-sans);font-size:14px;line-height:1.5;color:var(--text-primary)}
 .dl .v small{display:block;color:var(--text-muted);font-size:12.5px;margin-top:3px}
+/* ---- TESSA · HONEST HANDOFF ----
+   The listing model used to sit in a narrow right rail beside the copy.
+   That made the text end halfway down the rail and detached the caption.
+   Stack the argument first, then let the model occupy the full band as a
+   balanced 3 × 2 field matrix with its note immediately underneath. */
+.handoff-subhead{margin-top:var(--space-2xl)}
+.handoff-layout{grid-template-columns:1fr;gap:var(--space-lg)}
+.job-model{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  border-left:var(--border-hair);background:var(--surface-card-30)}
+.job-model .r{display:block;min-width:0;padding:var(--space-md);
+  border-right:var(--border-hair);border-bottom:var(--border-hair)}
+.job-model .k{padding-top:0;margin-bottom:var(--space-2xs)}
+.job-model .v{font-size:15px}
+.job-model-note{max-width:none}
+
 
 /* ==================================================================
    RESPONSIVE
@@ -1215,8 +1251,10 @@ section[id],main[id],.live[id],.sec[id]{
   .facts .f:nth-child(-n+2){border-bottom:var(--border-hair)}
   .cards3{grid-template-columns:1fr}
   .steps{grid-template-columns:repeat(2,1fr)}
+  .job-model{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:600px){
+  .job-model{grid-template-columns:1fr}
   .hhero{padding:var(--space-3xl) 0}
   .steps,.vpairs,.cols2{grid-template-columns:1fr}
   .prow{grid-template-columns:1fr;gap:9px}

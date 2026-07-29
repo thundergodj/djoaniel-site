@@ -175,8 +175,8 @@
 
     <section class="sect" id="s01">
       <div class="srule"><span class="eb">01 · Type</span><span class="ln"></span><span class="sq"></span></div>
-      <p class="prose">Three families, one job each. <b>Instrument Serif</b> carries display and statements. <b>Radio Canada</b> carries prose and the wordmark. <b>IBM Plex Mono</b> carries labels, data, and captions — the machine-read voice. Instrument Sans was removed from the system entirely.</p>
-      <p class="prose">The serif has one hard rule: <b>it never renders below 24px.</b> Its thin strokes are about a fifteenth of cap height, so at 16px a hairline falls to roughly three-quarters of a device pixel and the rasteriser greys it into mush — on the 1× Windows laptops most of this audience uses, retina cannot be assumed. Where a viewport can't afford 24px, titles swap to Radio Canada 700 rather than shrink the serif into its failure zone.</p>
+      <p class="prose">Three families, one job each. <b>Instrument Serif</b> carries display and statements. <b>Radio Canada</b> carries prose and the wordmark. <b>IBM Plex Mono</b> carries labels, data, and captions — the machine-read voice.</p>
+      <p class="prose">The serif has one hard production rule: <b>it never renders below 24px.</b> 22px is the arithmetic edge; 24px is the production floor with safety margin. Its thin strokes are about a fifteenth of cap height, so at 16px a hairline falls to roughly three-quarters of a device pixel and the rasteriser greys it into mush — on a 1× display, retina cannot be assumed. Where a viewport can't afford 24px, titles swap to Radio Canada 700 rather than shrink the serif into its failure zone.</p>
       <div class="floor">
         <p class="hd">The 24px floor <span class="px" id="flPx">31px</span></p>
         <div class="ctl">
@@ -208,26 +208,26 @@
 
     <section class="sect" id="s02">
       <div class="srule"><span class="eb">02 · Colour</span><span class="ln"></span><span class="sq"></span></div>
-      <p class="prose">Colour is bound to a legend, never used for decoration. Paper is the airframe; ink is structure. Blue marks what is selected, current, or deliberately called out: <b>read this</b>. Orange marks the operator's intervention — live, working, armed, or attention required. A button does not become orange merely because it can be clicked; it earns orange only while it holds that state. Red marks an ambiguous or null value; sage marks a resolved one.</p>
+      <p class="prose">Colour is bound to a legend, not decoration. Paper is the airframe; ink is structure. Blue marks reading and interaction emphasis. Orange marks the operator's intervention — live, working, armed, or attention required. Red marks unresolved, invalid, or failed states; sage marks resolved or passed states.</p>
       <div class="swz">
         <div class="sw"><div class="chip" style="background:var(--paper)"></div><div class="n">Paper</div><div class="m">The airframe. The quiet ground every signal sits on.</div></div>
         <div class="sw"><div class="chip" style="background:var(--ink-900)"></div><div class="n">Ink</div><div class="m">Structure: text, rules, frames, and resting controls.</div></div>
-        <div class="sw"><div class="chip" style="background:var(--accent)"></div><div class="n">Signal blue</div><div class="m">Selected, current, or deliberately marked: read this.</div></div>
+        <div class="sw"><div class="chip" style="background:var(--accent)"></div><div class="n">Signal blue</div><div class="m">Reading and interaction emphasis: selected, current, hover, or focus.</div></div>
         <div class="sw"><div class="chip" style="background:var(--state-operator)"></div><div class="n">Operator orange</div><div class="m">Live, working, armed, or attention required. Never merely clickable.</div></div>
-        <div class="sw"><div class="chip" style="background:var(--data-null)"></div><div class="n">Data red</div><div class="m">An ambiguous, missing, or failed value.</div></div>
-        <div class="sw"><div class="chip" style="background:var(--data-ok)"></div><div class="n">Resolved sage</div><div class="m">A system state that has been resolved.</div></div>
+        <div class="sw"><div class="chip" style="background:var(--data-null)"></div><div class="n">Data red</div><div class="m">An unresolved, invalid, or failed state.</div></div>
+        <div class="sw"><div class="chip" style="background:var(--data-ok)"></div><div class="n">Resolved sage</div><div class="m">A resolved or passed state.</div></div>
       </div>
     </section>
 
     <section class="sect" id="s03">
       <div class="srule"><span class="eb">03 · Build</span><span class="ln"></span><span class="sq"></span></div>
-      <p class="prose">Static HTML and one hand-authored stylesheet. No build step, no bundler, no runtime dependency beyond three web fonts and an icon set. The whole site is a handful of documents you could read end to end. It is versioned on GitHub and deploys to Vercel on every push — the commit is the release.</p>
+      <p class="prose">Static HTML, one shared stylesheet, page-local CSS, and a small shared behaviour file. No framework, bundler, or build step. Web fonts, icon CSS, and analytics load at runtime. The whole site is a handful of documents you could read end to end. It is versioned on GitHub and deploys to Vercel on every push — the commit is the release.</p>
       <p class="prose">Zero corner radius, hairline borders, a fixed instrument grid. The chrome carries the heavy responsive work so the prose never has to; the frame yields to the content, not the reverse.</p>
     </section>
 
     <section class="sect" id="s04">
       <div class="srule"><span class="eb">04 · Access</span><span class="ln"></span><span class="sq"></span></div>
-      <p class="prose">It is held to its own audit. Every interactive control has a visible focus ring, every destination icon is paired with screen-reader text, motion respects <span style="font-family:var(--font-mono);font-size:.85em;letter-spacing:.04em">prefers-reduced-motion</span>, and a skip link leads the keyboard straight to the content. Accessibility is treated as part of the craft, not a compliance pass bolted on at the end.</p>
+      <p class="prose">Shared visible focus treatment, screen-reader destination text, reduced-motion handling, and the selected checks demonstrated in the Accessibility Lab are built into the work. Accessibility is treated as part of the craft, not a compliance pass bolted on at the end.</p>
     </section>
 
     <section class="sect" id="s05">
@@ -278,8 +278,8 @@
     var hair = (n * 0.72 / 15);
     read.textContent = 'Hairline ≈ ' + hair.toFixed(2) + ' device pixels at 1×. ' +
       (below
-        ? 'Under 1.00 the rasteriser has nothing solid to draw, so the rule fires and the title swaps.'
-        : 'At or above 1.00 the stroke survives, so the serif holds.');
+        ? 'Below the 24px production floor, the safety margin is gone, so the rule fires and the title swaps.'
+        : 'At or above the 24px production floor, the safety margin holds and the serif stays.');
   }
   sl.addEventListener('input', paint);
   document.getElementById('flDn').addEventListener('click', function () { sl.value = +sl.value - 1; paint(); });

@@ -149,7 +149,7 @@
 
   <div class="hero-live">
     <span class="live-mk">Live</span>
-    <span class="t"><b>The configurator on this page is running.</b> Pick a frame, choose a colour, engrave it — the same four steps a customer completes in under two minutes.</span>
+    <span class="t"><b>The configurator on this page is running.</b> Pick a frame, choose a colour, engrave it, and review the order — the same four-step path a customer completes in under two minutes.</span>
     <span class="btn"><span class="slab" aria-hidden="true"></span>
       <a href="#cfg-live">Build one <i class="ph ph-arrow-right icon-action" aria-hidden="true"></i></a></span>
   </div>
@@ -242,7 +242,7 @@
       <div class="steps" data-cfg role="tablist" aria-label="Configurator steps" style="margin-top:var(--space-lg)">
         <button type="button" class="step" role="tab" data-step="0" aria-selected="true" data-done="0"><div class="n">1</div><div class="t">Choose frame</div><div class="d">Pick the SKU. Price is visible up front — the question that used to fill the inbox is answered before it's asked.</div></button>
         <button type="button" class="step" role="tab" data-step="1" aria-selected="false" data-done="0"><div class="n">2</div><div class="t">Pick colour</div><div class="d">Five matte options on a live preview. Colour has zero price impact, stated plainly, so there's no hesitation.</div></button>
-        <button type="button" class="step" role="tab" data-step="2" aria-selected="false" data-done="0"><div class="n">3</div><div class="t">Add your text</div><div class="d">Free engraving with per-column limits and instant validation. The detail that used to get lost is now structured.</div></button>
+        <button type="button" class="step" role="tab" data-step="2" aria-selected="false" data-done="0"><div class="n">3</div><div class="t">Add your text</div><div class="d">Free engraving in one field, flagged at 18 characters. The detail that used to get lost is now structured.</div></button>
         <button type="button" class="step" role="tab" data-step="3" aria-selected="false" data-done="0"><div class="n">4</div><div class="t">Review order</div><div class="d">One clear summary, then GCash. The owner receives a complete, correct order instead of a puzzle to assemble.</div></button>
       </div>
 
@@ -268,7 +268,7 @@
           <span class="k">What to watch</span>
           <p><b>The price is on screen before anything else.</b> Step one shows &#8369;349 next to the size, because "how much?" was the most-sent message in the inbox this flow replaced. Answering it first is the whole reason the flow works.</p>
           <p><b>Every step is reversible and nothing is lost.</b> Go back and change the frame after typing your engraving — the text survives. A four-step path a customer can reverse is what makes it safe to start.</p>
-          <p><b>The engraving field validates as you type</b>, per line, against the space the physical frame actually has. The detail that used to arrive across a dozen messages and ship wrong is now structured at the point of entry.</p>
+          <p><b>The recreation flags the engraving as you type</b>, in one field, against its 18-character threshold. The detail that used to arrive across a dozen messages and ship wrong is now structured at the point of entry.</p>
           <p class="note">A recreation, rebuilt in this site's own type and palette. The live storefront is the real thing; this is the flow it runs.</p>
         </div>
       </div>
@@ -291,7 +291,7 @@
         <div class="vpair"><div class="tag">Payment failed</div>
           <div class="before">Error: Transaction declined (code 402).</div>
           <div class="after">Payment didn't go through. Your card was declined — no charge was made. Give it another try, or use GCash instead.</div></div>
-        <div class="vpair"><div class="tag">Text too long</div>
+        <div class="vpair"><div class="tag">Shipped product · text too long</div>
           <div class="before">Invalid input: exceeds maximum length.</div>
           <div class="after">Max 10 characters per column — try something shorter.</div></div>
         <div class="vpair"><div class="tag">Info</div>
@@ -308,12 +308,12 @@
     <section class="sec" id="s06">
       <div class="srule"><span class="eb">06 · The outcome</span><span class="ln"></span><span class="sq"></span></div>
       <h2 class="d-lg">The inbox stopped being <span class="mark">the storefront.</span></h2>
-      <p class="prose">The configurator turned a one-person, always-on operation into something that runs while the owner sleeps. Orders now arrive complete and correct — the frame, colour, engraving, and quantity already assembled — so the studio spends its time making, not decoding threads.</p>
+      <p class="prose">The configurator turned a one-person, always-on operation into something that runs while the owner sleeps. Orders can arrive complete — the frame, colour, engraving, and quantity already assembled — so the studio can spend its time making, not decoding threads.</p>
 
       <div class="stats" style="margin-top:var(--space-xl)">
-        <div class="stat"><span class="v">4→1</span><div class="r"></div><span class="l">Multi-message thread → one self-serve flow</span></div>
-        <div class="stat"><span class="v">0</span><div class="r"></div><span class="l">Pricing questions in the inbox</span><span class="n">The answer is on the page now</span></div>
-        <div class="stat"><span class="v">24/7</span><div class="r"></div><span class="l">Orders accepted without the owner online</span></div>
+        <div class="stat"><span class="v">Thread→flow</span><div class="r"></div><span class="l">Multi-message order → self-serve path</span></div>
+        <div class="stat"><span class="v">Target</span><div class="r"></div><span class="l">Zero pricing questions in the inbox</span><span class="n">The answer is on the page now</span></div>
+        <div class="stat"><span class="v">Anytime</span><div class="r"></div><span class="l">Order flow without the owner online</span></div>
       </div>
       <p class="mono-note">Directional outcomes framed from the design goals of a personal project, not audited business metrics.</p>
     </section>
@@ -388,7 +388,7 @@
   var RULES = [
     'Price resolves the moment the SKU does. The question that used to open every thread is answered before it is asked.',
     'Colour carries no price impact, and the panel says so — so the choice costs nothing to make and nothing to reverse.',
-    'The engraving has a hard character budget, enforced at entry. The detail that used to get lost in a thread is now a field with a rule.',
+    'The recreation uses one engraving field with an 18-character budget, flagged at entry. The detail that used to get lost in a thread is now a field with a rule.',
     'The summary is the handoff. The owner receives a complete order instead of a conversation to reconstruct.'
   ];
 

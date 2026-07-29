@@ -14,7 +14,7 @@
   gtag('config', 'G-8897FSV2XF');
 </script>
 
-<meta name="description" content="A live reconstruction of the inspection sheet Djoaniel built for Avaloq: selected WCAG checks, five surfaces and one inherited platform pass.">
+<meta name="description" content="A live reconstruction of the inspection sheet Djoaniel built for Avaloq: up to ten selected WCAG 2.2 AA criteria per surface, across five surfaces and one inherited platform pass.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -73,7 +73,8 @@
    blue text only, while the unselected platform tab wore a warm fill that
    made it the loudest thing in the row — the strip was telling you the
    wrong tab was on. Status now lives in the label, selection in the frame. */
-.surf{display:flex;align-items:baseline;gap:9px;text-align:left;
+.surf{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;gap:9px;text-align:left;
   background:transparent;border:0;border-right:var(--border-hair);
   border-top:2px solid transparent;
   padding:10px 13px 11px;cursor:pointer;font:inherit;
@@ -86,11 +87,14 @@
 .surf .t{font-family:var(--font-sans);font-weight:700;font-size:13.5px;line-height:1.25;
   color:var(--text-primary)}
 .surf.on .n{color:var(--accent)}
-.surf .s{margin-left:auto;flex:none;padding-left:8px;font:var(--text-label);
+.surf .s{justify-self:end;font:var(--text-label);
   letter-spacing:0.04em;text-transform:uppercase;color:var(--text-muted)}
 .surf[disabled]{cursor:default;opacity:1;background:transparent}
 .surf[disabled] .t{color:var(--text-primary)}
-.surf.platform .s{color:var(--state-operator-ink)}
+.surf.platform .s{display:inline-flex;align-items:center;gap:6px;
+  padding:4px 7px;border:0.667px solid rgba(var(--state-operator-rgb),.34);
+  background:rgba(var(--state-operator-rgb),.09);color:var(--state-operator-ink)}
+.surf.platform .s::before{content:"";width:6px;height:6px;flex:none;background:currentColor}
 @media(max-width:980px){
   .surfaces{grid-template-columns:repeat(2,1fr)}
   .surf{border-bottom:var(--border-hair)}
@@ -111,17 +115,30 @@
    Previously the strip lived in its own section, two headings and a screen
    away from the thing it controlled. Nothing about that told the reader the
    five tabs drive the panel below them. */
-.bench{margin-top:var(--space-xl)}
+.bench-scroll-note{display:none}
+.bench-viewport{min-width:0}
+.bench{margin-top:0;padding-top:var(--space-sm)}
 /* Was a second serif headline with a second blue-underlined clause, one
    viewport below the first. Used once that construction is a signature;
    used twice at two sizes it is a tic, and it made a functional label for
    a control panel look like an editorial statement. It is a label. It is
    set like one, in the system's own mono/uppercase register. */
-.benchhd{display:flex;align-items:center;gap:var(--space-sm);margin:0 0 var(--space-2xs);
-  font:var(--text-micro);letter-spacing:0.05em;text-transform:uppercase}
-.benchhd .bt{flex:none;color:var(--text-primary);font-weight:600}
+.benchhd{display:flex;align-items:center;gap:var(--space-sm);margin:0 0 var(--space-xs);
+  font:var(--text-micro);letter-spacing:var(--track-caption);text-transform:uppercase}
+.benchhd .bt{flex:none;color:var(--text-primary);font-weight:500}
 .benchhd .ln{flex:1;height:1px;background:var(--border-default)}
 .benchhd .bs{flex:none;color:var(--text-muted)}
+
+/* This imperative is one short sentence, not a flexible text column. Letting
+   it grow left a wide invisible track after the final word, which detached the
+   connector rule from the copy. The rule should own every spare pixel. */
+#lab > .live-hd .live-im{flex:0 1 auto}
+/* The label changes, the control does not. Both states reserve the same
+   footprint and the action icon owns a fixed column, so the header never
+   recomposes when BREAK becomes PUT BACK. */
+#failfirst{inline-size:202px;box-sizing:border-box;justify-content:flex-start}
+#failfirst .icon-action{inline-size:var(--icon-action-size);flex:none;
+  display:inline-flex;align-items:center;justify-content:center}
 
 /* ==================================================================
    LAB SHELL — a bench, not a page.
@@ -235,6 +252,54 @@
   }
 }
 
+/* On a narrow screen the live-band header remains a page component, while
+   the bench becomes an honest application viewport. Compressing the three
+   panes into one column destroyed their relationship; preserving the bench's
+   working width and making the viewport explicit keeps the controls,
+   specimen and verdict legible as one instrument. */
+@media(max-width:860px){
+  #lab > .live-hd{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;gap:var(--space-xs) var(--space-sm);
+    padding:var(--space-md) 0}
+  #lab > .live-hd .live-mk{grid-column:1;grid-row:1}
+  #lab > .live-hd .live-im{grid-column:2/-1;grid-row:1;min-width:0}
+  #lab > .live-hd .ln{display:block;grid-column:1/-1;grid-row:2;width:100%}
+  #lab > .live-hd .live-note{grid-column:1/3;grid-row:3;min-width:0}
+  #lab > .live-hd .btn{grid-column:3;grid-row:3;justify-self:end;margin-left:0}
+
+  .bench-scroll-note{display:flex;align-items:center;gap:8px;
+    padding:9px 0;border-bottom:var(--border-hair);
+    font:var(--text-caption);letter-spacing:0.04em;text-transform:uppercase;
+    color:var(--text-muted)}
+  .bench-scroll-note::before{content:"";width:8px;height:8px;flex:none;
+    background:var(--accent)}
+  .bench-viewport{overflow-x:auto;overflow-y:visible;overscroll-behavior-x:contain;
+    padding-bottom:var(--space-2xs);scrollbar-gutter:stable;
+    scrollbar-width:thin;scrollbar-color:var(--accent) var(--surface-card-25)}
+  .bench-viewport::-webkit-scrollbar{height:8px}
+  .bench-viewport::-webkit-scrollbar-thumb{background:var(--accent)}
+  .bench-viewport::-webkit-scrollbar-track{background:var(--surface-card-25)}
+  .bench{min-width:1120px}
+  .benchhd{flex-wrap:nowrap}
+  .benchhd .ln{display:block}
+  .benchhd .bs{flex:none}
+  .surfaces{grid-template-columns:repeat(4,1fr) 1.4fr}
+  .surf{border-right:var(--border-hair);border-bottom:0}
+  .surf:last-child{border-right:0}
+  .surf:not(.platform) .s{display:block}
+  #lab .lab{grid-template-columns:340px minmax(420px,1fr) 336px;
+    grid-template-areas:"ctl stg aud"}
+  #lab .a-stg,#lab .a-aud{position:static;max-height:none}
+}
+@media(max-width:520px){
+  #lab > .live-hd{grid-template-columns:auto minmax(0,1fr)}
+  #lab > .live-hd .live-im{grid-column:2}
+  #lab > .live-hd .live-note{grid-column:1/-1;grid-row:3}
+  #lab > .live-hd .btn{grid-column:1/-1;grid-row:4;justify-self:stretch}
+  #lab > .live-hd .btn button{width:100%;justify-content:center}
+  #lab #failfirst{inline-size:100%}
+}
+
 .box{border:var(--border-hair);background:var(--surface-card-30);
   display:flex;flex-direction:column;min-height:0;overflow:hidden}
 /* All three panel headers share one height so content baselines line up
@@ -291,6 +356,11 @@
 .ctl .pr{color:var(--state-operator-ink);font-weight:600}
 .ctl .nm{display:block;font-family:var(--font-sans);font-weight:700;font-size:13.5px;
   line-height:1.3;color:var(--text-primary);margin:5px 0 3px}
+.ctl .aff{display:block;margin:0 0 5px;padding-left:7px;border-left:2px solid var(--text-muted);
+  font:var(--mono-label);line-height:1.35;letter-spacing:var(--track-label);
+  text-transform:uppercase;color:var(--text-muted)}
+.ctl .aff.sr{border-left-color:var(--state-operator);color:var(--state-operator-ink)}
+.ctl .aff.both{border-left-color:var(--accent)}
 .ctl .hp{font-family:var(--font-sans);font-size:12px;line-height:1.45;
   color:var(--text-muted);margin:0}
 .ctl .sub{margin-top:10px}
@@ -429,6 +499,10 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
 #spec{background:var(--white);border:var(--border-hair);
   --ui:rgb(11,63,255); --tx:rgb(9,9,9);
   font-family:var(--ui-sans)}
+/* Author-level display rules on labels, errors, review panels and buttons
+   must never outrank the state machine's hidden attribute. Without this,
+   the switch and audit changed while the specimen visibly stayed put. */
+#spec [hidden]{display:none!important}
 #spec .bar{display:flex;align-items:center;gap:10px;padding:11px 15px;
   border-bottom:var(--border-hair)}
 #spec .bm{font-family:var(--ui-sans);font-weight:700;font-size:15px;
@@ -545,15 +619,15 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Djoaniel Hernandez">
 <meta property="og:url" content="https://www.djoaniel.com/work/accessibility-lab">
-<meta property="og:title" content="Break It Yourself — ten criteria, yours to fail">
-<meta property="og:description" content="Five surfaces, ten criteria, one platform pass. The WCAG 2.2 AA inspection sheet I made for Avaloq's design team to audit with — wired to live controls so you can fail it on purpose.">
+<meta property="og:title" content="Break It Yourself — selected checks, yours to fail">
+<meta property="og:description" content="Five surfaces, up to ten selected WCAG 2.2 AA criteria per surface, one platform pass. The inspection sheet I made for Avaloq's design team — wired to live controls so you can fail it on purpose.">
 <meta property="og:image" content="https://www.djoaniel.com/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Djoaniel Hernandez — enterprise HUD design">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Break It Yourself — ten criteria, yours to fail">
-<meta name="twitter:description" content="Five surfaces, ten criteria, one platform pass. The WCAG 2.2 AA inspection sheet I made for Avaloq's design team to audit with — wired to live controls so you can fail it on purpose.">
+<meta name="twitter:title" content="Break It Yourself — selected checks, yours to fail">
+<meta name="twitter:description" content="Five surfaces, up to ten selected WCAG 2.2 AA criteria per surface, one platform pass. The inspection sheet I made for Avaloq's design team — wired to live controls so you can fail it on purpose.">
 <meta name="twitter:image" content="https://www.djoaniel.com/assets/og.png">
 <meta name="theme-color" content="#F7F6F2">
 <!-- Localhost-only accent comparison -->
@@ -609,14 +683,14 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
        taxonomy — with the audit itself attributed to the team. Claiming
        the instrument is the larger credential and the safer one.
        ================================================================== -->
-  <p class="prose lead">An EU directive sets the standard, not the method. Avaloq's design team ran the accessibility work; I built the <button type="button" class="term" data-tip-label="Inspection sheet" data-tip="The eighteen-point check a garage runs on a car. Fixed list, same order every time, one verdict per line &mdash; so the result doesn't depend on which mechanic looked at it. An accessibility audit has the same problem and takes the same fix.">inspection sheet</button> they audit with.</p>
+  <p class="prose lead">European accessibility regulation set the deadline. WCAG 2.2 AA set our audit target. Neither supplied an operating method. Avaloq's design team ran the accessibility work; I built the <button type="button" class="term" data-tip-label="Inspection sheet" data-tip="The eighteen-point check a garage runs on a car. Fixed list, same order every time, one verdict per line &mdash; so the result doesn't depend on which mechanic looked at it. An accessibility audit has the same problem and takes the same fix.">inspection sheet</button> they audit with.</p>
   <p class="prose lead">It checks <b>surfaces</b> rather than features and adds a third status — <i>inherited</i> — so a criterion resolved once at platform level is never re-litigated on the forty-first form.</p>
 
   <p class="mono-note">I built the method and the sheet. Avaloq owns the audit findings, adoption data and cost of remediation.</p>
 
   <div class="hero-live">
     <span class="live-mk">Live</span>
-    <span class="t"><b>The inspection sheet on this page is running.</b> Ten WCAG criteria, five surfaces, computed against the specimen in your browser — not a screenshot of a spreadsheet.</span>
+    <span class="t"><b>The inspection sheet on this page is running.</b> Up to ten selected WCAG criteria per surface, five surfaces, computed against the specimen in your browser — not a screenshot of a spreadsheet.</span>
     <span class="btn"><span class="slab" aria-hidden="true"></span>
       <a href="#lab">Open the sheet <i class="ph ph-arrow-right icon-action" aria-hidden="true"></i></a></span>
   </div>
@@ -624,7 +698,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
   <div class="facts" style="margin-top:var(--space-2xl)">
     <div class="f"><div class="k">My role</div><div class="v">Process owner<small>The inspection sheet and its taxonomy</small></div></div>
     <div class="f"><div class="k">Team</div><div class="v">Avaloq design<small>Ran the audit across five surfaces</small></div></div>
-    <div class="f"><div class="k">Standard</div><div class="v">WCAG 2.2 AA<small>Ten criteria per pass</small></div></div>
+    <div class="f"><div class="k">Audit target</div><div class="v">WCAG 2.2 AA<small>Up to ten selected criteria per surface</small></div></div>
     <div class="f"><div class="k">Scope</div><div class="v">Five surfaces<small>One platform pass, then inheritance</small></div></div>
   </div>
 
@@ -634,7 +708,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
        sheet" describes the artifact. -->
   <div class="stats" style="margin-top:var(--space-2xl)">
     <div class="stat"><span class="v">5</span><div class="r"></div><span class="l">Surfaces in the sheet</span></div>
-    <div class="stat"><span class="v">10</span><div class="r"></div><span class="l">AA criteria per pass</span></div>
+    <div class="stat"><span class="v">&le;10</span><div class="r"></div><span class="l">Selected AA criteria per surface</span></div>
     <div class="stat"><span class="v">1</span><div class="r"></div><span class="l">Platform pass</span><span class="n">(everything after it inherits)</span></div>
   </div>
 </div>
@@ -699,11 +773,13 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
       <span class="ln"></span>
       <span class="live-note">Nothing here is a screenshot</span>
       <span class="btn"><span class="slab" aria-hidden="true"></span>
-        <button type="button" id="failfirst"><i class="ph ph-arrow-u-up-left icon-action" aria-hidden="true"></i><span data-label>Put it back</span></button></span>
+        <button type="button" id="failfirst"><i class="ph ph-arrow-left icon-action" aria-hidden="true"></i><span data-label>Put it back</span></button></span>
     </div>
 
+  <div class="bench-scroll-note" aria-hidden="true">Instrument viewport · swipe</div>
+  <div class="bench-viewport" role="region" aria-label="Accessibility audit instrument" tabindex="0">
   <div class="bench">
-    <p class="benchhd"><span class="bt">Ten criteria · yours to fail</span><span class="ln"></span><span class="bs">Pick a surface</span></p>
+    <p class="benchhd"><span class="bt">Up to ten selected criteria · yours to fail</span><span class="ln"></span><span class="bs">Pick a surface</span></p>
 
     <div class="surfaces" role="tablist" aria-label="Audited surfaces">
       <button class="surf on" role="tab" aria-selected="true" aria-controls="stagewrap" data-spec="tables">
@@ -729,7 +805,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
     <!-- ---------- COL 2: stage ---------- -->
     <div id="stagewrap" class="a-stg">
       <div class="stg">
-        <p class="stghd"><span id="stgt">Savings plan overview</span><span class="ln"></span><span class="mk ok" id="mk">conformant</span></p>
+        <p class="stghd"><span id="stgt">Savings plan overview</span><span class="ln"></span><span class="mk ok" id="mk">selected checks pass</span></p>
 
         <!-- specwrap scrolls the specimen inside the bench, so the screen-reader
              readout below stays pinned and visible while you operate the form.
@@ -779,9 +855,10 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
             <div data-view="forms" hidden>
               <p class="cr">Home › Trading › New</p>
               <h3>New savings plan</h3>
-              <div class="fld" id="f-amt">
+              <div class="fld bad" id="f-amt">
                 <label for="i-amt" data-lbl="Savings amount">Savings amount</label>
-                <input id="i-amt" type="text" value="50,000" aria-describedby="f-amt-h f-amt-e">
+                <input id="i-amt" type="text" value="50,000" aria-invalid="true"
+                  aria-describedby="f-amt-h f-amt-e" data-hint-ref="f-amt-h" data-error-ref="f-amt-e">
                 <p class="hint" id="f-amt-h" data-hint>EUR. Maximum EUR 10,000 per execution.</p>
                 <p class="err" id="f-amt-e" data-err><span aria-hidden="true">✕</span> Amount exceeds the EUR 10,000 limit. Enter a lower amount or split the plan.</p>
               </div>
@@ -791,7 +868,8 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
               </div>
               <div class="fld">
                 <label for="i-dat" data-lbl="First execution date">First execution date</label>
-                <input id="i-dat" type="text" value="26.09.2026" aria-describedby="f-dat-h">
+                <input id="i-dat" type="text" value="26.09.2026" aria-describedby="f-dat-h"
+                  data-hint-ref="f-dat-h">
                 <p class="hint" id="f-dat-h" data-hint>Format DD.MM.YYYY.</p>
               </div>
               <button class="ab pri" type="button">Create plan</button>
@@ -816,8 +894,10 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
               <h3>Confirm payment</h3>
               <div class="fld bad" id="t-iban">
                 <label for="i-iban" data-lbl="Beneficiary IBAN">Beneficiary IBAN</label>
-                <input id="i-iban" type="text" value="CH93 0076 2011 6238 5295 8" aria-describedby="t-iban-e">
-                <p class="err" id="t-iban-e" data-err><span aria-hidden="true">✕</span> IBAN checksum failed. Swiss IBANs are 21 characters — this one is 22. Check the digits after CH93.</p>
+                <input id="i-iban" type="text" value="CH93 0076 2011 6238 5295 8"
+                  aria-invalid="true" aria-describedby="t-iban-e t-iban-s" data-suggestion-ref="t-iban-s">
+                <p class="err"><span aria-hidden="true">✕</span><span><span id="t-iban-e">IBAN checksum failed.</span>
+                  <span id="t-iban-s" data-suggestion>Swiss IBANs are 21 characters — this one is 22. Check the digits after CH93.</span></span></p>
               </div>
               <div class="rev" data-review>
                 <p class="rt">Review before you commit</p>
@@ -838,15 +918,15 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
         </div><!-- /specwrap -->
 
         <div class="srs">
-          <span class="k">Screen reader output</span>
-          <output id="sr"><span class="hint">Tab or hover into the specimen to hear what gets announced.</span></output>
+          <span class="k">Screen-reader simulation</span>
+          <output id="sr"><span class="hint">Tab or hover into the specimen to inspect the simulated announcement.</span></output>
         </div>
       </div>
     </div>
 
     <!-- ---------- COL 3: the sheet ---------- -->
     <section class="box audit a-aud" aria-labelledby="ah">
-      <p class="hd" id="ah">Accessibility · specimen <span class="ovl" id="ovl">Passed</span></p>
+      <p class="hd" id="ah">Accessibility · specimen <span class="ovl" id="ovl">Selected checks pass</span></p>
       <div id="rows" class="scr" aria-live="polite"></div>
       <!-- Undated on purpose. A date here timestamps an internal
            governance event and buys the reader nothing. -->
@@ -854,6 +934,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
     </section>
     </div><!-- /lab -->
   </div><!-- /bench -->
+  </div><!-- /bench-viewport -->
   </div><!-- /live -->
 
   <p class="mono-note">The specimens and inspection sheet are reconstructed in this site's own system. Companies shown are real; identifiers and positions are illustrative.</p>
@@ -863,7 +944,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 <section class="sec" id="s02">
   <div class="srule"><span class="eb">02 · Inherited</span><span class="ln"></span><span class="sq"></span></div>
   <h2 class="d-lg">Audited once. <span class="mark">Carried forever.</span></h2>
-  <p class="prose">The first version of the sheet made every feature test all ten criteria. It was correct and it was unusable — nobody was going to re-measure the focus ring on the forty-first form.</p>
+  <p class="prose">The first version of the sheet made every feature test all ten selected criteria. It was correct and it was unusable — nobody was going to re-measure the focus ring on the forty-first form.</p>
   <p class="prose">So the taxonomy grew a third status. <b>Inherited</b> means the criterion is satisfied by a governed platform component, was audited once against <b>Web apps &amp; web services</b>, and is carried by every feature that consumes it. A feature audit only tests what the feature itself introduces.</p>
 
   <div class="inhbox" style="margin-top:var(--space-lg)">
@@ -882,11 +963,12 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 <!-- ============================== SELF-AUDIT ============================== -->
 <section class="sec" id="s03">
   <div class="srule"><span class="eb">03 · This page</span><span class="ln"></span><span class="sq"></span></div>
-  <h2 class="d-lg">It passes its <span class="mark">own audit.</span></h2>
+  <h2 class="d-lg">It passes the checks <span class="mark">it demonstrates.</span></h2>
   <p class="prose">Every control here is reachable and operable from the keyboard alone. Each slider is duplicated by paired −/+ buttons, so no part of this page depends on a dragging movement — the same criterion the artifact marks inherited. The verdict panel is a live region, so it is announced rather than merely shown. Contrast ratios are computed with the WCAG relative-luminance formula, not estimated.</p>
   <p class="mono-note">Claiming accessibility work without shipping an accessible artifact would be the tell.</p>
 </section>
 
+<!-- ==============================================================
      04 — mirrors the section of the same name on The Unhappy Path.
      Two instances make it a rule; one would have made it an excuse.
      The constraint is a recurring, deliberate feature of this site,
@@ -898,7 +980,7 @@ table.tb .isin{font-family:var(--font-mono);font-size:11.5px;opacity:.6;display:
 
   <p class="prose">Defect counts, closure rates, current platform scores and remediation costs are Avaloq's data. They are not mine to publish.</p>
 
-  <p class="prose">The evidence I can publish is the instrument itself, rebuilt and running. You can operate every control, break every criterion and judge whether the method holds. No quoted outcome could rescue a method that does not.</p>
+  <p class="prose">The evidence I can publish is the instrument itself, rebuilt and running. You can operate every control, break the feature-level criteria exposed on each surface and judge whether the method holds. No quoted outcome could rescue a method that does not.</p>
 
   <p class="mono-note">The same rule governs every case on this site: the artifact is the evidence, the client keeps the outcome.</p>
 
@@ -941,7 +1023,7 @@ var UI=[11,63,255], TX=[9,9,9];
    anything is not evidence of an instrument — it is a screenshot of a legend.
    Let it catch something first; then let them fix it. */
 var S={uiC:100,txC:100,colour:true,alt:false,space:false,rigid:true,
-       head:true,label:true,hint:true,errtxt:true,live:true,review:true};
+       head:true,label:true,hint:true,errtxt:true,suggest:true,live:true,review:true};
 var uiR=0, txR=0;
 
 /* ================= inherited block (constant, every surface) ================= */
@@ -953,17 +1035,18 @@ var INHERITED=[
 ];
 
 /* ================= surfaces ================= */
-function C(key,sc,nm,hp,def){return {key:key,sc:sc,nm:nm,hp:hp,def:def};}
+function C(key,sc,nm,hp,def,aff,mode){return {key:key,sc:sc,nm:nm,hp:hp,def:def,aff:aff,mode:mode||'spec'};}
 
 var SURF={
  tables:{
   title:'Savings plan overview',
+  demo:{key:'colour',broken:true,sc:'1.4.1'},
   controls:[
-   C('colour','1.4.1','Status by colour alone','Strip the word from each chip, leaving a coloured square. Red / green separation disappears for roughly 1 in 12 men.',true),
-   C('alt','1.1.1','Remove icon-button names','Delete the accessible names on the icon-only toolbar. Watch the screen-reader output.',false),
-   C('head','1.3.1','Keep column header association','Turn off and the header cells stop being headers. Cell values lose the column they belong to.',true),
-   C('space','1.4.12 &middot; <b>pair 1/2</b>','Apply the user&rsquo;s spacing stylesheet','Line height 1.5×, letter spacing 0.12em, word spacing 0.16em — the override a dyslexic reader is entitled to apply.',false),
-   C('rigid','1.4.12 &middot; <b>pair 2/2</b>','Fixed-height chips &amp; buttons','Harmless on its own. Switch on the override above and the two together clip the chips — the defect neither control causes alone, and the reason the sheet tests pairs.',true)
+   C('colour','1.4.1','Status by colour alone','Strip the word from each chip, leaving a coloured square. Red / green separation disappears for roughly 1 in 12 men.',true,'Specimen · status labels'),
+   C('alt','1.1.1','Remove icon-button names','Delete the accessible names on the icon-only toolbar. Watch the screen-reader output.',false,'Screen reader · toolbar buttons','sr'),
+   C('head','1.3.1','Keep column header association','Turn off and the header cells stop being headers. Cell values lose the column they belong to.',true,'Screen reader · table columns','sr'),
+   C('space','1.4.12 &middot; <b>pair 1/2</b>','Apply the user&rsquo;s spacing stylesheet','Line height 1.5×, letter spacing 0.12em, word spacing 0.16em — the override a dyslexic reader is entitled to apply.',false,'Specimen · all text'),
+   C('rigid','1.4.12 &middot; <b>pair 2/2</b>','Fixed-height chips &amp; buttons','Harmless alone. It changes the outcome only while the spacing override above is on.',true,'Specimen · chips & buttons, with spacing')
   ],
   criteria:[
    uic(), txc(),
@@ -984,12 +1067,13 @@ var SURF={
 
  forms:{
   title:'New savings plan',
+  demo:{key:'errtxt',broken:false,sc:'3.3.1'},
   controls:[
-   C('label','3.3.2','Keep visible field labels','Turn off and the labels move into the placeholder — which vanishes the moment anyone types.',true),
-   C('hint','3.3.2','Keep format instructions','The EUR limit and the date format. Constraints the user cannot guess.',true),
-   C('errtxt','3.3.1','Describe the error in text','Turn off and the field keeps only a red border. The error still exists; it just stops being knowable.',false),
-   C('space','1.4.12 &middot; <b>pair 1/2</b>','Apply the user&rsquo;s spacing stylesheet','Same override, different surface.',false),
-   C('rigid','1.4.12 &middot; <b>pair 2/2</b>','Fixed-height chips &amp; buttons','Rigid sizing in the shared component set.',true)
+   C('label','3.3.2','Keep visible field labels','Turn off and the labels move into the placeholder — which vanishes the moment anyone types.',true,'Specimen + screen reader · field labels','both'),
+   C('hint','3.3.2','Keep format instructions','The EUR limit and the date format. Constraints the user cannot guess.',true,'Specimen + screen reader · instructions','both'),
+   C('errtxt','3.3.1','Describe the error in text','Turn off and the field keeps only a red border. The error still exists; it just stops being knowable.',false,'Specimen + screen reader · error message','both'),
+   C('space','1.4.12 &middot; <b>pair 1/2</b>','Apply the user&rsquo;s spacing stylesheet','The user&rsquo;s spacing override applied to the complete form.',false,'Specimen · all text'),
+   C('rigid','1.4.12 &middot; <b>pair 2/2</b>','Fixed-height chips &amp; buttons','Harmless alone. It changes the outcome only while the spacing override above is on.',true,'Specimen · buttons, with spacing')
   ],
   criteria:[
    uic(), txc(),
@@ -1010,11 +1094,12 @@ var SURF={
 
  status:{
   title:'Status indicators',
+  demo:{key:'colour',broken:true,sc:'1.4.1'},
   controls:[
-   C('colour','1.4.1','Status by colour alone','The component-level version of the same defect. Fix it here and every table inherits the fix.',true),
-   C('live','4.1.3','Announce status messages','Turn off and the confirmation still appears on screen — but only on screen.',true),
-   C('space','1.4.12 &middot; <b>pair 1/2</b>','Apply the user&rsquo;s spacing stylesheet','Line height 1.5×, letter spacing 0.12em, word spacing 0.16em.',false),
-   C('rigid','1.4.12 &middot; <b>pair 2/2</b>','Fixed-height chips &amp; buttons','Rigid sizing in the shared component set.',true)
+   C('colour','1.4.1','Status by colour alone','The component-level version of the same defect. Fix it here and every table inherits the fix.',true,'Specimen · status labels'),
+   C('live','4.1.3','Announce status messages','Turn off and the confirmation still appears on screen — but only on screen.',true,'Screen reader · pause confirmation','sr'),
+   C('space','1.4.12 &middot; <b>pair 1/2</b>','Apply the user&rsquo;s spacing stylesheet','Line height 1.5×, letter spacing 0.12em, word spacing 0.16em.',false,'Specimen · all text'),
+   C('rigid','1.4.12 &middot; <b>pair 2/2</b>','Fixed-height chips &amp; buttons','Harmless alone. It changes the outcome only while the spacing override above is on.',true,'Specimen · chips & buttons, with spacing')
   ],
   criteria:[
    uic(), txc(),
@@ -1032,18 +1117,19 @@ var SURF={
 
  txn:{
   title:'Payment confirmation',
+  demo:{key:'review',broken:false,sc:'3.3.4'},
   controls:[
-   C('review','3.3.4','Keep the review step','Turn off and Confirm becomes final and immediate. For a financial transaction, that is a conformance failure, not a preference.',false),
-   C('errtxt','3.3.3','Suggest a correction','Turn off and the error states that something is wrong without saying what would be right.',true),
-   C('space','1.4.12 &middot; <b>pair 1/2</b>','Apply the user&rsquo;s spacing stylesheet','Same override, highest-stakes surface.',false),
-   C('rigid','1.4.12 &middot; <b>pair 2/2</b>','Fixed-height chips &amp; buttons','Rigid sizing in the shared component set.',true)
+   C('review','3.3.4','Keep the review step','Turn off and Confirm becomes final and immediate. For a financial transaction, that is a conformance failure, not a preference.',false,'Specimen · review step & back action'),
+   C('suggest','3.3.3','Suggest a correction','Turn off and the error remains identified, but no longer says how to correct it.',true,'Specimen + screen reader · correction text','both'),
+   C('space','1.4.12 &middot; <b>pair 1/2</b>','Apply the user&rsquo;s spacing stylesheet','The user&rsquo;s spacing override applied to the complete transaction.',false,'Specimen · all text'),
+   C('rigid','1.4.12 &middot; <b>pair 2/2</b>','Fixed-height chips &amp; buttons','Harmless alone. It changes the outcome only while the spacing override above is on.',true,'Specimen · buttons, with spacing')
   ],
   criteria:[
    uic(), txc(),
    {sc:'3.3.4',n:'Error prevention (financial)',t:function(){return S.review;},
-    p:'The transaction is reversible, checked, and confirmed — the user reviews and can amend before committing.',
+    p:'The user reviews, confirms, and can correct the payment before final submission.',
     f:'A payment commits on a single click, with no review and no way back. This is the criterion a bank cannot argue its way out of.'},
-   {sc:'3.3.3',n:'Error suggestion',t:function(){return S.errtxt;},
+   {sc:'3.3.3',n:'Error suggestion',t:function(){return S.suggest;},
     p:'The failure is named and a correction is suggested — length, position, what to check.',
     f:'The user is told the IBAN is invalid and nothing else. They will retype the same digits.'},
    {sc:'3.3.1',n:'Error identification',t:function(){return true;},
@@ -1102,8 +1188,9 @@ function renderControls(){
   s.controls.forEach(function(c){
     h+='<div class="ctl"><span class="sc">'+c.sc+'</span>'+
        '<div class="sr"><span class="tx"><span class="nm" id="l-'+c.key+'">'+c.nm+'</span>'+
+       '<span class="aff '+c.mode+'" id="a-'+c.key+'">Affects · '+c.aff+'</span>'+
        '<p class="hp">'+c.hp+'</p></span>'+
-       '<button class="tg" type="button" data-k="'+c.key+'" aria-labelledby="l-'+c.key+'" aria-pressed="'+(S[c.key]?'true':'false')+'"></button></div></div>';
+       '<button class="tg" type="button" data-k="'+c.key+'" aria-labelledby="l-'+c.key+'" aria-describedby="a-'+c.key+'" aria-pressed="'+(S[c.key]?'true':'false')+'"></button></div></div>';
   });
   ctrls.innerHTML=h;
   ctrls.scrollTop=0; markEnd(ctrls);
@@ -1112,6 +1199,7 @@ function renderControls(){
     b.addEventListener('click',function(){
       var k=b.dataset.k, next=b.getAttribute('aria-pressed')!=='true';
       b.setAttribute('aria-pressed',String(next)); S[k]=next; applyState(); render();
+      revealControlOutcome(k);
     });
   });
   ctrls.querySelectorAll('.stp').forEach(function(b){
@@ -1167,6 +1255,23 @@ function applyState(){
   });
   spec.querySelectorAll('[data-hint]').forEach(function(h){h.hidden=!S.hint;});
   spec.querySelectorAll('[data-err]').forEach(function(e){e.hidden=!S.errtxt;});
+  spec.querySelectorAll('[data-suggestion]').forEach(function(e){e.hidden=!S.suggest;});
+  /* Hidden referenced descriptions can still be exposed through the
+     accessibility tree. Keep the real relationship in step with the visual
+     Forms lever instead of teaching one outcome and announcing another. */
+  spec.querySelectorAll('[data-hint-ref],[data-error-ref]').forEach(function(inp){
+    var ids=[];
+    if(S.hint&&inp.dataset.hintRef) ids.push(inp.dataset.hintRef);
+    if(S.errtxt&&inp.dataset.errorRef) ids.push(inp.dataset.errorRef);
+    if(ids.length) inp.setAttribute('aria-describedby',ids.join(' '));
+    else inp.removeAttribute('aria-describedby');
+  });
+  spec.querySelectorAll('[data-suggestion-ref]').forEach(function(inp){
+    var id=inp.dataset.suggestionRef;
+    var ids=(inp.getAttribute('aria-describedby')||'').split(/\s+/).filter(Boolean).filter(function(x){return x!==id;});
+    if(S.suggest) ids.push(id);
+    inp.setAttribute('aria-describedby',ids.join(' '));
+  });
   spec.querySelectorAll('[data-review]').forEach(function(r){r.hidden=!S.review;});
   spec.querySelectorAll('[data-back]').forEach(function(r){r.hidden=!S.review;});
   var tw=document.getElementById('toastwrap');
@@ -1181,7 +1286,7 @@ function render(){
   s.criteria.forEach(function(c){
     var ok=c.t();
     if(!ok) fails++;
-    h+='<div class="ar'+(ok?'':' no')+'"><span class="st '+(ok?'st-ok':'st-no')+'">'+(ok?'Passed':'Failed')+'</span>'+
+    h+='<div class="ar'+(ok?'':' no')+'" data-sc="'+c.sc+'"><span class="st '+(ok?'st-ok':'st-no')+'">'+(ok?'Passed':'Failed')+'</span>'+
        '<span><span class="cn">'+c.n+'<i>'+c.sc+'</i></span><p class="cd">'+val(ok?c.p:c.f)+'</p></span></div>';
   });
   /* The platform block prints as a closed group. render() rebuilds the
@@ -1191,7 +1296,7 @@ function render(){
      '<summary class="inhhd"><span class="ct">'+INHERITED.length+'</span>'+
      '<span>Inherited from the platform pass</span><i class="ph ph-caret-right icon-action cv" aria-hidden="true"></i></summary>';
   INHERITED.forEach(function(c){
-    h+='<div class="ar inh"><span class="st st-in">Inherit</span>'+
+    h+='<div class="ar inh"><span class="st st-in">Inherited</span>'+
        '<span><span class="cn">'+c.n+'<i>'+c.sc+'</i></span><p class="cd">'+c.d+'</p></span></div>';
   });
   h+='</details>';
@@ -1200,10 +1305,23 @@ function render(){
   if(dt) dt.addEventListener('toggle',function(){inhOpen=dt.open;markEnd(rows);});
   markEnd(rows);
 
-  if(fails===0){ ovl.textContent='Passed'; ovl.className='ovl b-ok';
-                 mk.textContent='conformant'; mk.className='mk ok'; }
+  if(fails===0){ ovl.textContent='Selected checks pass'; ovl.className='ovl b-ok';
+                 mk.textContent='selected checks pass'; mk.className='mk ok'; }
   else { ovl.textContent=fails+(fails===1?' failure':' failures'); ovl.className='ovl b-no';
          mk.textContent=fails+(fails===1?' criterion broken':' criteria broken'); mk.className='mk'; }
+  syncFailFirst();
+}
+
+/* The live-band action is a two-state sentence, matching the before/after
+   instrument: forward to break, back to restore. Each surface names the one
+   criterion it demonstrates, so the copy and the actual verdict stay paired. */
+function syncFailFirst(){
+  if(!ff) return;
+  var d=SURF[current].demo, broken=d&&S[d.key]===d.broken;
+  var icon=ff.querySelector('.ph'), label=ff.querySelector('[data-label]');
+  if(icon) icon.className='ph '+(broken?'ph-arrow-left':'ph-arrow-right')+' icon-action';
+  if(label) label.textContent=broken?'Put it back':'Break one for me';
+  ff.dataset.state=broken?'broken':'passing';
 }
 
 /* ================= surface switching ================= */
@@ -1220,10 +1338,10 @@ document.querySelectorAll('.surf[data-spec]').forEach(function(b){
     /* reset every toggle, then apply this surface's defaults — a broken state
        must never leak across surfaces and quietly fail a criterion nobody touched */
     ['colour','alt','space'].forEach(function(k){ S[k]=false; });
-    ['rigid','head','label','hint','errtxt','live','review'].forEach(function(k){ S[k]=true; });
+    ['rigid','head','label','hint','errtxt','suggest','live','review'].forEach(function(k){ S[k]=true; });
     SURF[current].controls.forEach(function(c){ S[c.key]=c.def; });
     renderControls(); applyState(); render();
-    srOut.innerHTML='<span class="hint">Tab or hover into the specimen to hear what gets announced.</span>';
+    srOut.innerHTML='<span class="hint">Tab or hover into the specimen to inspect the simulated announcement.</span>';
   });
 });
 
@@ -1251,8 +1369,29 @@ function announce(el){
   }
   var out=nm+', '+role;
   if(el.value&&tag==='INPUT') out=nm+', edit text, '+el.value;
+  if(el.getAttribute('aria-invalid')==='true') out+=', invalid';
   if(desc) out+='. '+desc;
   srOut.textContent=out+'.';
+}
+/* Semantic controls deliberately leave the pixels alone. Their result must
+   therefore appear immediately in the simulator; requiring a second hover
+   made a working toggle indistinguishable from a dead one. */
+function revealControlOutcome(k){
+  var target=null;
+  if(current==='tables'&&k==='alt')
+    target=spec.querySelector('.ib[data-nm="Export savings plans"]');
+  else if(current==='tables'&&k==='head')
+    target=spec.querySelector('th[data-th="Amount"]');
+  else if(current==='forms'&&(k==='label'||k==='hint'||k==='errtxt'))
+    target=document.getElementById('i-amt');
+  else if(current==='txn'&&k==='suggest')
+    target=document.getElementById('i-iban');
+  else if(current==='status'&&k==='live'){
+    if(S.live) srOut.innerHTML='<span class="hint">Status channel armed. Press Pause plan to trigger its announcement.</span>';
+    else srOut.innerHTML='<span class="bad">Status channel disabled.</span> <span class="hint">Pause plan will still render visually, but announce nothing.</span>';
+    return;
+  }
+  if(target) announce(target);
 }
 spec.addEventListener('focusin',function(e){ announce(e.target.closest('button,input,select,a,th')); });
 spec.addEventListener('mouseover',function(e){ var t=e.target.closest('button,input,select,a,th'); if(t) announce(t); });
@@ -1268,21 +1407,15 @@ document.addEventListener('click',function(e){
 
 /* ================= the live band's primary control =================
    One click that proves the sheet is computing rather than displaying.
-   It trips the first toggle on the current surface, scrolls the audit
-   pane to the row that just turned, and announces the change — the same
-   path a visitor takes manually, run once for them so the "it's live"
-   claim is demonstrated before it is read. Idempotent: a second press
-   restores the passing state, so the control is a demo, not a trap. */
+   Each surface declares its demonstration criterion; this control repairs
+   or re-breaks that same criterion and never operates an unrelated toggle. */
 var ff=document.getElementById('failfirst');
 if(ff) ff.addEventListener('click',function(){
-  var tg=ctrls.querySelector('.tg');
-  if(!tg){ return; }
+  var d=SURF[current].demo;
+  var tg=d&&ctrls.querySelector('.tg[data-k="'+d.key+'"]');
+  if(!d||!tg){ return; }
   tg.click();
-  var on=tg.getAttribute('aria-pressed')==='true';
-  var icon=ff.querySelector('.ph'), label=ff.querySelector('[data-label]');
-  if(icon) icon.className=on?'ph ph-arrow-u-up-left icon-action':'ph ph-arrow-right icon-action';
-  if(label) label.textContent=on?'Put it back':'Fail one for me';
-  var hit=rows.querySelector('.is-no,.b-no,[data-st="no"]');
+  var hit=rows.querySelector('.ar[data-sc="'+d.sc+'"]');
   if(hit&&hit.scrollIntoView) hit.scrollIntoView({block:'nearest',behavior:'smooth'});
   tg.focus({preventScroll:true});
 });
