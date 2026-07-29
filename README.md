@@ -17,7 +17,7 @@ assets/eishiki-v3.css         the design system (paper/ink/blue, hairlines, zero
 assets/eishiki-v3.js          interaction for the case studies
 work/no-value.html            case study — null-value standard, private wealth
 work/tessa.html               case study — conversational career coach
-work/sarisari-snaps.html      case study — configurator, own product
+work/sarisari-snaps.html      case study — physical product, parametric system
 work/unhappy-path.html        case study — component & state library, activewear retail
 work/accessibility-lab.html   the playable WCAG 2.2 AA audit lab
 type-lock.html                the Instrument Serif floor test and full scale
