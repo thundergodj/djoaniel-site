@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<title>True Size &mdash; Configurator &amp; Storefront &middot; Djoaniel Hernandez</title>
+<!-- Google Analytics &middot; G-8897FSV2XF -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8897FSV2XF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8897FSV2XF');
+</script>
+
+<meta name="description" content="The SariSari Snaps configurator encodes the same parametric rule the frame is manufactured from, so the preview holds the object's geometry at any rendered size. Interaction design, interface system and front-end build.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Radio+Canada:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.2/src/regular/style.css">
+<link rel="stylesheet" href="../assets/eishiki-v3.css">
+<style>
+/* ==================================================================
+   TRUE SIZE — page-local instruments.
+   Class names are page-local by rule (harmonization §7); nothing here
+   is shared, and every instrument inherits the band's single inset
+   (--live-pad) rather than inventing its own.
+   ================================================================== */
+
+/* --- the SKU rail: repeated cells, so it fills the band honestly --- */
+.skurail{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:1px;
+  background:var(--line);border-top:var(--border-hair);border-bottom:var(--border-hair)}
+.skurail button{appearance:none;border:0;cursor:pointer;background:var(--paper);
+  display:grid;grid-template-rows:1fr auto;gap:6px;justify-items:start;align-content:space-between;
+  padding:12px 11px;text-align:left;
+  font-family:inherit;color:var(--text-body);transition:background .14s var(--ease)}
+.skurail button:hover{background:var(--white)}
+.skurail button[aria-pressed="true"]{background:var(--white);box-shadow:inset 0 2px 0 0 var(--state-operator)}
+.skurail .nm{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-primary);font-weight:500}
+.skurail .gr{font:var(--mono-data);color:var(--text-muted);font-variant-numeric:tabular-nums}
+
+/* --- the derivation table: label + value, tabular --- */
+.derive{display:grid;margin-top:var(--space-lg);border-top:var(--border-hair)}
+.derive .r{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-md);
+  align-items:baseline;padding:9px 0;border-bottom:var(--border-hair)}
+.derive .k{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-muted)}
+.derive .v{font:var(--mono-data);color:var(--text-primary);font-variant-numeric:tabular-nums;text-align:right}
+.derive .r.tot .k{color:var(--text-primary);font-weight:500}
+.derive .r.tot .v{font-weight:600}
+.derive .fx{grid-column:1/-1;font:var(--mono-caption);letter-spacing:var(--track-caption);
+  color:var(--text-muted);padding-top:2px}
+
+/* --- the true-size stage: ONE object, so it is capped and paired --- */
+.stage{display:grid;place-items:center;padding:var(--space-xl) 0;background:var(--surface-card-30);
+  border:var(--border-hair);max-width:var(--object-lg,760px);margin-inline:auto;width:100%}
+.frameobj{position:relative;background:var(--fc,#F6F4EF);border:var(--border-hair);
+  width:min(100%,var(--fw,320px));transition:background .3s var(--ease)}
+.frameobj .pockets{display:grid;gap:var(--pg,3%)}
+.frameobj .pockets i{display:block;aspect-ratio:1;background:rgba(9,9,9,.11);
+  border-radius:var(--pr,9%)}
+.frameobj .skirt{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;
+  justify-content:space-between;padding:0 var(--si,4%)}
+.frameobj .cap{flex:1 1 auto;min-width:0;font-family:var(--font-mono);color:var(--fi,#241A20);
+  opacity:.72;font-size:var(--cs,9px);letter-spacing:.02em;white-space:nowrap;
+  overflow:hidden;text-overflow:clip}
+.frameobj .stmp{width:var(--is,11px);height:var(--is,11px);flex:none;border-radius:50%;
+  background:var(--fi,#241A20);opacity:.72}
+
+/* --- the craft-step flow: repeated cells --- */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;
+  background:var(--line);border-top:var(--border-hair);border-bottom:var(--border-hair)}
+.flow button{appearance:none;border:0;cursor:pointer;background:var(--paper);font-family:inherit;
+  display:grid;gap:5px;justify-items:start;padding:12px 11px;text-align:left;
+  transition:background .14s var(--ease)}
+.flow button:hover{background:var(--white)}
+.flow button[aria-pressed="true"]{background:var(--white);box-shadow:inset 0 2px 0 0 var(--state-operator)}
+.flow .n{font:var(--mono-caption);letter-spacing:var(--track-caption);color:var(--text-muted);
+  font-variant-numeric:tabular-nums}
+.flow .t{font-size:14px;line-height:1.3;color:var(--text-primary);font-weight:500}
+.flowbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.72fr);
+  gap:var(--space-xl);padding:var(--space-lg) 0 0;align-items:start}
+.flowbody .sub{font-size:15px;line-height:1.55;color:var(--text-body);margin:0}
+.flowbody .gate{display:grid;gap:5px;margin:0;padding-top:var(--space-sm);
+  border-top:var(--border-hair);font:var(--mono-caption);
+  letter-spacing:var(--track-caption);color:var(--text-muted)}
+.flowbody .gate b{display:block;color:var(--text-primary);font-weight:600;text-transform:uppercase}
+.flowbody .gate .g{color:var(--text-primary)}
+
+/* --- the palette bench: repeated cells + a computed readout --- */
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:1px;
+  background:var(--line);border-top:var(--border-hair);border-bottom:var(--border-hair)}
+.swatches button{appearance:none;border:0;cursor:pointer;background:var(--paper);font-family:inherit;
+  display:grid;gap:0;padding:0;text-align:left;transition:background .14s var(--ease)}
+/* The indicator sits at the FOOT here, not the head: the colour chip is the
+   button's first child and paints over a top inset shadow, so the selected
+   state was invisible on the one instrument whose whole job is selection. */
+.swatches button[aria-pressed="true"]{background:var(--white);
+  box-shadow:inset 0 -3px 0 0 var(--state-operator)}
+.swatches .chip{height:62px;display:grid;place-items:center}
+.swatches .chip span{font-family:var(--font-mono);font-size:11.5px;font-weight:600;letter-spacing:.04em}
+.swatches .meta{display:grid;gap:2px;padding:10px 11px}
+.swatches .lb{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-primary);font-weight:500}
+.swatches .cd{font:var(--mono-data);color:var(--text-muted);font-variant-numeric:tabular-nums}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  margin-top:var(--space-lg);border-top:var(--border-hair)}
+.readout .c{padding:11px 0;border-bottom:var(--border-hair);display:grid;gap:3px}
+.readout .k{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-muted)}
+.readout .v{font:var(--mono-data);color:var(--text-primary);font-variant-numeric:tabular-nums;font-size:15px}
+.readout .v.pass{color:var(--data-ok)}
+
+/* --- the anomaly table --- */
+.anom{width:100%;border-collapse:collapse;margin-top:var(--space-lg);
+  font-variant-numeric:tabular-nums}
+.anom th,.anom td{text-align:left;padding:9px 12px 9px 0;border-bottom:var(--border-hair);
+  font:var(--mono-data);color:var(--text-body)}
+.anom th{font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;
+  color:var(--text-muted);font-weight:500;border-bottom:var(--border-solid)}
+.anom td.n{text-align:right;padding-right:0}
+.anom tr.flag td{color:var(--text-primary);font-weight:600}
+.anom tr.flag td:first-child::before{content:"→ ";color:var(--state-operator-ink)}
+
+/* --- the fail-soft ladder --- */
+.ladder{display:grid;margin-top:var(--space-lg);border-top:var(--border-hair)}
+.ladder .r{display:grid;grid-template-columns:180px minmax(0,1fr);gap:var(--space-md);
+  padding:12px 0;border-bottom:var(--border-hair)}
+.ladder .k{font:var(--mono-data);color:var(--text-primary)}
+.ladder .v{font-size:15px;line-height:1.55;color:var(--text-body)}
+.ladder .k small{display:block;font:var(--mono-caption);letter-spacing:var(--track-caption);
+  color:var(--text-muted);margin-top:2px}
+
+.closing{margin-top:var(--space-xl);padding-top:var(--space-lg);border-top:var(--border-solid);
+  font-family:var(--font-display);font-size:clamp(1.3rem,2.1vw,1.85rem);line-height:1.24;
+  max-width:34ch;color:var(--text-primary)}
+
+@media(max-width:900px){
+  .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .flowbody{grid-template-columns:minmax(0,1fr);gap:var(--space-md)}
+  .ladder .r{grid-template-columns:minmax(0,1fr)}
+  .derive .r{grid-template-columns:minmax(0,1fr) auto}
+}
+@media(max-width:560px){
+  .flow{grid-template-columns:minmax(0,1fr)}
+}
+</style>
+
+<!-- Link preview — what a recruiter sees when this URL is pasted -->
+<link rel="canonical" href="https://www.djoaniel.com/work/sarisari-studio">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Djoaniel Hernandez">
+<meta property="og:url" content="https://www.djoaniel.com/work/sarisari-studio">
+<meta property="og:title" content="True Size — the SariSari Snaps configurator">
+<meta property="og:description" content="The configurator encodes the same parametric rule the frame is manufactured from. Interaction design, interface system and front-end build.">
+<meta property="og:image" content="https://www.djoaniel.com/assets/sarisari/og-sarisari.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Hands arranging magnetic photographs across early SariSari Snaps prototypes">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="True Size — the SariSari Snaps configurator">
+<meta name="twitter:description" content="One parametric rule, two materials: the same geometry drives the printed frame and the browser preview.">
+<meta name="twitter:image" content="https://www.djoaniel.com/assets/sarisari/og-sarisari.jpg">
+<meta name="theme-color" content="#F7F6F2">
+<link rel="stylesheet" href="../assets/local-debug.css">
+<script defer src="../assets/local-debug.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="in">
+    <a class="logo" href="../index.html"><span class="wm">Djoaniel</span><span class="sq"></span></a>
+    <div class="crumb">
+      <button type="button" class="crumb-t" aria-expanded="false" aria-controls="crumb-l" aria-label="Sections">
+        <span class="n">01 / 06</span><span class="t">The thread was the storefront</span><i class="ph ph-caret-down icon-header cv" aria-hidden="true"></i>
+      </button>
+      <ul class="crumb-l" id="crumb-l" hidden>
+        <li><a href="#s01" data-t="The thread was the storefront"><span class="n">01</span><span>The thread was the storefront</span></a></li>
+        <li><a href="#s02" data-t="One rule, two materials"><span class="n">02</span><span>One rule, two materials</span></a></li>
+        <li><a href="#s03" data-t="Four steps, one object"><span class="n">03</span><span>Four steps, one object</span></a></li>
+        <li><a href="#s04" data-t="The palette is the product"><span class="n">04</span><span>The palette is the product</span></a></li>
+        <li><a href="#s05" data-t="The catalogue defends itself"><span class="n">05</span><span>The catalogue defends itself</span></a></li>
+        <li><a href="#s06" data-t="What I chose not to build"><span class="n">06</span><span>What I chose not to build</span></a></li>
+      </ul>
+    </div>
+    <nav aria-label="Primary">
+      <a href="../index.html" aria-current="page">Work</a>
+      <a href="../about.html">About</a>
+      <a href="../colophon.html">Colophon</a>
+    </nav>
+  </div>
+</header>
+
+<div class="cs-head" style="padding-top:var(--space-4xl)">
+  <a class="arrow plain" href="../index.html"><i class="ph ph-arrow-left icon-action g" aria-hidden="true"></i> All work</a>
+  <p style="font:var(--mono-label);letter-spacing:.05em;color:var(--text-muted);text-transform:uppercase;margin:var(--space-lg) 0 var(--space-md)">// Case study 05 &middot; Commerce &middot; Configurator &amp; build</p>
+  <h1 class="d-hero" style="view-transition-name:vt-studio">The frame is drawn by a rule.<br><span class="mark">So is the one on screen.</span></h1>
+  <p class="prose lead">The frame in <a href="sarisari-snaps.html">part one</a> is a parametric model, not a drawing. The storefront that sells it derives its geometry from that same rule &mdash; so the preview holds the manufactured frame's geometry and proportions at any rendered size, rather than approximating them. I designed the flow, the states and the interface system, and built the front end.</p>
+
+  <div class="facts" style="margin-top:var(--space-2xl)">
+    <div class="f"><div class="k">My role</div><div class="v">Design and build<small>Interaction design, states, interface system, front end</small></div></div>
+    <div class="f"><div class="k">Shape</div><div class="v">Four craft steps<small>Then the reveal, checkout, confirmation</small></div></div>
+    <div class="f"><div class="k">Source of truth</div><div class="v">The manufacturing model<small>One rule, shared with the printed object</small></div></div>
+    <div class="f"><div class="k">Catalogue</div><div class="v">Nine frames<small>One to twelve photographs</small></div></div>
+  </div>
+</div>
+
+<div class="cs-body" style="margin-top:var(--space-5xl)">
+<main id="main">
+
+  <section class="sec" id="s01">
+    <div class="srule"><span class="eb">01 &middot; The thread was the storefront</span><span class="ln"></span><span class="sq"></span></div>
+    <h2 class="d-lg">Messenger was the specification layer.</h2>
+    <p class="prose">Orders came in as Messenger threads. Which frame, how many photographs, what colour, what the text should say, whether the text was even possible at that width &mdash; all of it negotiated in messages, then transcribed by hand. The thread was doing the job of a product page, an order form and a spec sheet at once, and it was the only place the order existed.</p>
+    <p class="prose">A configurator is the obvious answer. The part that decides whether it works is less obvious: the customer is not buying a picture of a frame, they are buying a physical object with a fixed pocket size and a fixed skirt. If the screen and the object disagree about proportion, the thread comes back &mdash; as a complaint instead of an order.</p>
+
+    <div class="ladder">
+      <div class="r"><div class="k">Decoded by hand<small>before</small></div><div class="v">Frame, quantity, colour, text and stamp reconstructed from a conversation, one order at a time.</div></div>
+      <div class="r"><div class="k">Assembled by the customer<small>after</small></div><div class="v">The same decisions made against a live preview, arriving as a structured order record with its required fields validated. Payment and fulfilment stayed direct.</div></div>
+    </div>
+  </section>
+
+  <section class="sec" id="s02">
+    <div class="srule"><span class="eb">02 &middot; One rule, two materials</span><span class="ln"></span><span class="sq"></span></div>
+    <h2 class="d-lg">One rule, encoded in both systems.</h2>
+    <p class="prose">The printed frame is generated from one parametric model: a fixed square pocket, one gap that repeats between pockets, a consistent edge on three sides, and a deeper skirt along the bottom. Those proportions are the product. The configurator does not approximate them in CSS percentages &mdash; it encodes the same constants the manufacturing model does and derives every frame in the catalogue from them.</p>
+    <p class="prose">The honest limit of that claim: the constants are carried across by hand, not generated from the model at build time. Two systems agreeing because someone transcribed them is a rule with a drift risk, and the fix &mdash; one generated source consumed by both &mdash; is the version I would build next.</p>
+    <p class="prose">There is a concrete reason it cannot be percentages. In CSS, a percentage padding resolves against the box's own <i>width</i>, and a percentage grid row-gap resolves against an indefinite height as zero. Both are correct behaviour and both break the moment a frame is not square &mdash; which is seven of the nine. So the preview measures its own rendered width, calibrates one scale factor against the derived outer width, and converts every constant through it.</p>
+
+    <div class="live">
+      <div class="live-hd">
+        <span class="live-mk">Live</span>
+        <span class="live-im">Pick a frame. The shape is derived from the rule, not drawn &mdash; every figure below falls out of it.</span>
+        <span class="ln"></span>
+        <span class="live-note">Derived, not asserted</span>
+      </div>
+
+      <div class="skurail" id="skuRail" role="group" aria-label="Frame catalogue"></div>
+
+      <div class="pair pair-wide" style="margin-top:var(--space-lg)">
+        <div class="stage">
+          <div class="frameobj" id="frameObj" role="img" aria-label="Derived frame proportion">
+            <div class="pockets" id="pockets"></div>
+            <div class="skirt"><span class="cap" id="capTxt">your text here</span><span class="stmp"></span></div>
+          </div>
+        </div>
+        <div class="aside">
+          <p style="font:var(--mono-label);letter-spacing:var(--track-label);text-transform:uppercase;color:var(--text-muted);margin:0 0 var(--space-sm)">The derivation</p>
+          <div class="derive" id="derive"></div>
+          <p class="mono-note" style="margin-top:var(--space-md)">Expressed in pocket units: the pocket is 1, everything else a rounded ratio of it &mdash; no more than the product photographs already show. The model's actual dimensions and tolerances stay unpublished. The rule is the portfolio piece; the tooling is the business.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="mono-note">Caption length is not a style choice either: ten characters per column, recomputed whenever the frame or its orientation changes. A wider frame earns more words.</p>
+  </section>
+
+  <section class="sec" id="s03">
+    <div class="srule"><span class="eb">03 &middot; Four steps, one object</span><span class="ln"></span><span class="sq"></span></div>
+    <h2 class="d-lg">Each step changes the object in front of you, or it does not exist.</h2>
+    <p class="prose">Four steps do the making &mdash; frame, photographs, colour, personalisation &mdash; and the test for every one of them was the same: does this step visibly change the thing being bought? A step that only collects a value belongs after the craft, not inside it. That is why colour is its own step and quantity is not. The reveal follows the fourth step and the product counts it as the fifth, which is why the progress label reads &ldquo;of 5&rdquo;.</p>
+
+    <div class="live">
+      <div class="live-hd">
+        <span class="live-mk">Live</span>
+        <span class="live-im">Step through the flow. The gate under each step is the condition that lets you leave it.</span>
+        <span class="ln"></span>
+        <span class="live-note">Four craft steps, then the reveal</span>
+      </div>
+
+      <div class="flow" id="flow" role="group" aria-label="Configurator steps"></div>
+      <div class="flowbody" id="flowBody"></div>
+    </div>
+
+    <p class="prose">Photographs are the only hard gate among the four craft steps. You cannot leave that step until every pocket is filled, and the continue button counts what is outstanding rather than going grey and explaining nothing. Everything else in the craft is optional by design &mdash; text, stamp and layout are all free, and skipping them is a valid keepsake, not an incomplete one. Submission is gated separately, at checkout, on valid contact details.</p>
+
+    <div class="ladder">
+      <div class="r"><div class="k">Reveal<small>after the fourth step</small></div><div class="v">The build view fades out before the finished keepsake arrives, so the payoff reads as a continuation rather than a page change.</div></div>
+      <div class="r"><div class="k">Checkout<small>after the reveal</small></div><div class="v">Leaves the textured world entirely. The craft steps are warm; the part where money is discussed is plain.</div></div>
+    </div>
+  </section>
+
+  <section class="sec" id="s04">
+    <div class="srule"><span class="eb">04 &middot; The palette is the product</span><span class="ln"></span><span class="sq"></span></div>
+    <h2 class="d-lg">Five colours, because five survived the photographs.</h2>
+    <p class="prose">The interface does not have its own frame palette. The five colours a customer picks from are the five matte colours that survived elimination against real photographs in <a href="sarisari-snaps.html">part one</a>. Garcia chose that production palette; what I did here was encode those five into the configurator and design the ink behaviour around them, so a swatch on screen and a printed frame are one decision rather than two.</p>
+    <p class="prose">Which creates a problem the interface has to solve: text and stamps sit <i>on</i> the frame, and the frame is a colour the customer chose. So the ink is not a token. It is computed: relative luminance by the WCAG formula, then a threshold selects the dark or the light ink. That is a threshold, not a search &mdash; it does not compare both candidates and take the better one. For the five production colours the two approaches agree and every result clears AA once the rendered opacity is composited in, which is the check worth stating rather than the mechanism worth overselling. The placeholder hint scales its own opacity by the same measurement, because a faint dark hint on a pale frame is the case that fails.</p>
+
+    <div class="live">
+      <div class="live-hd">
+        <span class="live-mk">Live</span>
+        <span class="live-im">Pick a frame colour. The ratio reported is the composited one &mdash; the pair actually painted, not the opaque pair.</span>
+        <span class="ln"></span>
+        <span class="live-note">Computed with the WCAG formula</span>
+      </div>
+
+      <div class="swatches" id="swatches" role="group" aria-label="Frame colours"></div>
+      <div class="readout" id="colorRead"></div>
+    </div>
+
+    <p class="mono-note">Contrast is computed in this page from the same relative-luminance formula the product uses, then composited at the opacity the caption and stamp actually render at. The lowest of the five is Blush at 4.80:1. The ink decision is the product's; the arithmetic is reproducible here.</p>
+  </section>
+
+  <section class="sec" id="s05">
+    <div class="srule"><span class="eb">05 &middot; The catalogue defends itself</span><span class="ln"></span><span class="sq"></span></div>
+    <h2 class="d-lg">Two frames hold four photographs. They are not the same price.</h2>
+    <p class="prose">Wide Shot and Classic both take four photographs. Wide Shot costs more. Read as a spreadsheet that is an error, and it is exactly the kind of thing a later contributor tidies up on a quiet afternoon &mdash; because four equals four.</p>
+    <p class="prose">It is not an error. A four-across frame is a longer object with a longer skirt and a different footprint; it prints and ships differently from a compact square. The catalogue is the single source of truth for pricing, so the exception is recorded in it as an instruction not to normalise it. A rule that only exists in someone's memory is a rule with an expiry date.</p>
+
+    <table class="anom">
+      <thead><tr><th>Frame</th><th>Grid</th><th>Photographs</th><th class="n">Price</th></tr></thead>
+      <tbody>
+        <tr><td>Solo</td><td>1 &times; 1</td><td>1</td><td class="n">&#8369;388</td></tr>
+        <tr><td>Double Take</td><td>2 &times; 1</td><td>2</td><td class="n">&#8369;588</td></tr>
+        <tr><td>Triple Treat</td><td>3 &times; 1</td><td>3</td><td class="n">&#8369;788</td></tr>
+        <tr class="flag"><td>Classic</td><td>2 &times; 2</td><td>4</td><td class="n">&#8369;888</td></tr>
+        <tr class="flag"><td>Wide Shot</td><td>4 &times; 1</td><td>4</td><td class="n">&#8369;988</td></tr>
+        <tr><td>Six Pack</td><td>3 &times; 2</td><td>6</td><td class="n">&#8369;1,288</td></tr>
+        <tr><td>Eight Tiles</td><td>4 &times; 2</td><td>8</td><td class="n">&#8369;1,688</td></tr>
+        <tr><td>Gridstagram</td><td>3 &times; 3</td><td>9</td><td class="n">&#8369;1,788</td></tr>
+        <tr><td>Darling Dozen</td><td>4 &times; 3</td><td>12</td><td class="n">&#8369;2,488</td></tr>
+      </tbody>
+    </table>
+    <p class="mono-note">Nine frames, one to twelve photographs. Prices are the published storefront ones. Personalisation is itemised at zero rather than hidden, so a price can be attached later without restructuring the order.</p>
+  </section>
+
+  <section class="sec" id="s06">
+    <div class="srule"><span class="eb">06 &middot; What I chose not to build</span><span class="ln"></span><span class="sq"></span></div>
+    <h2 class="d-lg">A first version earns its scope by naming what it left out.</h2>
+    <p class="prose">There is no payment processor. Payment is arranged directly, and the order is recorded rather than transacted. For a studio filling orders by hand, payment integration would have added implementation and support cost before order volume justified it &mdash; and it would have replaced a working manual step with a fragile automatic one.</p>
+    <p class="prose">The same reasoning shaped the handoff from the marketing site. A visitor can assemble a keepsake on the landing page and carry it into the configurator through a single encoded value in the URL. It restores the frame, the colour, the text, the stamp and the orientation &mdash; and every field is validated on its own, so an unknown value is skipped rather than fatal. Malformed fields fall back independently, leaving the configurator in a usable default state rather than a broken one.</p>
+
+    <div class="ladder">
+      <div class="r"><div class="k">Fails soft<small>the handoff</small></div><div class="v">Each field applies independently; anything malformed is ignored and the rest still restores.</div></div>
+      <div class="r"><div class="k">Not shipped<small>the debug panel</small></div><div class="v">Removed by the bundler at build time rather than hidden behind a flag &mdash; it is absent from the customer bundle, not merely invisible in it.</div></div>
+      <div class="r"><div class="k">Deliberately manual<small>fulfilment</small></div><div class="v">Orders are recorded for a person to pick up. Automating a step nobody was struggling with was not the win.</div></div>
+    </div>
+
+    <p class="prose">What I would change: the arrangement sandbox at the photograph step lets a customer reorder freely, but that arrangement is not what gets manufactured &mdash; photographs are matched to pockets by slot. It reads as a promise the order does not keep, and it is the highest-priority fix on my own list. The cheap correction is to state the constraint at the point of interaction &mdash; label the step as choosing which photographs go in, not which pocket each one lands in. The complete one is to carry arrangement through into the order record. I would ship the label first, because it stops the interface implying something the order cannot honour.</p>
+
+    <p class="closing">Part one is the object. This is the part that had to agree with it.</p>
+
+    <div class="actions" style="margin-top:var(--space-xl)">
+      <div class="btn">
+        <span class="slab" aria-hidden="true"></span>
+        <a href="https://www.sarisarisnaps.com/" target="_blank" rel="noopener noreferrer">Open the live configurator <i class="ph ph-arrow-square-out icon-action" aria-hidden="true"></i></a>
+      </div>
+      <a class="arrow plain" href="sarisari-snaps.html"><i class="ph ph-arrow-left icon-action" aria-hidden="true"></i> Read part one &mdash; the object</a>
+      <a class="arrow plain" href="mailto:djoaniel@gmail.com?subject=Your%20portfolio%20%E2%80%94%20True%20Size">Talk to me about design and build<span class="sr-only"> (opens your email app)</span> <i class="ph ph-envelope-simple" aria-hidden="true"></i></a>
+    </div>
+  </section>
+
+  <nav class="prevnext" aria-label="Case study pagination">
+    <a class="pn plain" href="sarisari-snaps.html"><div class="k"><i class="ph ph-arrow-left icon-action" aria-hidden="true"></i> Previous case</div><div class="t">SariSari Snaps</div></a>
+    <a class="pn next plain" href="unhappy-path.html"><div class="k">Next case <i class="ph ph-arrow-right icon-action" aria-hidden="true"></i></div><div class="t">The Unhappy Path</div></a>
+  </nav>
+
+</main>
+</div>
+
+<footer class="foot">
+  <div class="in">
+    <div class="z">Created by Djoaniel Hernandez &middot; NN/g #1046866 &middot; <a href="mailto:djoaniel@gmail.com"><i class="ph ph-envelope-simple inl" aria-hidden="true"></i> djoaniel@gmail.com<span class="sr-only"> (opens your email app)</span></a></div>
+    <div class="mk">意識</div>
+  </div>
+</footer>
+
+<script src="../assets/eishiki-v3.js"></script>
+<script>
+/* ====================================================================
+   TRUE SIZE — the instruments.
+   Every constant below is the product's own. The page derives; it does
+   not restate. If a number appears on screen it was computed here from
+   the rule's own ratios or the colour hexes, never typed twice.
+   ==================================================================== */
+(function(){
+  'use strict';
+
+  /* --- the rule, in POCKET UNITS --------------------------------------
+     The pocket is 1. Every other term is a ratio of it, rounded — which is
+     all the argument needs, because the derivation and the CSS-percentage
+     problem are identical at any scale. These ratios say no more than the
+     product's own photographs already do. The manufacturing model's actual
+     dimensions, depths and tolerances are deliberately not published. */
+  var RULE = { cell:1, gap:0.06, left:0.06, right:0.06, top:0.06, bottom:0.31, pocketR:0.1 };
+  var u = function(n){ return Math.round(n * 100) / 100; };
+
+  var SKUS = [
+    { id:'SOLO',   name:'Solo',          cols:1, rows:1, price:388  },
+    { id:'DOUBLE', name:'Double Take',   cols:2, rows:1, price:588  },
+    { id:'TRIPLE', name:'Triple Treat',  cols:3, rows:1, price:788  },
+    { id:'WIDE',   name:'Wide Shot',     cols:4, rows:1, price:988  },
+    { id:'CLASSIC',name:'Classic',       cols:2, rows:2, price:888  },
+    { id:'SIX',    name:'Six Pack',      cols:3, rows:2, price:1288 },
+    { id:'EIGHT',  name:'Eight Tiles',   cols:4, rows:2, price:1688 },
+    { id:'GRID',   name:'Gridstagram',   cols:3, rows:3, price:1788 },
+    { id:'DOZEN',  name:'Darling Dozen', cols:4, rows:3, price:2488 }
+  ];
+
+  /* deriveBlueprint — the product's own derivation, restated once. */
+  function derive(cols, rows){
+    var paw = cols * RULE.cell + (cols - 1) * RULE.gap;
+    var pah = rows * RULE.cell + (rows - 1) * RULE.gap;
+    return {
+      cols: cols, rows: rows, paw: u(paw), pah: u(pah),
+      outerW: u(RULE.left + paw + RULE.right),
+      outerH: u(RULE.bottom + pah + RULE.top)
+    };
+  }
+  var maxCaptionChars = function(cols){ return 10 * cols; };
+
+  /* --- the palette, with the product's chip codes --- */
+  var COLORS = [
+    { id:'white',  label:'White',      hex:'#F6F4EF', desc:'Cleanest gift'   },
+    { id:'black',  label:'Black',      hex:'#2C2A27', desc:'Gallery feel'    },
+    { id:'sage',   label:'Sage',       hex:'#BEC9A5', desc:'Soft home decor' },
+    { id:'blush',  label:'Blush',      hex:'#E8AFCF', desc:'Sweet & romantic'},
+    { id:'blue',   label:'Dusty Blue', hex:'#A3D8E1', desc:'Calm & fresh'    }
+  ];
+  var INK_DARK = '#241A20', INK_LIGHT = '#F8EFE5', INK_THRESHOLD = 0.42;
+  /* The caption and stamp render at this opacity, so the ratio a reader
+     actually sees is the COMPOSITED one. Reporting the opaque pair would
+     be measuring a colour this page never paints. */
+  var INK_ALPHA = 0.72;
+
+  /* WCAG relative luminance — the same formula the accessibility lab uses. */
+  function luminance(hex){
+    var c = hex.replace('#','');
+    function lin(v){
+      var s = parseInt(v,16) / 255;
+      return s <= 0.03928 ? s/12.92 : Math.pow((s+0.055)/1.055, 2.4);
+    }
+    return 0.2126*lin(c.slice(0,2)) + 0.7152*lin(c.slice(2,4)) + 0.0722*lin(c.slice(4,6));
+  }
+  function contrast(a, b){
+    var la = luminance(a), lb = luminance(b);
+    var hi = Math.max(la,lb), lo = Math.min(la,lb);
+    return (hi + 0.05) / (lo + 0.05);
+  }
+  function readableInk(hex){ return luminance(hex) > INK_THRESHOLD ? INK_DARK : INK_LIGHT; }
+  /* Browsers composite opacity in sRGB space, so this mirrors the paint. */
+  function composite(fg, bg, a){
+    var f = fg.replace('#',''), b = bg.replace('#',''), out = '#';
+    for (var i = 0; i < 3; i++){
+      var v = Math.round(a * parseInt(f.substr(i*2,2),16) + (1-a) * parseInt(b.substr(i*2,2),16));
+      out += ('0' + v.toString(16)).slice(-2);
+    }
+    return out;
+  }
+
+  var state = { sku:'CLASSIC', color:'white', step:1 };
+
+  /* ================= 02 · the blueprint converter ================= */
+  var rail = document.getElementById('skuRail');
+  var frameObj = document.getElementById('frameObj');
+  var pockets = document.getElementById('pockets');
+  var deriveEl = document.getElementById('derive');
+  var capTxt = document.getElementById('capTxt');
+
+  if (rail) {
+    SKUS.forEach(function(s){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(s.id === state.sku));
+      b.dataset.sku = s.id;
+      b.innerHTML = '<span class="nm">' + s.name + '</span>' +
+                    '<span class="gr">' + s.cols + '×' + s.rows + ' · ' +
+                    (s.cols * s.rows) + '</span>';
+      b.addEventListener('click', function(){ state.sku = s.id; paintFrame(); });
+      rail.appendChild(b);
+    });
+  }
+
+  function paintFrame(){
+    var s = SKUS.filter(function(x){ return x.id === state.sku; })[0];
+    if (!s || !frameObj) return;
+    var bp = derive(s.cols, s.rows);
+    var col = COLORS.filter(function(c){ return c.id === state.color; })[0];
+
+    Array.prototype.forEach.call(rail.children, function(b){
+      b.setAttribute('aria-pressed', String(b.dataset.sku === state.sku));
+    });
+
+    /* Everything below is a RATIO of the derived outer width, so the
+       rendered object keeps the manufactured proportion at any size. */
+    var pct = function(mm){ return (mm / bp.outerW * 100) + '%'; };
+    var TARGET_H = 360, MAX_W = 500;   /* the stage can narrow to ~568 when the aside takes its floor */
+    var fw = Math.min(MAX_W, TARGET_H * (bp.outerW / bp.outerH));
+    frameObj.style.setProperty('--fw', Math.round(fw) + 'px');
+    frameObj.style.aspectRatio = bp.outerW + ' / ' + bp.outerH;
+    frameObj.style.setProperty('--fc', col.hex);
+    frameObj.style.setProperty('--fi', readableInk(col.hex));
+    frameObj.style.setProperty('--pr', (RULE.pocketR / RULE.cell * 100) + '%');
+    /* The skirt insets by the frame's own edge, expressed in pocket units.
+       This read `RULE.left + 1` when the constants were millimetres — the +1
+       became a whole pocket the moment the unit changed, and 156px of padding
+       ate the caption. Unit refactors do not respect additive fudge terms. */
+    frameObj.style.setProperty('--si', pct(RULE.left * 1.6));
+    frameObj.style.setProperty('--cs', Math.max(7, Math.min(13, fw * 0.045)) + 'px');
+    frameObj.style.setProperty('--is', Math.max(8, Math.min(16, fw * 0.055)) + 'px');
+
+    pockets.style.gridTemplateColumns = 'repeat(' + bp.cols + ',1fr)';
+    pockets.style.gap = pct(RULE.gap);
+    pockets.style.padding = pct(RULE.top) + ' ' + pct(RULE.right) + ' ' +
+                            pct(RULE.bottom) + ' ' + pct(RULE.left);
+    pockets.innerHTML = new Array(bp.cols * bp.rows + 1).join('<i></i>');
+    frameObj.setAttribute('aria-label',
+      s.name + ' — ' + bp.cols + ' by ' + bp.rows + ', ' +
+      bp.outerW + ' by ' + bp.outerH + ' pocket units');
+
+    var chars = maxCaptionChars(bp.cols);
+    capTxt.textContent = 'your text here'.slice(0, chars);
+
+    deriveEl.innerHTML =
+      row('Pocket', '1 × 1 unit') +
+      row('Grid', bp.cols + ' × ' + bp.rows) +
+      row('Pocket area', bp.paw + ' × ' + bp.pah,
+          bp.cols + ' pockets + ' + (bp.cols-1) + ' gaps  ·  ' +
+          bp.rows + ' pockets + ' + (bp.rows-1) + ' gaps') +
+      row('Edge', RULE.top + ' top and sides') +
+      row('Skirt', RULE.bottom + ' bottom') +
+      row('Caption limit', chars + ' characters', '10 per column × ' + bp.cols + ' columns') +
+      rowTotal('Outer footprint', bp.outerW + ' × ' + bp.outerH + ' units');
+  }
+  function row(k, v, fx){
+    return '<div class="r"><span class="k">' + k + '</span><span class="v">' + v + '</span>' +
+           (fx ? '<span class="fx">' + fx + '</span>' : '') + '</div>';
+  }
+  function rowTotal(k, v){
+    return '<div class="r tot"><span class="k">' + k + '</span><span class="v">' + v + '</span></div>';
+  }
+
+  /* ================= 03 · the craft steps, then the reveal ================= */
+  var STEPS = [
+    { n:1, label:'Step 1 of 5', t:'Choose your frame',
+      sub:'Tap a frame and the keepsake takes its shape in the preview. Nine frames, one to twelve photographs.',
+      gate:'Always open', gateNote:'A frame is pre-selected, so the flow never starts on an empty screen.' },
+    { n:2, label:'Step 2 of 5', t:'Add your photos',
+      sub:'Upload, crop, and the photographs drop into the pockets. The number required is the frame you just chose.',
+      gate:'Every pocket filled', gateNote:'The continue button counts what is outstanding instead of going grey.' },
+    { n:3, label:'Step 3 of 5', t:'Pick your colour',
+      sub:'Five matte finishes, chosen to sit against photographs rather than compete with them.',
+      gate:'Always open', gateNote:'Colour has no price impact and a default is already applied.' },
+    { n:4, label:'Step 4 of 5', t:'Personalize',
+      sub:'Text and a symbol, both optional, both free. The character limit follows the width of the frame.',
+      gate:'Always open', gateNote:'Skipping it is a valid keepsake, not an incomplete one.' },
+    { n:5, label:'The reveal', t:'See your keepsake',
+      sub:'The build view fades and the finished keepsake arrives. Checkout follows it — quantity, delivery and how payment is arranged — on plain ground, outside the textured world of the craft steps.',
+      gate:'None here', gateNote:'Submission is gated at checkout instead, on valid contact details.' }
+  ];
+  var flow = document.getElementById('flow');
+  var flowBody = document.getElementById('flowBody');
+  if (flow) {
+    STEPS.forEach(function(s){
+      var b = document.createElement('button');
+      /* A group of toggle buttons, NOT a tablist: aria-pressed is the
+         toggle state, and pairing it with role="tab" would promise a
+         tab/tabpanel relationship (aria-selected, arrow-key roving focus,
+         aria-controls) that this instrument does not implement. */
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(s.n === state.step));
+      b.dataset.step = String(s.n);
+      b.innerHTML = '<span class="n">' + s.label + '</span><span class="t">' + s.t + '</span>';
+      b.addEventListener('click', function(){ state.step = s.n; paintFlow(); });
+      flow.appendChild(b);
+    });
+  }
+  function paintFlow(){
+    if (!flow) return;
+    Array.prototype.forEach.call(flow.children, function(b){
+      b.setAttribute('aria-pressed', String(Number(b.dataset.step) === state.step));
+    });
+    var s = STEPS[state.step - 1];
+    flowBody.innerHTML =
+      '<p class="sub">' + s.sub + '</p>' +
+      '<div class="gate"><b>Gate</b><span class="g">' + s.gate + '</span><span>' + s.gateNote + '</span></div>';
+  }
+
+  /* ================= 04 · the palette bench ================= */
+  var sw = document.getElementById('swatches');
+  var colorRead = document.getElementById('colorRead');
+  if (sw) {
+    COLORS.forEach(function(c){
+      var ink = readableInk(c.hex);
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-pressed', String(c.id === state.color));
+      b.dataset.color = c.id;
+      b.innerHTML =
+        '<span class="chip" style="background:' + c.hex + ';color:' + ink + '"><span>Aa</span></span>' +
+        '<span class="meta"><span class="lb">' + c.label + '</span>' +
+        '<span class="cd">' + c.desc + '</span></span>';
+      b.addEventListener('click', function(){ state.color = c.id; paintColor(); paintFrame(); });
+      sw.appendChild(b);
+    });
+  }
+  function paintColor(){
+    if (!sw) return;
+    Array.prototype.forEach.call(sw.children, function(b){
+      b.setAttribute('aria-pressed', String(b.dataset.color === state.color));
+    });
+    var c = COLORS.filter(function(x){ return x.id === state.color; })[0];
+    var L = luminance(c.hex);
+    var ink = readableInk(c.hex);
+    var painted = composite(ink, c.hex, INK_ALPHA);
+    var ratio = contrast(painted, c.hex);
+    var pass = ratio >= 4.5;
+    colorRead.innerHTML =
+      cell('Frame', c.hex.toUpperCase()) +
+      cell('Relative luminance', L.toFixed(4)) +
+      cell('Ink chosen', (L > INK_THRESHOLD ? 'dark' : 'light') + ' · ' + ink) +
+      cell('Painted at ' + Math.round(INK_ALPHA*100) + '%', painted.toUpperCase()) +
+      cell('Contrast as painted', ratio.toFixed(2) + ':1', pass);
+  }
+  function cell(k, v, pass){
+    return '<div class="c"><span class="k">' + k + '</span>' +
+           '<span class="v' + (pass ? ' pass' : '') + '">' + v + '</span></div>';
+  }
+
+  paintFrame(); paintFlow(); paintColor();
+})();
+</script>
+</body>
+</html>

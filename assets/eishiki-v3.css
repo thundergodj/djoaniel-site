@@ -552,7 +552,13 @@ section[id],main[id],.live[id],.sec[id]{
    Wide instruments (the audit lab, the listing page, the homepage) do
    not use this. They already fill the width honestly.
    ------------------------------------------------------------------ */
-.pair{display:grid;grid-template-columns:minmax(0,var(--object)) minmax(0,1fr);
+/* The aside carries a 280px FLOOR, and the object is the thing that yields.
+   With minmax(0,1fr) the remainder went to the aside and between ~1080 and
+   ~1320 that remainder was 236-305px — two or three words a line, which is a
+   worse outcome than the empty space the pair exists to remove. The object
+   giving back 50px costs nothing; the reading column falling under measure
+   costs the whole pairing. Below 1080 it stacks instead. */
+.pair{display:grid;grid-template-columns:minmax(0,var(--object)) minmax(280px,1fr);
   gap:var(--space-3xl);align-items:start}
 /* .pair-wide — the same pairing, one size up, for a PAGE-sized object.
    The homepage template is the only instrument that needs it: it was
@@ -562,7 +568,7 @@ section[id],main[id],.live[id],.sec[id]{
    widths — an OBJECT wearing a BAND's frame. This is the column that
    holds it; the aside takes the ~490 that was doing nothing, which is
    still more than the 52ch its prose will use. */
-.pair-wide{grid-template-columns:minmax(0,var(--object-lg)) minmax(0,1fr)}
+.pair-wide{grid-template-columns:minmax(0,var(--object-lg)) minmax(280px,1fr)}
 /* THREE TIERS, because a fixed 760 column does not yield.
    760 is a floor, not a preference: the aside gets whatever is left, and
    at a 1100px window that was 144px — a column of prose one word wide,
@@ -573,7 +579,9 @@ section[id],main[id],.live[id],.sec[id]{
    Below that it is just a pair; below 980 it stacks with everything else.
    MUST stay above the 980 block — same specificity, later wins. */
 @media(max-width:1320px){
-  .pair-wide{grid-template-columns:minmax(0,var(--object)) minmax(0,1fr)}
+  /* the aside keeps its floor in the fallback tier too — this is the band
+     where it was thinnest, so inheriting minmax(0,1fr) here undid the fix */
+  .pair-wide{grid-template-columns:minmax(0,var(--object)) minmax(280px,1fr)}
 }
 /* CLASS 03 · OBJECT. Anything depicting a single artifact is capped here
    whether or not it has been paired yet, so a new instrument cannot
@@ -619,7 +627,13 @@ section[id],main[id],.live[id],.sec[id]{
 .aside .note{margin-top:var(--space-lg);font:var(--mono-caption);letter-spacing:var(--track-caption);
   color:var(--text-muted);line-height:1.5}
 
-@media(max-width:980px){
+/* 1080, not 980. The base .pair holds a 620px object plus whatever remains,
+   so between ~980 and ~1100 the aside computed to 209-260px — a column of
+   prose a few words wide, which is worse than the void it was introduced to
+   fill. Collapsing earlier costs one breakpoint and removes the whole band of
+   widths where the pair was two columns in theory and one in practice.
+   Affects tessa (x2), sarisari-snaps and sarisari-studio. */
+@media(max-width:1080px){
   .pair{grid-template-columns:1fr;gap:var(--space-lg)}
   .live > .pair{padding:var(--space-md) 0}
   .aside{border-left:0;border-top:0.667px solid var(--border-default);
