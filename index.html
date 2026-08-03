@@ -130,7 +130,10 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap
   animation:stroke .6s var(--ease) .3s forwards;
 }
 @keyframes stroke{to{background-size:100% 100%}}
-nav{display:flex;gap:18px;align-items:center;padding-bottom:4px}
+/* wrap: the nav carries four items since Résumé joined it, and below 760px
+   it drops under the wordmark into a single column. Without this the email
+   address runs off the right edge on a 375px phone. */
+nav{display:flex;flex-wrap:wrap;gap:18px;align-items:center;padding-bottom:4px}
 nav a{
   font-family:var(--font-mono);font-size:12.5px;letter-spacing:0.04em;text-transform:uppercase;
   color:var(--text-muted);text-decoration:none;transition:color .16s var(--ease);
@@ -459,8 +462,12 @@ a.card[href$="sarisari-studio.html"]   .ct{view-transition-name:vt-studio}
     <!-- About is a card now, so it is gone from here. One destination in two
          places on a page that never scrolls is clutter, and the card carries
          it at far greater presence than a 13px nav link ever did. -->
+    <!-- Résumé sits in the nav, not on the grid: it is the one thing a
+         recruiter needs that the work cannot hand them, and a page that
+         never scrolls has no footer to hide it in. -->
     <nav aria-label="Primary">
       <a href="about.html">About</a>
+      <a href="assets/djoaniel-hernandez-cv.pdf" download="Djoaniel-Hernandez-CV.pdf"><i class="ph ph-file-arrow-down inl" aria-hidden="true"></i> Résumé<span class="sr-only"> (PDF, 2 pages, downloads)</span></a>
       <a href="colophon.html">Colophon</a>
       <a href="mailto:djoaniel@gmail.com"><i class="ph ph-envelope-simple inl" aria-hidden="true"></i> djoaniel@gmail.com<span class="sr-only"> (opens your email app)</span></a>
     </nav>
