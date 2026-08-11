@@ -9,9 +9,45 @@
     /^192\.168\./.test(hostname) ||
     /^172\.(1[6-9]|2\d|3[01])\./.test(hostname) ||
     /\.local$/i.test(hostname);
-  var isExplicit = params.get('debug') === '1';
+  var isLocalHost = LOCAL_HOSTS.indexOf(hostname) !== -1 || isPrivateHost;
 
-  if (LOCAL_HOSTS.indexOf(hostname) === -1 && !isPrivateHost && !isExplicit) return;
+  /* ---- SESSION LATCH -------------------------------------------------
+     ?debug=1 is the ignition, not the condition. A query string does not
+     survive navigation, so before this the panel died on the first
+     internal link and the workaround was the "Copy debug URL" button.
+
+     sessionStorage, deliberately, not localStorage: the latch is per-tab
+     and dies with the tab. A link handed to someone else, or reopened
+     tomorrow, is a clean site — the panel never follows anyone home.
+
+     Tri-state, so one key carries activation and its own off switch:
+       '1'     latched on   — survives navigation on any host
+       '0'     latched off  — also overrides localhost, which is the only
+                              way to silence the panel while developing
+       absent  no opinion   — the host decides, as it always did
+
+     Storage access is wrapped: private-browsing modes throw on access
+     rather than returning null, and a debug harness must never be the
+     reason a page fails to render. Failing closed is the correct default
+     here — worst case you are back to appending the param per page. */
+  var SESSION_KEY = 'djoaniel.debug.session';
+
+  function readSession() {
+    try { return sessionStorage.getItem(SESSION_KEY); } catch (e) { return null; }
+  }
+
+  function writeSession(value) {
+    try {
+      if (value === null) sessionStorage.removeItem(SESSION_KEY);
+      else sessionStorage.setItem(SESSION_KEY, value);
+    } catch (e) {}
+  }
+
+  var debugParam = params.get('debug');
+  if (debugParam === '1' || debugParam === '0') writeSession(debugParam);
+
+  var session = readSession();
+  if (!(session === '1' || (session !== '0' && isLocalHost))) return;
 
   var ACCENTS = [
     { id:'original',  label:'Original',  hex:'#0B3FFF', css:'rgb(11,63,255)', rgb:'11,63,255' },
