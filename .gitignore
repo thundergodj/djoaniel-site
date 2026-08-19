@@ -6,3 +6,7 @@ node_modules/
 .env.local
 /tmp
 /output
+
+# impeccable (design skill, local tooling only)
+.claude/
+_to_delete/

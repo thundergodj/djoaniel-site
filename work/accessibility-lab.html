@@ -32,16 +32,20 @@
      orange (--state-operator) = operator / platform attention
 
    ---- 1.4.3 ON THIS PAGE'S OWN CHROME -------------------------------
-   --text-faint is ink-400, rgb(150,149,143). Measured against this
-   page's panel surface it is 2.85:1 — under the 4.5:1 floor for body
+   --text-faint WAS ink-400, rgb(150,149,143). Measured against this
+   page's panel surface it was 2.85:1 — under the 4.5:1 floor for body
    text and under the 3:1 floor for non-text. It was carrying criterion
    numbers, the sheet's signature block, the tab numerals and the
    readout units, and it was filling the toggle knob. On a page that
    says out loud it computes ratios rather than estimating them, that
    is the single worst defect available. Every one of those is now
    --text-muted (ink-600, 4.92:1), and the knob is ink-700.
-   --text-faint survives only on the inverse panel, where the same colour
-   measures 6.63:1 against ink-900 and is fine.
+   ink-400 survives only on inverse panels, where the same colour
+   measures 6.63:1 against ink-900 and is fine — .tip i, .audit .hd .r
+   and .srs .hint all sit on ink-900 and are legal there.
+   The token itself was retuned globally on 2026-08-14: --text-faint now
+   resolves to --ink-500 (112,111,98), 4.69:1 on paper. ink-400 is a
+   NON-TEXT value on light ground. See eishiki-v3.css.
    Measured, not eyeballed:
      PASSED pill  #265438 on tint  7.01:1
      FAILED pill  #96261F on tint  6.57:1

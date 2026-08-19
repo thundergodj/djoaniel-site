@@ -1,4 +1,12 @@
 User-agent: *
 Allow: /
 
+# Benches, not pages. Both are real and reachable; neither is portfolio.
+Disallow: /type-lock
+
+# /og builds the share plate. /og.png IS the share image and must stay
+# crawlable, so the longer Allow wins over the shorter Disallow.
+Allow: /og.png
+Disallow: /og$
+
 Sitemap: https://www.djoaniel.com/sitemap.xml

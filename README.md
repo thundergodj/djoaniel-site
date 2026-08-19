@@ -1,7 +1,7 @@
 # djoaniel.com
 
-The portfolio of Djoaniel Hernandez — a designer who makes dense, live, high-stakes
-systems readable at a glance.
+The portfolio of Djoaniel Hernandez. He finds the rule nobody wrote down, then
+builds it so it outlasts him.
 
 Static HTML, one hand-authored stylesheet, no build step and no framework. The site is
 itself the strongest work sample: read the source. Deployed on Vercel; every push to
@@ -18,6 +18,7 @@ assets/eishiki-v3.js          interaction for the case studies
 work/no-value.html            case study — null-value standard, private wealth
 work/tessa.html               case study — conversational career coach
 work/sarisari-snaps.html      case study — physical product, parametric system
+work/sarisari-studio.html     case study — True Size configurator & storefront
 work/unhappy-path.html        case study — component & state library, activewear retail
 work/accessibility-lab.html   the playable WCAG 2.2 AA audit lab
 type-lock.html                the Instrument Serif floor test and full scale
@@ -32,18 +33,26 @@ type-lock.html                the Instrument Serif floor test and full scale
 - **Colour behaves like livery.** Paper is the airframe; ink is structure; blue means *read this* or *current*; orange means the operator is live, working, or armed; red is an exception; sage is resolved. A button is not orange merely because it is clickable.
 
 More on all of it — including the type lock and the accessibility pass — on the
-[colophon](https://www.djoaniel.com/colophon.html).
+[colophon](https://www.djoaniel.com/colophon).
 
 ## Deploy
 
+Vercel builds on push to `main`. `cleanUrls` is on, so `/work/no-value` resolves
+as well as `/work/no-value.html`.
+
+**Never `git add -A` here.** This folder is mounted through a bridge that rewrites
+line endings, so `git status` reports thousands of changed lines that do not exist.
+Check the real diff, then stage named files:
+
 ```bash
-git add -A
+git diff --ignore-cr-at-eol --stat   # empty output means nothing changed
+git add the/file/you/edited
 git commit -m "…"
-git push
+git push origin main
 ```
 
-Vercel builds on push. `cleanUrls` is on, so `/work/no-value` resolves as well as
-`/work/no-value.html`.
+[PUSH.md](PUSH.md) has the rest, including the `.gitattributes` fix that ends the
+phantom diff.
 
 ---
 

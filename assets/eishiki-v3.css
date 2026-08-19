@@ -28,7 +28,7 @@
   --ink-700:rgb(62,62,58);
   --ink-650:rgb(61,61,57);
   --ink-600:rgb(102,102,96);
-  --ink-500:rgb(116,115,101);
+  --ink-500:rgb(112,111,98);
   --ink-400:rgb(150,149,143);
   --ink-300:rgb(51,51,51);
   --line:rgb(214,213,208);
@@ -54,7 +54,7 @@
   --text-primary:var(--ink-900);
   --text-body:var(--ink-700);
   --text-muted:var(--ink-600);
-  --text-faint:var(--ink-400);
+  --text-faint:var(--ink-500);
   --text-inverse:var(--white);
   --border-default:var(--line);
   --border-strong:var(--ink-900);
@@ -65,6 +65,18 @@
   --state-operator-on:var(--ink-900);      /* readable text on the orange fill */
   --data-null:var(--data-red);      /* ambiguous / unknown */
   --accent-warm:var(--state-operator); /* legacy alias */
+  /* THE QUIET GRAY HAS A FLOOR.
+     --text-faint used to be --ink-400 (150,149,143). On paper that measures
+     2.78:1 and on white 3.00:1 — under the 4.5:1 body floor and under the
+     3:1 non-text floor. It was patched by hand in five files (no-value,
+     colophon, unhappy-path, accessibility-lab, type-lock) and the patch never
+     held, because the defect was in the token, not the call sites. It now
+     resolves to --ink-500, retuned to 112,111,98: 4.69:1 on paper, 5.07:1 on
+     white, 4.81:1 on the tinted card surfaces. --ink-400 keeps its job as a
+     NON-TEXT value — dot fills, legend swatches, hairline marks — where 3:1
+     is the bar and it clears it. Do not put type on --ink-400 again.
+     The cost, accepted: faint (4.69) and muted (5.34) now sit one step apart
+     instead of two. Legality bought the compression. */
   --data-ok:var(--sage);            /* resolved — the "after" side of a fix */
 
   /* families */
@@ -739,6 +751,11 @@ section[id],main[id],.live[id],.sec[id]{
    click instead of six screens of scrolling. The count is written per
    page, never generated, so it cannot drift from what is actually there.
    ================================================================== */
+/* Surfaces that flip to ink-900 re-declare the quiet gray rather than asking
+   the next person to remember which one is legal on which ground. --ink-400
+   measures 6.63:1 against ink-900; --ink-500 would measure 3.92:1 and fail. */
+.hero-live,.tip,.bub.user,.toggle button.active,.crumb-l a:hover{
+  --text-faint:var(--ink-400)}
 .hero-live{display:flex;align-items:center;gap:var(--space-md);flex-wrap:wrap;
   background:var(--surface-inverse);color:var(--text-inverse);
   padding:var(--space-xs) var(--space-md);margin:var(--space-xl) 0 0}

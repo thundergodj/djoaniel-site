@@ -233,6 +233,14 @@
 .plp .fold::after{content:'';position:absolute;left:0;right:0;top:0;height:4000px;
   background:var(--white);opacity:.62;pointer-events:none}
 .plp .fold span{position:absolute;right:10px;top:-11px;z-index:2;
+  /* The stage scales the PAGE. This label is not part of the page — it is
+     the annotation ON the page, so it belongs to band pixels, not reference
+     pixels, and it counter-scales back to its declared size. At 82% it was
+     rendering at 10.3px, under the 11px floor for functional text; the one
+     label whose whole job is to state a measurement was too small to read.
+     --plp-cs is published by layout() and clamped at 2 so a very narrow
+     window cannot inflate the label past the specimen it annotates. */
+  transform:scale(var(--plp-cs,1));transform-origin:100% 0;
   background:var(--b-error);color:var(--white);padding:2px 8px;
   font:var(--mono-caption);letter-spacing:var(--track-caption);text-transform:uppercase}
 
@@ -1017,6 +1025,7 @@ button.tg[aria-pressed="true"]::after{transform:translateX(28px);background:var(
       var winLog = Math.round(Math.max(0, window.innerHeight - SITE_CHROME) / scale);
       var mine   = Math.min(REF_FOLD, Math.max(420, winLog));
       plp.style.transform = 'scale(' + scale + ')';
+      plp.style.setProperty('--plp-cs', Math.min(2, 1 / scale).toFixed(4));
       plp.style.setProperty('--fold', mine + 'px');
       stage.style.height = Math.round((mine + PEEK) * scale) + 'px';
       /* Say the zoom out loud. A recreation shown at 58% that does not
