@@ -80,14 +80,17 @@
 .flow .n{font:var(--mono-caption);letter-spacing:var(--track-caption);color:var(--text-muted);
   font-variant-numeric:tabular-nums}
 .flow .t{font-size:14px;line-height:1.3;color:var(--text-primary);font-weight:500}
-/* The gate column is a READOUT, not a stack of captions. It used to set the
-   label, the condition and a 69-character explanation at one size in one
-   typeface, so the one thing a reader takes away from a step weighed the same
-   as its own caption, and five steps looked identical while the section argues
-   that exactly one of them is hard. Grammar reused from
-   work/accessibility-lab.html (.ro / .sw / .v / .b) rather than re-authored. */
+/* The gate bay. It used to set the label, the condition and a 69-character
+   explanation at one size in one typeface, so the thing a reader takes away
+   from a step weighed the same as its own caption, and all five steps looked
+   identical while the section argues that exactly one of them is hard. The
+   state chip is the readout: one orange among five is the argument. */
+/* Padding BOTH ends. Top-only is the .sec rule (4e — one section's opening
+   space is the previous one's closing space); inside a band there is no next
+   section, the bottom rule closes it, and the last line of the gate note was
+   sitting 1px off that rule. The .pair band above this one pays 24px. */
 .flowbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(312px,352px);
-  gap:0;padding:var(--space-lg) 0 0;align-items:start}
+  gap:0;padding:var(--space-lg) 0;align-items:start}
 /* Prose stays at measure and reserves its second line; the body used to jump
    17px between steps because the sub and the note each set one line or two. */
 .flowbody .sub{font-size:15px;line-height:1.55;color:var(--text-body);margin:0;
@@ -97,25 +100,22 @@
    read as dead air under the prose rather than as the column beside it. */
 .flowbody .gate{margin:0 0 0 var(--space-xl);padding:0 0 0 var(--space-xl);
   border-left:var(--border-hair)}
-.flowbody .gate b{display:block;font:var(--mono-label);letter-spacing:var(--track-label);
+/* Two rows, not three. The first pass set the state as a 17px/600 mono value
+   with a chip beside it: that is the grammar for a NUMBER (a ratio, a count),
+   and this value is a two-word phrase — so it read as shouting, while the chip
+   said OPEN forty pixels from a value that already said "Always open". The
+   chip IS the readout. The condition folds into the sentence that explains it,
+   and the swatch is gone: a lone coloured square in front of text is a bullet,
+   and the square is a motif, not a bullet. */
+.flowbody .gh{display:flex;align-items:center;gap:var(--space-xs)}
+.flowbody .gh b{font:var(--mono-label);letter-spacing:var(--track-label);
   text-transform:uppercase;font-weight:500;color:var(--text-muted)}
-.flowbody .ro{display:flex;align-items:center;gap:7px;margin:7px 0 0;
-  font-family:var(--font-mono)}
-.flowbody .ro .sw{width:12px;height:12px;flex:none;display:block;
-  border:0.667px solid var(--border-default)}
-.flowbody .ro .v{flex:1 1 auto;min-width:0;font-size:17px;font-weight:600;
-  letter-spacing:-.02em;color:var(--text-primary);white-space:nowrap;
-  overflow:hidden;text-overflow:ellipsis}
-/* 12.5px, not the 11.5px the lab uses — uppercase mono has a 12.5px floor. */
-.flowbody .ro .b{flex:none;font-size:12.5px;letter-spacing:var(--track-label);
-  text-transform:uppercase;font-weight:600;padding:3px 7px}
+.flowbody .gh .b{flex:none;font:var(--mono-label);letter-spacing:var(--track-label);
+  text-transform:uppercase;font-weight:600;padding:4px 9px}
 /* The reason a gate is what it is, is a sentence — so it is set in the body
    face. Mono is for data; 69 characters of it was the tell. */
-.flowbody .gn{margin:7px 0 0;font-size:13px;line-height:1.5;
-  color:var(--text-muted);min-height:3em}
-.g-open .sw{background:var(--data-ok)}
-.g-hard .sw{background:var(--state-operator)}
-.g-none .sw{background:var(--ink-400)}
+.flowbody .gn{margin:10px 0 0;font-size:14px;line-height:1.55;
+  color:var(--text-muted);min-height:3.1em}
 .g-open .b{background:rgba(86,128,102,.14);color:rgb(38,84,56)}
 .g-hard .b{background:rgba(var(--state-operator-rgb),.13);color:var(--state-operator-ink)}
 .g-none .b{background:rgba(9,9,9,.05);color:var(--text-muted)}
@@ -569,24 +569,24 @@
   var STEPS = [
     { n:1, label:'Step 1 of 5', t:'Choose your frame',
       sub:'Tap a frame and the keepsake takes its shape in the preview. Nine frames, one to twelve photographs.',
-      gate:'Always open', gateNote:'A frame is pre-selected, so the flow never starts on an empty screen.',
-      gk:'g-open', badge:'Open' },
+      gk:'g-open', badge:'Open',
+      gateNote:'A frame is pre-selected, so the flow never starts on an empty screen.' },
     { n:2, label:'Step 2 of 5', t:'Add your photos',
       sub:'Upload, crop, and the photographs drop into the pockets. The number required is the frame you just chose.',
-      gate:'Every pocket filled', gateNote:'The continue button counts what is outstanding instead of going grey.',
-      gk:'g-hard', badge:'Hard gate' },
+      gk:'g-hard', badge:'Hard gate',
+      gateNote:'Every pocket must be filled. The continue button counts what is outstanding.' },
     { n:3, label:'Step 3 of 5', t:'Pick your colour',
       sub:'Five matte finishes, chosen to sit against photographs rather than compete with them.',
-      gate:'Always open', gateNote:'Colour has no price impact and a default is already applied.',
-      gk:'g-open', badge:'Open' },
+      gk:'g-open', badge:'Open',
+      gateNote:'Colour has no price impact and a default is already applied.' },
     { n:4, label:'Step 4 of 5', t:'Personalize',
       sub:'Text and a symbol, both optional, both free. The character limit follows the width of the frame.',
-      gate:'Always open', gateNote:'Skipping it is a valid keepsake, not an incomplete one.',
-      gk:'g-open', badge:'Open' },
+      gk:'g-open', badge:'Open',
+      gateNote:'Skipping it is a valid keepsake, not an incomplete one.' },
     { n:5, label:'The reveal', t:'See your keepsake',
       sub:'The build view fades and the finished keepsake arrives. Checkout follows it — quantity, delivery and how payment is arranged — on plain ground, outside the textured world of the craft steps.',
-      gate:'None here', gateNote:'Submission is gated at checkout instead, on valid contact details.',
-      gk:'g-none', badge:'N/A' }
+      gk:'g-none', badge:'None',
+      gateNote:'Submission is gated at checkout instead, on valid contact details.' }
   ];
   var flow = document.getElementById('flow');
   var flowBody = document.getElementById('flowBody');
@@ -613,10 +613,8 @@
     var s = STEPS[state.step - 1];
     flowBody.innerHTML =
       '<p class="sub">' + s.sub + '</p>' +
-      '<div class="gate ' + s.gk + '"><b>Gate</b>' +
-      '<p class="ro"><span class="sw"></span>' +
-      '<span class="v">' + s.gate + '</span>' +
-      '<span class="b">' + s.badge + '</span></p>' +
+      '<div class="gate ' + s.gk + '">' +
+      '<div class="gh"><b>Gate</b><span class="b">' + s.badge + '</span></div>' +
       '<p class="gn">' + s.gateNote + '</p></div>';
   }
 
