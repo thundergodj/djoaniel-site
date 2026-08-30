@@ -715,9 +715,7 @@ section[id],main[id],.live[id],.sec[id]{
   padding:4px 9px;font:var(--mono-label);font-weight:500;
   letter-spacing:var(--track-label);text-transform:uppercase}
 .live-mk::before{content:"";width:6px;height:6px;background:currentColor;
-  border-radius:50%;animation:live-pulse 1.9s var(--ease-out) infinite}
-@keyframes live-pulse{0%,100%{opacity:1}50%{opacity:.25}}
-@media(prefers-reduced-motion:reduce){.live-mk::before{animation:none}}
+  border-radius:50%}
 
 /* the imperative. Sans, not serif: this is an instruction, not a claim,
    and it has to out-shout body prose without pretending to be a headline.
@@ -829,11 +827,8 @@ section[id],main[id],.live[id],.sec[id]{
    IMAGE SLOT — flat frame, no radius, mono label. Zero real bitmaps
    in the source, so these stay honest placeholders until art exists.
    ================================================================== */
-.slot{position:relative;border:var(--border-hair);background:var(--surface-card-16);
+.slot{position:relative;border:var(--border-hair);background:var(--surface-card-30);
   display:grid;place-items:center;overflow:hidden}
-.slot::after{content:'';position:absolute;inset:0;
-  background:repeating-linear-gradient(-45deg,transparent 0 11px,rgba(9,9,9,.026) 11px 22px);
-  pointer-events:none}
 .slot .lbl{font:var(--text-caption);letter-spacing:0.04em;text-transform:uppercase;
   color:var(--text-faint);z-index:1;text-align:center;padding:0 20px}
 .slot .idx{position:absolute;top:11px;left:13px;font:var(--text-caption);
@@ -907,16 +902,20 @@ section[id],main[id],.live[id],.sec[id]{
    ================================================================== */
 .states{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-2xs)}
 .state{position:relative;text-align:left;border:var(--border-hair);
-  background:var(--surface-card-30);padding:16px 15px 16px 19px;cursor:pointer;font:inherit;
+  background:var(--surface-card-30);padding:16px 15px;cursor:pointer;font:inherit;
   transition:border-color var(--dur-fast) linear,background var(--dur-fast) linear,
              box-shadow var(--dur-fast) linear}
 /* Hover and selected were one rule, so pointing at a card looked exactly
    like having chosen it — four tiles, any of which could be the live one.
-   Hover is now a darkening of the edge; selection is the accent slab, the
-   same 4px slab the primary button carries. Chosen outranks pointed-at. */
+   Hover is now a darkening of the edge; selection is the accent edge plus
+   the filled square marker. Chosen outranks pointed-at. */
 .state:hover{border-color:var(--ink-700);background:var(--white)}
-.state.on{border-color:var(--accent);background:var(--white);
-  box-shadow:inset 4px 0 0 var(--accent)}
+.state.on{border-color:var(--accent);background:var(--white)}
+/* The marker is declared on all four cards and filled only on the chosen
+   one, so selecting does not shift the number sideways. */
+.state .n::before{content:"";display:inline-block;width:.5em;height:.5em;
+  background:transparent;margin-right:.5em;vertical-align:.02em}
+.state.on .n::before{background:var(--accent)}
 .state.on .t{color:var(--text-primary)}
 /* The three parts are <span>s inside a <button>, so they need an explicit
    box. Without this they run inline — "01RESOLVED Colour and size both
@@ -1041,23 +1040,21 @@ section[id],main[id],.live[id],.sec[id]{
   letter-spacing:0.04em}
 
 /* ==================================================================
-   BUTTON — offset slab + spark burst. Primary actions only.
+   BUTTON — flat face + spark burst. Primary actions only.
 
    A button is an affordance, not an operator state: its resting face stays
-   ink and its primary-action slab stays blue. Orange appears only while the
+   ink and it takes the accent on hover. Orange appears only while the
    control truthfully reports aria-busy="true".
    ================================================================== */
 .btn{position:relative;display:inline-block}
-.btn .slab{position:absolute;inset:0;transform:translate(4px,4px);
-  background:var(--accent);pointer-events:none}
+.btn .slab{display:none}   /* deslop 2026-08-28: offset slab removed */
 .btn button,.btn a{position:relative;display:inline-flex;text-decoration:none;align-items:center;gap:10px;
   padding:12px 20px;font:var(--text-caption);font-weight:500;letter-spacing:0.04em;
   text-transform:uppercase;background:var(--surface-inverse);color:var(--text-inverse);
   border:0.667px solid var(--surface-inverse);cursor:pointer;white-space:nowrap;
-  transition:transform var(--dur-fast) var(--ease-snap)}
-.btn button:hover,.btn a:hover{transform:translate(1px,1px)}
-.btn button:active,.btn a:active{transform:translate(4px,4px)}
-.btn:has([aria-busy="true"]) .slab{background:var(--surface-inverse)}
+  transition:background var(--dur-hover) linear,border-color var(--dur-hover) linear}
+.btn button:hover,.btn a:hover{background:var(--accent);border-color:var(--accent);
+  color:var(--white)}
 .btn button[aria-busy="true"],.btn a[aria-busy="true"]{
   background:var(--state-operator);color:var(--state-operator-on);
   border-color:var(--state-operator)}
